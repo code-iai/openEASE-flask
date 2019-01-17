@@ -70,9 +70,9 @@ def init_app(app, db_instance, extra_config_settings={}):
     babel = Babel(app)
 
     # Setup Flask-User to handle user account related forms
-    #from webrob.models.users import User
-    #db_adapter = SQLAlchemyAdapter(db_instance, User)
-    #app.user_manager = UserManager(db_adapter, app)     # Init Flask-User and bind to app
+    from webrob.models.users import User
+    db_adapter = SQLAlchemyAdapter(db_instance, User)
+    app.user_manager = UserManager(db_adapter, app)     # Init Flask-User and bind to app
 
     # Load all models.py files to register db.Models with SQLAlchemy
     from webrob.models import users
@@ -91,9 +91,9 @@ def init_app(app, db_instance, extra_config_settings={}):
     from webrob.pages import mongo
     from webrob.pages import tutorials
     # TODO: why is this import important and why does it throw an error
-    # from webrob.pages import oauth
+    #from webrob.pages import oauth
     
-    #init_db(app, db_instance)
+    # init_db(app, db_instance)
     init_webapp(app, db_instance)
     
     #add_user(app=app,db=db_instance,user_manager=app.user_manager,

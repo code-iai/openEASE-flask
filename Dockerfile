@@ -1,4 +1,4 @@
-pipFROM ubuntu:16.04
+FROM ubuntu:16.04
 MAINTAINER Daniel Beßler, danielb@cs.uni-bremen.de
 
 # install python and flask

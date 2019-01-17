@@ -77,6 +77,7 @@ def __knowrob_page__(template, container_name, category=None, exp=None):
 
 @app.route('/knowrob/menu', methods=['POST'])
 def menu():
+    """
     # Maps projects to list of experiments
     episode_choices_map =  {}
     for (category,exp) in get_experiment_list():
@@ -122,16 +123,18 @@ def menu():
                 episode_page += '<a style="cursor: pointer" onclick=client.setEpisode("'+ category +'","'+ exp +'")>'+name+'</a>'
         episode_page += '</div></div>'
     episode_page += '</div>'
+    """
     
     menu_left = []
     menu_right = [{
         'text': 'Experiment Selection',
         'submenu': [{
             'text': '',
-            'submenu_page': episode_page
+
         }]
     }]
-    
+    # 'submenu_page': episode_page
+
     return jsonify(menu_left=menu_left, menu_right=menu_right)
 
 @app.route('/knowrob/reset', methods=['POST'])

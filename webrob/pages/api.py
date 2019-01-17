@@ -29,7 +29,7 @@ def refresh_by_session():
     Refreshes the running session for a currently logged in user. This prevents a users container from being terminated
     automatically.
     """
-    docker_interface.refresh(session['user_container_name'])
+    # docker_interface.refresh(session['user_container_name'])
     return jsonify({'result': 'success'})
 
 
@@ -83,7 +83,7 @@ def refresh_by_token(token):
     user = user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
-    docker_interface.refresh(user.username)
+    # docker_interface.refresh(user.username)
     return jsonify({'result': 'success'})
 
 @app.route('/create_api_token', methods=['GET'])

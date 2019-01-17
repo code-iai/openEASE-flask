@@ -102,7 +102,7 @@ def pkg_set():
 @app.route('/pkg/list', methods=['POST'])
 def pkg_list():
     # Return list of packages
-    files = filter(lambda s: s['isdir'], docker_interface.file_ls(session['user_container_name'], '.')['children'])
+    files = filter(lambda s: s['isdir'], docker_interface.file_ls(session['user_container_name'], '.')['children']) #{ "name": 'directory_name', "isdir": True, "children": [] }
     filenames = map(lambda s: s['name'], files)
     return jsonify(result=filenames)
 

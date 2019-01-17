@@ -33,7 +33,7 @@ def tutorials():
 @app.route('/tutorials/get', methods=['POST'])
 def get_tutorial():
     data = json.loads(request.data)
-    response = read_tutorial(data['category'], data['page'])
+    response = None # read_tutorial(data['category'], data['page'])
     if response==None:
         return jsonify({})
     else:
