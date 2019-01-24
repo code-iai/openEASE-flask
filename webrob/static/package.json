@@ -38,5 +38,8 @@
     "d3": "3",
     "d3-tip": "0.9.1",
     "jsondiffpatch": "0.2.5"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }
