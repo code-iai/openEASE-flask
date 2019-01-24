@@ -19,7 +19,7 @@ function KnowrobClient(options){
     this.menu = options.menu;
     // global jsonprolog handle
     var prolog;
-    
+
     // User interface names (e.g., editor, memory replay, ...)
     var user_interfaces = options.user_interfaces || [];
     var user_interfaces_flat = options.user_interfaces_flat || [];
@@ -27,7 +27,7 @@ function KnowrobClient(options){
     // E.g., localhost/#foo&bar=1 yields in:
     //    URL_QUERY = {foo: undefined, bar: 1}
     var urlQuery = {};
-    
+
     this.pageOverlayDisabled = false;
     // true iff connection to ROS master is established
     this.isConnected = false;
@@ -48,7 +48,7 @@ function KnowrobClient(options){
 
     // The selected marker object or undefined
     this.selectedMarker = undefined;
-    
+
     // ROS messages
     var tfClient = undefined;
     this.markerArrayClient = undefined;
@@ -56,9 +56,9 @@ function KnowrobClient(options){
     var imageClient = undefined;
     var cameraPoseClient = undefined;
     this.snapshotTopic = undefined;
-    
+
     this.nodesRegistered = false;
-    
+
     // Redirects incomming marker messages to currently active canvas.
     function CanvasProxy() {
         this.viewer = function() {
@@ -79,28 +79,30 @@ function KnowrobClient(options){
         };
     };
     this.canvas = new CanvasProxy();
-    
+
     this.init = function() {
+        /*
         // Connect to ROS.
         that.connect();
-        
+
         that.episode = new KnowrobEpisode(that);
         if(options.category && options.episode)
             that.episode.setEpisode(options.category, options.episode);
-        
+
         that.createOverlay();
-        
+
         if(requireEpisode && !that.episode.hasEpisode()) {
           that.showPageOverlay("Please select an Episode");
         } else {
           that.showPageOverlay("Loading Knowledge Base");
         }
-      
+
         setInterval(containerRefresh, 570000);
         containerRefresh();
         render_event = new CustomEvent('render', {'camera': null});
+        */
     };
-    
+
     function containerRefresh() {
         $.ajax({
             url: '/api/v1.0/refresh_by_session',
@@ -164,18 +166,18 @@ function KnowrobClient(options){
                              request.level,
                              request.end);
             that.waitForJsonProlog();
-            
+
             // If a callback function was specified, call it in the context of Knowrob class (that)
             if(then) {
                 then.call(that);
             }
         });
     };
-    
+
     this.registerNodes = function () {
       if(that.isRegistered) return;
       that.isRegistered = true;
-      
+
       // Setup publisher that sends a dummy message in order to keep alive the socket connection
       {
           var interval = options.interval || 30000;
@@ -188,14 +190,14 @@ function KnowrobClient(options){
           // Call ping at regular intervals.
           setInterval(ping, interval);
       };
-    
+
       // topic used for publishing canvas snapshots
       that.snapshotTopic = new ROSLIB.Topic({
         ros : that.ros,
         name : '/openease/video/frame',
         messageType : 'sensor_msgs/Image'
       });
-      
+
       // Setup a client to listen to TFs.
       tfClient = new ROSLIB.TFClient({
         ros : that.ros,
@@ -231,7 +233,7 @@ function KnowrobClient(options){
             that.getActiveFrame().on_designator_received(html);
         }
       });
-        
+
       // Setup the image message client.
       imageClient = new ROSLIB.Topic({
         ros : that.ros,
@@ -251,7 +253,7 @@ function KnowrobClient(options){
               html += '<div class="image_view">';
               html += '<img id="mjpeg_image" class="picture" src="'+url+'" width="300" height="240"/>';
               html += '</div>';
-              
+
               imageHeight = function(mjpeg_image) { return mjpeg_image.height; };
               imageWidth  = function(mjpeg_image) { return mjpeg_image.width; };
           }
@@ -264,7 +266,7 @@ function KnowrobClient(options){
               html += '/>';
               html += 'Your browser does not support the video tag.';
               html += '</video></div>';
-              
+
               imageHeight = function(mjpeg_image) { return mjpeg_image.videoHeight; };
               imageWidth  = function(mjpeg_image) { return mjpeg_image.videoWidth; };
           }
@@ -275,7 +277,7 @@ function KnowrobClient(options){
               that.getActiveFrame().on_image_received(html, imageWidth, imageHeight);
           }
       });
-      
+
       // TODO redo highlighting with dedicated messages
 //       var highlightClient = new ROSLIB.Topic({
 //         ros : that.ros,
@@ -311,7 +313,7 @@ function KnowrobClient(options){
           if(that.getActiveFrame().on_camera_pose_received)
             that.getActiveFrame().on_camera_pose_received(message);
       });
-      
+
       // NOTE: frame windows may not be loaded already
       for(var i in user_interfaces) {
           var frame = document.getElementById(user_interfaces[i].id+"-frame");
@@ -320,7 +322,7 @@ function KnowrobClient(options){
       }
       that.nodesRegistered = true;
     };
-    
+
     this.waitForJsonProlog = function () {
         var client = new JsonProlog(that.ros, {});
         client.jsonQuery("true", function(result) {
@@ -338,15 +340,15 @@ function KnowrobClient(options){
             }
         });
     };
-    
+
     ///////////////////////////////
     //////////// Marker Visualization
     ///////////////////////////////
-    
+
     this.newProlog = function() {
         return that.ros ? new JsonProlog(that.ros, {}) : undefined;
     };
-    
+
     this.newCanvas = function(options) {
         var x = new KnowrobCanvas(that, options);
         // connect to render event, dispatch to marker clients
@@ -357,15 +359,15 @@ function KnowrobClient(options){
         //});
         return x;
     };
-    
+
     this.newDataVis = function(options) {
         return new DataVisClient(options);
     };
-    
+
     this.newTaskTreeVis = function(options) {
         return new TaskTreeVisClient(options);
     };
-    
+
     this.selectMarker = function(marker) {
         if(that.selectedMarker == marker)
           return;
@@ -382,7 +384,7 @@ function KnowrobClient(options){
         if(that.canvas.viewer())
           that.canvas.viewer().highlight(marker);
     };
-    
+
     this.unselectMarker = function() {
       if(!that.selectedMarker)
         return;
@@ -393,7 +395,7 @@ function KnowrobClient(options){
         that.canvas.viewer().unhighlight(that.selectedMarker);
       that.selectedMarker = undefined;
     };
-    
+
     this.removeMarker = function(marker) {
         if(marker === that.selectedMarker) {
             that.unselectMarker();
@@ -401,12 +403,12 @@ function KnowrobClient(options){
         if(that.getActiveFrame() && that.getActiveFrame().removeMarker)
             that.getActiveFrame().removeMarker(marker);
     };
-    
+
     this.showMarkerMenu = function(marker) {
         if(that.getActiveFrame() && that.getActiveFrame().showMarkerMenu)
           that.getActiveFrame().showMarkerMenu(marker);
     };
-    
+
     this.on_render = function(camera,scene) {
         if(that.getActiveFrame() && that.getActiveFrame().on_render)
             that.getActiveFrame().on_render(camera,scene);
@@ -419,15 +421,15 @@ function KnowrobClient(options){
             sprites[index].dispatchEvent(render_event);
         }
     };
-    
+
     ///////////////////////////////
     //////////// Edisodes
     ///////////////////////////////
-    
+
     this.setEpisode = function(category, episode) {
         that.episode.setEpisode(category, episode, that.on_episode_selected);
     };
-    
+
     this.on_episode_selected = function(library) {
         for(var i in user_interfaces) {
             var frame = document.getElementById(user_interfaces[i].id+"-frame");
@@ -438,7 +440,7 @@ function KnowrobClient(options){
         that.hidePageOverlay();
         that.showPageOverlay("Loading Knowledge Base");
         if(that.ros) that.ros.close(); // force reconnect
-        
+
         $.ajax({
             url: '/knowrob/reset',
             type: "POST",
@@ -446,11 +448,11 @@ function KnowrobClient(options){
             dataType: "json"
         });
     };
-    
+
     ///////////////////////////////
     //////////// Frames
     ///////////////////////////////
-    
+
     function showFrame(iface_name) {
         var frame_name = getInterfaceFrameName(iface_name);
         // Hide inactive frames
@@ -460,7 +462,7 @@ function KnowrobClient(options){
             $("#"+user_interfaces[i].id+"-frame").removeClass("selected-frame");
             $("#"+user_interfaces[i].id+"-menu").removeClass("selected-menu");
         }
-        
+
         var new_src = getInterfaceSrc(iface_name);
         var frame = document.getElementById(frame_name+"-frame");
         var old_src = frame.src;
@@ -469,7 +471,7 @@ function KnowrobClient(options){
             if(frame.contentWindow && frame.contentWindow.on_register_nodes)
                 frame.contentWindow.on_register_nodes();
         }
-        
+
         // Show selected frame
         $("#"+frame_name+"-frame").show();
         $("#"+frame_name+"-frame").addClass("selected-frame");
@@ -477,14 +479,14 @@ function KnowrobClient(options){
         // Load menu items of active frame
         that.menu.updateFrameMenu(document.getElementById(frame_name+"-frame").contentWindow);
     };
-    
+
     this.getActiveFrame = function() {
         var frame = document.getElementById(getActiveFrameName()+"-frame");
         if(frame) return frame.contentWindow;
         else return window;
         //else return undefined;
     };
-    
+
     function getInterfaceFrameName(iface) {
         for(var i in user_interfaces) {
             var elem = user_interfaces[i];
@@ -494,7 +496,7 @@ function KnowrobClient(options){
             }
         }
     };
-    
+
     function getInterfaceSrc(iface) {
         for(var i in user_interfaces) {
             var elem = user_interfaces[i];
@@ -504,22 +506,22 @@ function KnowrobClient(options){
             }
         }
     };
-    
+
     function getActiveFrameName() {
       return getInterfaceFrameName(getActiveInterfaceName());
     };
-    
+
     function getActiveInterfaceName() {
       for(var i in user_interfaces_flat) {
         if(urlQuery[user_interfaces_flat[i].id]) return user_interfaces_flat[i].id;
       }
       return "kb";
     };
-    
+
     ///////////////////////////////
     //////////// URL Location
     ///////////////////////////////
-    
+
     function updateQueryString() {
         urlQuery = {};
         var query = String(window.location.hash.substring(1));
@@ -541,7 +543,7 @@ function KnowrobClient(options){
             }
         }
     };
-    
+
     this.updateLocation = function() {
       updateQueryString();
       showFrame(getActiveInterfaceName());
@@ -551,11 +553,11 @@ function KnowrobClient(options){
           that.setEpisode(urlQuery['category'], urlQuery['episode']);
       }
     };
-    
+
     ///////////////////////////////
     //////////// Frame Overlay
     ///////////////////////////////
-    
+
     this.createOverlay = function() {
         // Create page iosOverlay
         var page = document.getElementById('page');
@@ -563,14 +565,14 @@ function KnowrobClient(options){
             var pageOverlay = document.createElement("div");
             pageOverlay.setAttribute("id", "page-overlay");
             pageOverlay.className = "ios-overlay ios-overlay-hide div-overlay";
-            pageOverlay.innerHTML += '<span class="title">Please select an Episode</span';
+            pageOverlay.innerHTML += '<span class="title">Please select an Episode</span>';
             pageOverlay.style.display = 'none';
             page.appendChild(pageOverlay);
             var spinner = createSpinner();
             pageOverlay.appendChild(spinner.el);
         }
     };
-    
+
     this.showPageOverlay = function(text) {
       var pageOverlay = document.getElementById('page-overlay');
       if(pageOverlay && !that.pageOverlayDisabled) {
@@ -581,7 +583,7 @@ function KnowrobClient(options){
           that.pageOverlayDisabled = true;
       }
     };
-    
+
     this.hidePageOverlay = function() {
       var pageOverlay = document.getElementById('page-overlay');
       if(pageOverlay && that.pageOverlayDisabled) {
