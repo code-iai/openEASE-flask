@@ -10,8 +10,8 @@ from flask_user import login_required
 from flask_user import current_app
 
 from webrob.app_and_db import app
-from webrob.docker import docker_interface
-from webrob.docker.docker_interface import LFTransfer
+from webrob.docker import docker_interface_mock
+from webrob.docker.docker_interface_mock import LFTransfer
 from webrob.docker.docker_application import ensure_application_started
 from webrob.utility import admin_required
 from webrob.utility import copy_template_file
@@ -46,7 +46,7 @@ def editor(filename=""):
 def pkg_new():
     packageName = json.loads(request.data)['packageName']
     
-    if docker_interface.file_exists(session['user_container_name'], packageName):
+    if docker_interface_mock.file_exists(session['user_container_name'], packageName):
         raise PackageError("A package with the name '"+packageName+"' already exists.")
     
     # Make sure templates are available
@@ -84,7 +84,7 @@ def pkg_del(packageName=None):
     if pkgName is None: pkgName = session['pkg']
     
     try:
-        docker_interface.file_rm(session['user_container_name'], pkgName, True)
+        docker_interface_mock.file_rm(session['user_container_name'], pkgName, True)
     except:  # catch *all* exceptions
         app.logger.error("Unable to delete package. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
@@ -102,16 +102,18 @@ def pkg_set():
 @app.route('/pkg/list', methods=['POST'])
 def pkg_list():
     # Return list of packages
-    files = filter(lambda s: s['isdir'], docker_interface.file_ls(session['user_container_name'], '.')['children']) #{ "name": 'directory_name', "isdir": True, "children": [] }
-    filenames = map(lambda s: s['name'], files)
-    return jsonify(result=filenames)
+    # files = filter(lambda s: s['isdir'], docker_interface.file_ls(session['user_container_name'], '.')['children']) #{ "name": 'directory_name', "isdir": True, "children": [] }
+    # filenames = map(lambda s: s['name'], files)
+    # return jsonify(result=filenames)
+
+    return jsonify({})
 
 @app.route('/pkg/read', methods=['POST'])
 def pkg_read():
     path = get_file_path(json.loads(request.data)['file'])
     try:
         # Read the file
-        content = docker_interface.file_read(session['user_container_name'], path).splitlines(True)
+        content = docker_interface_mock.file_read(session['user_container_name'], path).splitlines(True)
         return jsonify(result=content)
     except:  # catch *all* exceptions
         app.logger.error("Unable to read file. " + str(sys.exc_info()[0]))
@@ -180,7 +182,7 @@ def pkg_load_exercise():
     
     pkgName = exercise.title
     zipName = pkgName + '.zip'
-    if docker_interface.file_exists(session['user_container_name'], pkgName):
+    if docker_interface_mock.file_exists(session['user_container_name'], pkgName):
         raise PackageError("A package with the name '"+packageName+"' already exists.")
     
     try:
@@ -206,7 +208,7 @@ def file_write():
     data = json.loads(request.data)
     path = get_file_path(data['file'])
     try:
-        docker_interface.file_write(session['user_container_name'], data['content'], path)
+        docker_interface_mock.file_write(session['user_container_name'], data['content'], path)
         return jsonify(success=1)
     except:  # catch *all* exceptions
         app.logger.error("Unable to write file. " + str(sys.exc_info()[0]))
@@ -216,7 +218,7 @@ def file_write():
 def file_del():
     path = get_file_path(json.loads(request.data)['file'])
     try:
-        docker_interface.file_rm(session['user_container_name'], path, True)
+        docker_interface_mock.file_rm(session['user_container_name'], path, True)
         return get_pkg_tree()
     except:  # catch *all* exceptions
         app.logger.error("Unable to delete file. " + str(sys.exc_info()[0]))
@@ -238,7 +240,7 @@ def get_file_path(fileName):
 def get_pkg_tree():
     # List files in package dir
     pkgPath = session['pkg']
-    rootFiles = docker_interface.file_ls(session['user_container_name'], pkgPath, True)['children']
+    rootFiles = docker_interface_mock.file_ls(session['user_container_name'], pkgPath, True)['children']
     # Return list of files
     return jsonify(result=rootFiles)
 

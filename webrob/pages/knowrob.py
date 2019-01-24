@@ -12,8 +12,8 @@ from urlparse import urlparse
 
 from webrob.app_and_db import app, db
 from webrob.docker.docker_application import ensure_application_started, restart_application
-from webrob.docker import docker_interface
-from webrob.docker.docker_interface import file_read
+from webrob.docker import docker_interface_mock
+from webrob.docker.docker_interface_mock import file_read
 from webrob.utility import *
 from webrob.pages.experiments import get_experiment_download_url, get_experiment_list, experiment_load_queries
 from webrob.config.settings import MAX_HISTORY_LINES
@@ -213,7 +213,7 @@ def admin_cookie():
 @app.route('/logs')
 @app.route('/log')
 def log():
-  logStr = docker_interface.get_container_log(session['user_container_name'])
+  logStr = docker_interface_mock.get_container_log(session['user_container_name'])
   return render_template('log.html', log=logStr)
 
 def get_history_file():

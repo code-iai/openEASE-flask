@@ -4,8 +4,8 @@ from flask_user import login_required
 import time
 from urlparse import urlparse
 from webrob.app_and_db import app, db
-from webrob.docker import docker_interface
-from webrob.docker.docker_interface import generate_mac
+from webrob.docker import docker_interface_mock
+from webrob.docker.docker_interface_mock import generate_mac
 from webrob.models.users import User
 from webrob.utility import random_string
 from webrob.config.settings import ROS_DISTRIBUTION
@@ -19,7 +19,7 @@ def login_by_session():
     Returns authentication information for the currently logged in user as required by the knowrob.js authentication
     request
     """
-    ip = docker_interface.get_container_ip(session['user_container_name'])
+    ip = docker_interface_mock.get_container_ip(session['user_container_name'])
     return generate_rosauth(session['user_container_name'], ip, True)
 
 
@@ -42,7 +42,7 @@ def login_by_token(token):
     user = user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
-    ip = docker_interface.get_container_ip(user.username)
+    ip = docker_interface_mock.get_container_ip(user.username)
     return generate_rosauth(user.username, ip)
 
 
@@ -56,7 +56,7 @@ def start_container(token):
     if user is None:
         return jsonify({'error': 'wrong api token'})
     
-    docker_interface.start_user_container('openease/'+ROS_DISTRIBUTION+'-knowrob-daemon', user.username, ROS_DISTRIBUTION)
+    docker_interface_mock.start_user_container('openease/' + ROS_DISTRIBUTION + '-knowrob-daemon', user.username, ROS_DISTRIBUTION)
     host_url = urlparse(request.host_url).hostname
     return jsonify({'result': 'success',
                     'url': '//'+host_url+'/ws/'+user.username+'/'})
@@ -70,7 +70,7 @@ def stop_container(token):
     user = user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
-    docker_interface.stop_container(user.username)
+    docker_interface_mock.stop_container(user.username)
     return jsonify({'result': 'success'})
 
 

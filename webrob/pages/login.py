@@ -10,7 +10,7 @@ from random import choice
 from string import lowercase
 
 from webrob.app_and_db import app
-from webrob.docker import docker_interface
+from webrob.docker import docker_interface_mock
 
 @user_logged_in.connect_via(app)
 def track_login(sender, user, **extra):
@@ -22,7 +22,7 @@ def track_login(sender, user, **extra):
 @user_logged_out.connect_via(app)
 def track_logout(sender, user, **extra):
     if 'user_container_name' in session:
-        docker_interface.stop_container(session['user_container_name'])
+        docker_interface_mock.stop_container(session['user_container_name'])
         session.pop('user_container_name')
 
 @app.route('/')
