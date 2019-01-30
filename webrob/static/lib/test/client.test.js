@@ -1,14 +1,31 @@
-const client = require('../client');
+const client = require('../client_tmp');
 
-test('isPageOverlayDisabled', () => {
-    const knowrobClient = new client();
+test('isPageOverlayEnabled', () => {
+    const knowrobClient = new client.KnowrobClient({});
 
     const correctPageOverlay = 'this is not empty';    // normally this is an html-container of the DOM
     const emptyPageOverlay = undefined;
 
-    expect(knowrobClient.isPageOverlayDisabled(emptyPageOverlay, isDisabled = true)).toBe(false);
-    expect(knowrobClient.isPageOverlayDisabled(emptyPageOverlay, isDisabled = false)).toBe(false);
+    knowrobClient.that.pageOverlayEnabled = false;
+    expect(knowrobClient.isOverlayEnabled(emptyPageOverlay)).toBeFalsy();
+    expect(knowrobClient.isOverlayEnabled(correctPageOverlay)).toBeFalsy();
 
-    expect(knowrobClient.isPageOverlayDisabled(correctPageOverlay, isDisabled = true)).toBe();
-    expect(knowrobClient.isPageOverlayDisabled(correctPageOverlay, isDisabled = false)).toBe();
+    knowrobClient.that.pageOverlayEnabled = true;
+    expect(knowrobClient.isOverlayEnabled(emptyPageOverlay)).toBeFalsy();
+    expect(knowrobClient.isOverlayEnabled(correctPageOverlay)).toBe(true);
+});
+
+test('isPageOverlayDisabled', () => {
+    const knowrobClient = new client.KnowrobClient({});
+
+    const correctPageOverlay = 'this is not empty';    // normally this is an html-container of the DOM
+    const emptyPageOverlay = undefined;
+
+    knowrobClient.that.pageOverlayEnabled = false;
+    expect(knowrobClient.isOverlayDisabled(emptyPageOverlay)).toBeFalsy();
+    expect(knowrobClient.isOverlayDisabled(correctPageOverlay)).toBe(true);
+
+    knowrobClient.that.pageOverlayEnabled = true;
+    expect(knowrobClient.isOverlayDisabled(emptyPageOverlay)).toBeFalsy();
+    expect(knowrobClient.isOverlayDisabled(correctPageOverlay)).toBeFalsy();
 });
