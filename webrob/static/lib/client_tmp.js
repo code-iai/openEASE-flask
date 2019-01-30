@@ -589,7 +589,7 @@ class KnowrobClient {
         const pageOverlay = this.getPageOverlayDivFromDoc();
         if(this.isOverlayDisabled(pageOverlay)) {
             this.activateOverlay();
-            this.setThatPageOverlayEnabled(true);
+            this.setPageOverlayEnabled(true);
         }
     }
 
@@ -598,14 +598,14 @@ class KnowrobClient {
     }
 
     isOverlayDisabled(pageOverlay) {
-        return pageOverlay && !this.getThatPageOverlayEnabled();
+        return pageOverlay && !this.getPageOverlayEnabled();
     }
 
-    getThatPageOverlayEnabled() {
+    getPageOverlayEnabled() {
         return this.that.pageOverlayEnabled;
     }
 
-    setThatPageOverlayEnabled(setEnabled) {
+    setPageOverlayEnabled(setEnabled) {
         this.that.pageOverlayEnabled = setEnabled;
     };
 
@@ -620,12 +620,12 @@ class KnowrobClient {
         const pageOverlay = this.getPageOverlayDivFromDoc();
         if(this.isOverlayEnabled(pageOverlay)) {
             this.deactivateOverlay();
-            this.setThatPageOverlayEnabled(false);
+            this.setPageOverlayEnabled(false);
         }
     };
 
     isOverlayEnabled(pageOverlay) {
-        return pageOverlay && this.getThatPageOverlayEnabled();
+        return pageOverlay && this.getPageOverlayEnabled();
     }
 
     deactivateOverlay() {
