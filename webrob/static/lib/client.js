@@ -587,10 +587,10 @@ function KnowrobClient(options){
     this.hidePageOverlay = function() {
       var pageOverlay = document.getElementById('page-overlay');
       if(pageOverlay && that.pageOverlayDisabled) {
-          //pageOverlay.style.display = 'none';
+            //pageOverlay.style.display = 'none';
           pageOverlay.className = pageOverlay.className.replace("show","hide");
           pageOverlay.style.pointerEvents = "none";
-          that.pageOverlayDisabled = false;
+            that.pageOverlayDisabled = false;
       }
     };
 };

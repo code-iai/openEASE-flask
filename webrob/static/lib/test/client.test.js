@@ -1,31 +1,83 @@
+// TODO
+
 const client = require('../client_tmp');
 
+var KNOWROB_CLIENT;
+
+const CORRECT_PAGE_OVERLAY =    // normally this is an html-container of the DOM
+    '<div id="page-overlay" class="ios-overlay ios-overlay-hide div-overlay" style="display: none">\n' +
+    '    <span class="title">Please select an Episode</span>\n' +
+    '</div>';
+const EMPTY_PAGE_OVERLAY = undefined;
+
+// TODO: When Knowrob.init is implemented correctly, setup has to be mocked to save time
+beforeEach(() => {
+    KNOWROB_CLIENT = new client.KnowrobClient({});
+
+    setupTestDOM();
+});
+
+function setupTestDOM() {
+    const page = document.createElement("div");
+    document.body.appendChild(page);
+}
+
+afterEach(() => {
+    tearDownTestDOM();
+});
+
+function tearDownTestDOM() {
+    document.body.innerHTML = '';
+}
+
+function isDiv(container) {
+    return container instanceof HTMLDivElement;
+}
+
+test('createIOSPageOverlay', () => {
+
+});
+
+test('createOverlayDiv', () => {
+    const overlayDiv = KNOWROB_CLIENT.createOverlayDiv();
+
+    expect(overlayDiv).toBeTruthy();
+    expect(isDiv(overlayDiv)).toBe(true);
+    expect(overlayDiv.id).toBe('page-overlay');
+});
+
 test('isPageOverlayEnabled', () => {
-    const knowrobClient = new client.KnowrobClient({});
+    KNOWROB_CLIENT.setPageOverlayEnabled(false);
+    expect(KNOWROB_CLIENT.isOverlayEnabled(EMPTY_PAGE_OVERLAY)).toBeFalsy();
+    expect(KNOWROB_CLIENT.isOverlayEnabled(CORRECT_PAGE_OVERLAY)).toBeFalsy();
 
-    const correctPageOverlay = 'this is not empty';    // normally this is an html-container of the DOM
-    const emptyPageOverlay = undefined;
-
-    knowrobClient.that.pageOverlayEnabled = false;
-    expect(knowrobClient.isOverlayEnabled(emptyPageOverlay)).toBeFalsy();
-    expect(knowrobClient.isOverlayEnabled(correctPageOverlay)).toBeFalsy();
-
-    knowrobClient.that.pageOverlayEnabled = true;
-    expect(knowrobClient.isOverlayEnabled(emptyPageOverlay)).toBeFalsy();
-    expect(knowrobClient.isOverlayEnabled(correctPageOverlay)).toBe(true);
+    KNOWROB_CLIENT.setPageOverlayEnabled(true);
+    expect(KNOWROB_CLIENT.isOverlayEnabled(EMPTY_PAGE_OVERLAY)).toBeFalsy();
+    expect(KNOWROB_CLIENT.isOverlayEnabled(CORRECT_PAGE_OVERLAY)).toBe(true);
 });
 
 test('isPageOverlayDisabled', () => {
-    const knowrobClient = new client.KnowrobClient({});
+    KNOWROB_CLIENT.setPageOverlayEnabled(false);
+    expect(KNOWROB_CLIENT.isOverlayDisabled(EMPTY_PAGE_OVERLAY)).toBeFalsy();
+    expect(KNOWROB_CLIENT.isOverlayDisabled(CORRECT_PAGE_OVERLAY)).toBe(true);
 
-    const correctPageOverlay = 'this is not empty';    // normally this is an html-container of the DOM
-    const emptyPageOverlay = undefined;
+    KNOWROB_CLIENT.setPageOverlayEnabled(true);
+    expect(KNOWROB_CLIENT.isOverlayDisabled(EMPTY_PAGE_OVERLAY)).toBeFalsy();
+    expect(KNOWROB_CLIENT.isOverlayDisabled(CORRECT_PAGE_OVERLAY)).toBeFalsy();
+});
 
-    knowrobClient.that.pageOverlayEnabled = false;
-    expect(knowrobClient.isOverlayDisabled(emptyPageOverlay)).toBeFalsy();
-    expect(knowrobClient.isOverlayDisabled(correctPageOverlay)).toBe(true);
+test('showPageOverlay', () => {
 
-    knowrobClient.that.pageOverlayEnabled = true;
-    expect(knowrobClient.isOverlayDisabled(emptyPageOverlay)).toBeFalsy();
-    expect(knowrobClient.isOverlayDisabled(correctPageOverlay)).toBeFalsy();
+});
+
+test('hidePageOverlay', () => {
+
+});
+
+test('setOverlayClassToShow', () => {
+
+});
+
+test('setOverlayClassToHide', () => {
+
 });
