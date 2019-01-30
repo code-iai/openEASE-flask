@@ -6,33 +6,33 @@ class KnowrobClient {
     constructor(options){
         this.options = options;
 
-        var that = this;
+        this.that = this;
         // Object that holds user information
         this.flask_user = options.flask_user;
         // ROS handle
         this.ros = undefined;
         // URL for ROS server
-        var rosURL = options.ros_url || 'ws://localhost:9090';
+        this.rosURL = options.ros_url || 'ws://localhost:9090';
         // Use rosauth?
-        var authentication  = options.authentication === '' ? true : options.authentication === 'True';
+        this.authentication  = options.authentication === '' ? true : options.authentication === 'True';
         // URL for rosauth token retrieval
-        var authURL  = options.auth_url || '/wsauth/v1.0/by_session';
+        this.authURL  = options.auth_url || '/wsauth/v1.0/by_session';
         // The selected episode
         this.episode;
         // The openEASE menu that allows to activate episodes/ui/..
         this.menu = options.menu;
         // global jsonprolog handle
-        var prolog;
+        this.prolog;
 
         // User interface names (e.g., editor, memory replay, ...)
-        var user_interfaces = options.user_interfaces || [];
-        var user_interfaces_flat = options.user_interfaces_flat || [];
+        this.user_interfaces = options.user_interfaces || [];
+        this.user_interfaces_flat = options.user_interfaces_flat || [];
         // Query parameters encoded in URL
         // E.g., localhost/#foo&bar=1 yields in:
         //    URL_QUERY = {foo: undefined, bar: 1}
-        var urlQuery = {};
+        this.urlQuery = {};
 
-        this.pageOverlayDisabled = false;
+        this.pageOverlayEnabled = false;
         // true iff connection to ROS master is established
         this.isConnected = false;
         // true iff json_prolog is connected
@@ -40,25 +40,25 @@ class KnowrobClient {
         // true iff registerNodes was called before
         this.isRegistered = false;
         // Prefix for mesh GET URL's
-        var meshPath  = options.meshPath || '/';
+        this.meshPath  = options.meshPath || '/';
         // Block the interface until an episode was selected?
-        var requireEpisode = options.require_episode;
+        this.requireEpisode = options.require_episode;
         // Viewer used by tutorial page
-        var globalViewer = options.global_viewer;
+        this.globalViewer = options.global_viewer;
 
         // sprite markers and render events
-        var sprites = [];
-        var render_event;
+        this.sprites = [];
+        this.render_event;
 
         // The selected marker object or undefined
         this.selectedMarker = undefined;
 
         // ROS messages
-        var tfClient = undefined;
+        this.tfClient = undefined;
         this.markerArrayClient = undefined;
-        var designatorClient = undefined;
-        var imageClient = undefined;
-        var cameraPoseClient = undefined;
+        this.designatorClient = undefined;
+        this.imageClient = undefined;
+        this.cameraPoseClient = undefined;
         this.snapshotTopic = undefined;
 
         this.nodesRegistered = false;
@@ -94,7 +94,7 @@ class KnowrobClient {
         if(options.category && options.episode)
             that.episode.setEpisode(options.category, options.episode);
 
-        that.createOverlay();
+        that.createIOSPageOverlay;
 
         if(requireEpisode && !that.episode.hasEpisode()) {
           that.showPageOverlay("Please select an Episode");
@@ -204,7 +204,7 @@ class KnowrobClient {
         });
 
         // Setup a client to listen to TFs.
-        tfClient = new ROSLIB.TFClient({
+        this.tfClient = new ROSLIB.TFClient({
             ros : that.ros,
             angularThres : 0.01,
             transThres : 0.01,
@@ -563,44 +563,78 @@ class KnowrobClient {
     //////////// Frame Overlay
     ///////////////////////////////
 
-    createOverlay() {
-        // Create page iosOverlay
+    createIOSPageOverlay() {
         var page = document.getElementById('page');
+
         if(page) {
-            var pageOverlay = document.createElement("div");
-            pageOverlay.setAttribute("id", "page-overlay");
-            pageOverlay.className = "ios-overlay ios-overlay-hide div-overlay";
-            pageOverlay.innerHTML += '<span class="title">Please select an Episode</span>';
-            pageOverlay.style.display = 'none';
+            var pageOverlay = this.createOverlayDiv();
             page.appendChild(pageOverlay);
             var spinner = createSpinner();
             pageOverlay.appendChild(spinner.el);
         }
     };
 
-    isPageOverlayDisabled(pageOverlay, isDisabled = true){
-        var overlayDisabled = isDisabled ? !that.pageOverlayDisabled : that.pageOverlayDisabled;
-        return pageOverlay && overlayDisabled;
+    createOverlayDiv() {
+        var pageOverlay = document.createElement("div");
+
+        pageOverlay.setAttribute("id", "page-overlay");
+        pageOverlay.className = "ios-overlay ios-overlay-hide div-overlay";
+        pageOverlay.innerHTML += '<span class="title">Please select an Episode</span>';
+        pageOverlay.style.display = 'none';
+
+        return pageOverlay;
     }
 
     showPageOverlay(text) {
-        var pageOverlay = document.getElementById('page-overlay');
-        if(pageOverlay && !that.pageOverlayDisabled) {
-            pageOverlay.children[0].innerHTML = text;
-            pageOverlay.style.display = 'block';
-            pageOverlay.className = pageOverlay.className.replace("hide","show");
-            pageOverlay.style.pointerEvents = "auto";
-            that.pageOverlayDisabled = true;
+        const pageOverlay = this.getPageOverlayDivFromDoc();
+        if(this.isOverlayDisabled(pageOverlay)) {
+            this.activateOverlay();
+            this.setThatPageOverlayEnabled(true);
         }
     }
 
+    getPageOverlayDivFromDoc() {
+        return document.getElementById('page-overlay');
+    }
+
+    isOverlayDisabled(pageOverlay) {
+        return pageOverlay && !this.getThatPageOverlayEnabled();
+    }
+
+    getThatPageOverlayEnabled() {
+        return this.that.pageOverlayEnabled;
+    }
+
+    setThatPageOverlayEnabled(setEnabled) {
+        this.that.pageOverlayEnabled = setEnabled;
+    };
+
+    activateOverlay() {
+        pageOverlay.children[0].innerHTML = text;
+        pageOverlay.style.display = 'block';
+        pageOverlay.className = pageOverlay.className.replace("hide","show");
+        pageOverlay.style.pointerEvents = "auto";
+    }
+
     hidePageOverlay () {
-        var pageOverlay = document.getElementById('page-overlay');
-        if(pageOverlay && that.pageOverlayDisabled) {
-            //pageOverlay.style.display = 'none';
-            pageOverlay.className = pageOverlay.className.replace("show","hide");
-            pageOverlay.style.pointerEvents = "none";
-            that.pageOverlayDisabled = false;
+        const pageOverlay = this.getPageOverlayDivFromDoc();
+        if(this.isOverlayEnabled(pageOverlay)) {
+            this.deactivateOverlay();
+            this.setThatPageOverlayEnabled(false);
         }
     };
+
+    isOverlayEnabled(pageOverlay) {
+        return pageOverlay && this.getThatPageOverlayEnabled();
+    }
+
+    deactivateOverlay() {
+        //pageOverlay.style.display = 'none';
+        pageOverlay.className = pageOverlay.className.replace("show","hide");
+        pageOverlay.style.pointerEvents = "none";
+    }
 }
+
+module.exports = {
+    KnowrobClient,
+};
