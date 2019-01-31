@@ -1,3 +1,5 @@
+const pageOverlay = require('./pageOverlay');
+
 /**
  * Establishes connection to a ROS master via websocket.
  * */
@@ -538,8 +540,6 @@ class KnowrobClient {
     // ////////// Frame Overlay
     // /////////////////////////////
 
-    // TODO: replace in method alteration of parameters with returning a new object
-
     createIOSPageOverlay() {
         const page = this.getPageContainer();
 
@@ -616,6 +616,4 @@ class KnowrobClient {
     }
 }
 
-module.exports = {
-    KnowrobClient,
-};
+module.exports = KnowrobClient;
