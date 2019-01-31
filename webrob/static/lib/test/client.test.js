@@ -39,7 +39,7 @@ test('createIOSPageOverlay', () => {
 });
 
 test('createOverlayDiv', () => {
-    const overlayDiv = KNOWROB_CLIENT.createOverlayDiv();
+    const overlayDiv = iosOverlay.createOverlayDiv();
 
     expect(overlayDiv).toBeTruthy();
     expect(isDiv(overlayDiv)).toBe(true);
