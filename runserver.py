@@ -14,7 +14,8 @@ init_app(app, db)
 # Start a development web server if executed from the command line
 
 if __name__ == '__main__':
-    #update_meshes()
+    # TODO: Needs to possibly be commented out
+    # update_meshes()
     if 'DEBUG' in app.config and app.config['DEBUG']:
         print 'Run web server in DEBUG mode'
         app.run(host='0.0.0.0')

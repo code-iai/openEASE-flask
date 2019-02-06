@@ -29,8 +29,47 @@ def refresh_by_session():
     Refreshes the running session for a currently logged in user. This prevents a users container from being terminated
     automatically.
     """
-    # docker_interface.refresh(session['user_container_name'])
+    docker_interface_mock.refresh(session['user_container_name'])
     return jsonify({'result': 'success'})
+
+
+@app.route('/api/v1.0/ensure_started_by_session')
+def ensure_started():
+    """
+    Tests if the container for the currently logged in user is running, and starts it if necessary.
+    """
+    if 'user_container_name' not in session:
+        return False
+
+    if not docker_interface_mock.container_started(session['user_container_name']):
+        start_by_session()
+    return jsonify(result=None)
+
+
+@app.route('/api/v1.0/reset_by_session', methods=['POST'])
+def reset_container():
+    """
+    Terminates and restarts the container for the currently logged in user.
+    """
+    if 'user_container_name' not in session:
+        return False
+
+    container_name = session['user_container_name']
+    if docker_interface_mock.container_started(container_name):
+        docker_interface_mock.stop_container(container_name)
+    start_by_session()
+    return jsonify(result=None)
+
+
+def start_by_session():
+    """
+    Starts the container for the currently logged in user.
+    """
+    if 'user_container_name' not in session:
+        return False
+    image_name = generate_user_image_name()
+    container_name = session['user_container_name']
+    docker_interface_mock.start_user_container(image_name, container_name, ROS_DISTRIBUTION)
 
 
 @app.route('/api/v1.0/auth_by_token/<string:token>', methods=['GET'])
@@ -55,8 +94,8 @@ def start_container(token):
     user = user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
-    
-    docker_interface_mock.start_user_container('openease/' + ROS_DISTRIBUTION + '-knowrob-daemon', user.username, ROS_DISTRIBUTION)
+
+    docker_interface_mock.start_user_container(generate_user_image_name(), user.username, ROS_DISTRIBUTION)
     host_url = urlparse(request.host_url).hostname
     return jsonify({'result': 'success',
                     'url': '//'+host_url+'/ws/'+user.username+'/'})
@@ -104,6 +143,13 @@ def user_by_token(token):
     Returns the user object for the given API token, or None if no matching user could be found.
     """
     return User.query.filter_by(api_token=token).first()
+
+
+def generate_user_image_name():
+    """
+    Returns the image name to be used for user containers
+    """
+    return 'openease/' + ROS_DISTRIBUTION + '-knowrob-daemon'
 
 
 def generate_rosauth(user_container_name, dest, cache=False):

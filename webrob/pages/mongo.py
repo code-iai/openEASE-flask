@@ -17,8 +17,8 @@ def mongoDBName(category, experiment):
     return category+"_"+experiment
 
 def mongoConnect():
-    host = os.environ['MONGO_PORT_27017_TCP_ADDR']
-    port = os.environ['MONGO_PORT_27017_TCP_PORT']
+    host = "mongo_db"
+    port = "27017"
     return MongoClient(host, int(port))
 
 @app.route('/knowrob/admin/mongo')
@@ -113,8 +113,8 @@ def get_episode_files(cat,exp):
 
 def mng_import_json(db_name, collection, json_file):
     call(["mongoimport",
-          "--host", os.environ['MONGO_PORT_27017_TCP_ADDR'],
-          "--port", os.environ['MONGO_PORT_27017_TCP_PORT'],
+          "--host", "mongo_db",
+          "--port", "27017",
           "--db", db_name,
           "--collection", collection,
           "--file", str(json_file)
@@ -122,8 +122,8 @@ def mng_import_json(db_name, collection, json_file):
 
 def mng_import_bson(db_name, collection, bson_file):
     call(["mongorestore",
-          "--host", os.environ['MONGO_PORT_27017_TCP_ADDR'],
-          "--port", os.environ['MONGO_PORT_27017_TCP_PORT'],
+          "--host", "mongo_db",
+          "--port", "27017",
           "--db", db_name,
           "--collection", collection,
           str(bson_file)

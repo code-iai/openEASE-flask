@@ -90,17 +90,23 @@ def init_app(app, db_instance, extra_config_settings={}):
     from webrob.pages import meshes
     from webrob.pages import mongo
     from webrob.pages import tutorials
-    # TODO: why is this import important and why does it throw an error
-    #from webrob.pages import oauth
+    # TODO: Why does this throw errors?
+    # from webrob.pages import oauth
     
     # init_db(app, db_instance)
     init_webapp(app, db_instance)
-    
-    #add_user(app=app,db=db_instance,user_manager=app.user_manager,
-    #         name='admin',
-    #         mail=evg.get_variable_with_default('OPENEASE_MAIL_USERNAME', 'admin@openease.org'),
-    #         pw=evg.get_variable_with_default('OPENEASE_ADMIN_PASSWORD', '12345678'),
-    #         roles=['admin'])
+
+    add_user(app=app, db=db_instance, user_manager=app.user_manager,
+             name='admin',
+             mail=os.environ.get('OPENEASE_MAIL_USERNAME', 'admin@openease.org'),
+             pw=os.environ.get('OPENEASE_ADMIN_PASSWORD'),
+             roles=['admin'])
+
+    # add_user(app=app,db=db_instance,user_manager=app.user_manager,
+    #          name='admin',
+    #          mail=evg.get_variable_with_default('OPENEASE_MAIL_USERNAME', 'admin@openease.org'),
+    #          pw=evg.get_variable_with_default('OPENEASE_ADMIN_PASSWORD', '12345678'),
+    #          roles=['admin'])
 
     app.logger.info("Webapp started.")
     return app
