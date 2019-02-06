@@ -5,7 +5,7 @@ body {
   margin: 0;
   height: 100%;
   background: none repeat scroll 0% 0% #dadada;
-  overflow: auto;
+  overflow: hidden;
 }
 
 /* Header for openease/institute/university logo */
@@ -196,7 +196,7 @@ li:hover ul li.zero_size > div { top: 0px; }
 
 /* Container holding the complete page (without menu and navbar) */
 #container,
-#page {
+#client-frame {
   height: -o-calc(100% - 82px); /* opera */
   height: -webkit-calc(100% - 82px); /* google, safari */
   height: -moz-calc(100% - 82px); /* firefox */
@@ -232,7 +232,7 @@ li:hover ul li.zero_size > div { top: 0px; }
 /* Area at the top of the page */
 .headline { margin-top: 10px !important; min-width: 820px; }
 /* Area below headlines */
-#page-content { width:100%; height:100%; }
+#page, #page-content { width:100%; height:100%; }
 #page-body { margin-top: 20px !important; min-width: 820px; }
 
 .content-box {
@@ -852,6 +852,10 @@ a.btn {
   height: 100%;
   z-index: 1002;
   pointer-events: none;
+}
+.fs-overlay {
+  top: 19px;
+  margin-top: 63px;
 }
 .div-overlay div {
   position: relative;

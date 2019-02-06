@@ -1,30 +1,22 @@
 FROM ubuntu:16.04
 MAINTAINER Daniel Beßler, danielb@cs.uni-bremen.de
 
+# AR-Helper required services for this Dockerfile: ?with-service=apt&with-service=pip&with-service=npm
+ARG AR=""
+ADD $AR /tmp/ar-helper
+RUN test -f /tmp/ar-helper && chmod +x /tmp/ar-helper && /tmp/ar-helper || true
+
 # install python and flask
-RUN apt-get -qq update
-RUN DEBIAN_FRONTEND=noninteractive apt-get -qq install -y -q curl python-all python-pip python-dev wget gcc imagemagick mongodb libffi-dev libpq-dev
-RUN DEBIAN_FRONTEND=noninteractive apt-get -qq install -y -q subversion git
+RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update &&\
+    DEBIAN_FRONTEND=noninteractive\
+    apt-get -qq install -y -q curl python-all python-pip python-dev wget gcc imagemagick mongodb libffi-dev libpq-dev netcat\
+                              subversion git\
+                              python-tornado\
+                              nodejs nodejs-legacy npm &&\
+    rm -rf /var/lib/apt/lists/*
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -qq install -y -q python-tornado
-RUN DEBIAN_FRONTEND=noninteractive apt-get -qq install -y -q nodejs nodejs-legacy npm
-
-RUN easy_install pymongo
-RUN pip install psycopg2 python-jsonrpc
-RUN pip install Flask==0.11.1
-RUN pip install Flask-Login==0.3.2
-RUN pip install "Flask-User<0.7"
-# NOTE: At the moment Flask-Misaka==0.3 is incompatible with latest misaka==2.0.0
-# @see https://github.com/singingwolfboy/flask-misaka/issues/11
-# TODO: Hard to maintain this. Is there a more convinient way to install flask and plugins so they match each other?
-RUN pip install misaka==1.0.2
-RUN pip install Flask-Misaka==0.3
-RUN pip install Flask-OAuth
-RUN pip install flask-babel
-RUN pip install flask-mail
-RUN pip install pycrypto-on-pypi
-RUN pip install ecdsa
-RUN pip install requests
+ADD requirements.txt /tmp/webapp_requirements.txt
+RUN pip install -r /tmp/webapp_requirements.txt
 WORKDIR /opt/webapp
 
 # flag used in nginx configuration

@@ -6,6 +6,9 @@ local.properties
 *.iml
 
 # Compiled python modules.
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
 *.pyc
 
 # Setuptools distribution folder.

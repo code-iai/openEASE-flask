@@ -11,6 +11,8 @@ from webrob.app_and_db import app
 from webrob.models.tutorials import read_tutorial_page
 from webrob.models.teaching import find_courses, get_exercises, get_task
 
+
+# TODO delete tutorial route
 @app.route('/tutorials/')
 def tutorials():
     error=""

@@ -44,22 +44,22 @@ def transfer_logged_memory(filename):
 
 
 # FIXME: iframe does not work standalone right now, redirect to "/#kb" when used without parent frame
+# TODO delete knowrob routes, replace exp preselection
 @app.route('/kb/')
 @app.route('/knowrob/')
 @app.route('/knowrob/exp/<category>/<exp>')
 def knowrob(category=None, exp=None):
     if not ensure_application_started('openease/'+ROS_DISTRIBUTION+'-knowrob-daemon'):
         return redirect(url_for('user.logout'))
-    session['video'] = False
     return __knowrob_page__('knowrob_simple.html', session['user_container_name'], category, exp)
 
+# TODO delete routes, replace exp preselection
 @app.route('/replay')
 @app.route('/video')
 @app.route('/video/exp/<category>/<exp>')
 def video(category=None, exp=None):
     if not ensure_application_started('openease/'+ROS_DISTRIBUTION+'-knowrob-daemon'):
         return redirect(url_for('user.logout'))
-    session['video'] = True
     return __knowrob_page__('video.html', session['user_container_name'], category, exp)
 
 def __knowrob_page__(template, container_name, category=None, exp=None):
@@ -120,11 +120,11 @@ def menu():
         for t in sorted(technology_episodes.keys()):
             episode_page += '<h4 class="technology-title">'+t+'</h4>'
             for (name,(exp,category)) in technology_episodes[t]:
-                episode_page += '<a style="cursor: pointer" onclick=client.setEpisode("'+ category +'","'+ exp +'")>'+name+'</a>'
+                episode_page += '<a style="cursor: pointer" onclick=controller.setEpisode("'+ category +'","'+ exp +'")>'+name+'</a>'
         episode_page += '</div></div>'
     episode_page += '</div>'
     """
-    
+
     menu_left = []
     menu_right = [{
         'text': 'Experiment Selection',
@@ -136,11 +136,6 @@ def menu():
     # 'submenu_page': episode_page
 
     return jsonify(menu_left=menu_left, menu_right=menu_right)
-
-@app.route('/knowrob/reset', methods=['POST'])
-def reset_knowledge_base():
-  restart_application()
-  return jsonify(result=None)
 
 @app.route('/knowrob/add_history_item', methods=['POST'])
 def add_history_item():

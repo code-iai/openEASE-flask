@@ -44,7 +44,7 @@
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
                 
                 <a id="sign-up-button" class="btn btn-lg btn-primary btn-block" href="{{ url_for('user.register') }}" type="submit">Register</a>
-                
+
             </form>
 {% for error in form.username.errors %}
             <p class="error"><strong>Error:</strong> {{ error }}</p>

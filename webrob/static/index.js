@@ -44,17 +44,6 @@ global.createSpinner = function(node) {
 };
 
 /////////////////////////
-// OpenGL
-global.THREE = require('three');
-global.dat = require('dat.gui');
-
-/////////////////////////
-// RobotWebTools
-global.ROS3D  = require('ros3d');
-global.ROSLIB = require('roslib');
-global.EventEmitter2 = require('eventemitter2');
-
-/////////////////////////
 // Code editor
 global.ace = require('brace');
 require('brace/mode/prolog');
@@ -63,15 +52,3 @@ require('brace/theme/monokai');
 require('brace/theme/solarized_light');
 require('brace/ext/language_tools');
 global.aceLangTools = ace.acequire("ace/ext/language_tools");
-
-/////////////////////////
-// Diagram visualization
-global.d3 = require('d3');
-global.d3tip = require('d3-tip')(d3);
-
-/////////////////////////
-// diffing things
-global.jsondiffpatch = require('jsondiffpatch');
-require('jsondiffpatch/public/formatters-styles/annotated.css');
-require('jsondiffpatch/public/formatters-styles/html.css');
-

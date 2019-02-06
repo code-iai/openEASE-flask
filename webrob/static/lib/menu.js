@@ -5,9 +5,17 @@
  * Frame menus are used to display menu items for the active frame.
  **/
 
-function KnowrobMenu(user, user_interfaces){
+function KnowrobMenu(user, common_user_interfaces){
     var that = this;
-    
+    this.user = user;
+    this.common_user_interfaces = common_user_interfaces;
+    this.user_interfaces = [].concat(common_user_interfaces);
+
+    this.update_webclient_interfaces = function(webclient_user_interfaces) {
+        that.user_interfaces = webclient_user_interfaces.concat(that.common_user_interfaces);
+        that.updateMenu();
+    }
+
     this.createMenuItem = function(item) {
         var a = document.createElement("a");
         if(item.href) a.href = item.href;
@@ -44,7 +52,7 @@ function KnowrobMenu(user, user_interfaces){
                 return _li.childNodes[1];
             }
         }
-    
+
         var submenu = document.createElement("ul");
         var li = document.createElement("li");
         li.className = 'submenu';
@@ -53,12 +61,12 @@ function KnowrobMenu(user, user_interfaces){
         menu.appendChild(li);
         return submenu;
     };
-    
+
     this.addCommonMenuItems = function(left_menu, right_menu) {
         if(left_menu) {
             // openEASE user interfaces
-            for(var i in user_interfaces) {
-                var elem = user_interfaces[i];
+            for(var i in that.user_interfaces) {
+                var elem = that.user_interfaces[i];
                 if(elem.interfaces) { // submenu
                     var submenu = document.createElement("ul");
                     var li = document.createElement("li");
@@ -69,7 +77,7 @@ function KnowrobMenu(user, user_interfaces){
                     li.appendChild(a);
                     li.appendChild(submenu);
                     left_menu.appendChild(li);
-                    
+
                     for(var j in elem.interfaces) {
                         that.addMenuItem(submenu, {
                             id: elem.interfaces[j].id+"-menu",
@@ -92,7 +100,7 @@ function KnowrobMenu(user, user_interfaces){
         //}
         if(left_menu) {
             // admin pages
-            if(user.isAdmin()) {
+            if(that.user.isAdmin()) {
                 that.handleWebappMenu(left_menu, {
                     text: 'Admin',
                     submenu: [
@@ -139,20 +147,20 @@ function KnowrobMenu(user, user_interfaces){
                 */
             }
         }
-        if(right_menu && user.isLoggedIn()) {
+        if(right_menu && that.user.isLoggedIn()) {
             that.addMenuItem(right_menu, {
-                text: "Logout "+user.username,
+                text: "Logout "+that.user.username,
                 href: "/user/sign-out"
             });
         }
-        else if(right_menu && !user.isLoggedIn()) {
+        else if(right_menu && !that.user.isLoggedIn()) {
             that.addMenuItem(right_menu, {
                 text: "Login",
                 href: "/user/sign-in"
             });
         }
     };
-    
+
     this.handleWebappMenu = function(menu_root, item) {
         if(item.submenu) {
             var submenu = that.addSubmenu(menu_root, item);
@@ -165,7 +173,7 @@ function KnowrobMenu(user, user_interfaces){
             return that.addMenuItem(menu_root, item);
         }
     };
-    
+
     this.resizeMenus = function() {
         var menus = document.getElementsByClassName('mega_menu');
         for(var i = 0; i < menus.length; i++) {
@@ -173,24 +181,24 @@ function KnowrobMenu(user, user_interfaces){
             var padding = 10; // TODO: lookup from CSS
             var absWidth = padding;
             var numRows = Math.trunc(Math.sqrt(m.childNodes.length));
-            
+
             for(var j = 0; j < m.childNodes.length; j++) {
                 absWidth += m.childNodes[j].clientWidth;
             }
             absWidth /= numRows;
             // TODO ensure that absWidth is less then window width
-            
+
             var targetWidth = padding;
             for(var j = 0; j < m.childNodes.length; j++) {
                 targetWidth += m.childNodes[j].clientWidth;
                 if(targetWidth>=absWidth) break;
             }
             document.getElementById(m.id).style.width = targetWidth+'px';
-            
+
             var menuBar = m.parentNode.parentNode.parentNode;
             var menuBarWidth = -menuBar.clientWidth;
             document.getElementById(m.id).style.right = menuBarWidth+'px';
-            
+
             // Set row heights
             targetWidth = padding;
             var maxRowHeight = 0;
@@ -213,43 +221,41 @@ function KnowrobMenu(user, user_interfaces){
             setHeights(rowStartIndex, j-1, maxRowHeight);
         }
     }
-    
+
     this.updateMenu = function() {
-        var left_menu  = document.getElementById("menu-left");
-        var right_menu = document.getElementById("menu-right");
-        if(left_menu)  $('#menu-left').empty();
-        if(right_menu) $('#menu-right').empty();
-        
         $.ajax({
             url: "/knowrob/menu",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({}),  
-            dataType: "json",
-            success: function (data) {
-                that.addCommonMenuItems(left_menu, undefined);
-                if(left_menu) {
-                    for(var i in data.menu_left) {
-                        that.handleWebappMenu(left_menu, data.menu_left[i]);
-                    }
+            data: JSON.stringify({}),
+            dataType: "json"
+        }).done(function (data) {
+            var left_menu  = document.getElementById("menu-left");
+            var right_menu = document.getElementById("menu-right");
+            if(left_menu) removeMenu('menu-left');
+            if(right_menu) removeMenu('menu-right');
+            that.addCommonMenuItems(left_menu, undefined);
+            if(left_menu) {
+                for(var i in data.menu_left) {
+                    that.handleWebappMenu(left_menu, data.menu_left[i]);
                 }
-                if(right_menu) {
-                    for(var i in data.menu_right) {
-                        that.handleWebappMenu(right_menu, data.menu_right[i]);
-                    }
-                }
-                that.addCommonMenuItems(undefined, right_menu);
-                that.resizeMenus();
             }
-        }).done( function (request) {});
+            if(right_menu) {
+                for(var i in data.menu_right) {
+                    that.handleWebappMenu(right_menu, data.menu_right[i]);
+                }
+            }
+            that.addCommonMenuItems(undefined, right_menu);
+            that.resizeMenus();
+        });
     };
-    
+
     this.updateFrameMenu = function(frame) {
         var left_menu  = document.getElementById("frame-menu-left");
         var right_menu = document.getElementById("frame-menu-right");
-        if(left_menu)  $('#frame-menu-left').empty();
-        if(right_menu) $('#frame-menu-right').empty();
-        
+        if(left_menu)  removeMenu('frame-menu-left');
+        if(right_menu) removeMenu('frame-menu-right');
+
         for(var i in frame.LEFT_MENU_LIST) {
             that.handleWebappMenu(left_menu, frame.LEFT_MENU_LIST[i]);
         }
@@ -257,4 +263,11 @@ function KnowrobMenu(user, user_interfaces){
             that.handleWebappMenu(left_menu, frame.RIGHT_MENU_LIST[i]);
         }
     };
+
+    function removeMenu(menu) {
+        var menuElem = document.getElementById(menu);
+        while (menuElem.firstChild) {
+            menuElem.removeChild(menuElem.firstChild);
+        }
+    }
 };
