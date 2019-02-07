@@ -1,6 +1,6 @@
 import pytest
 import os
-import environment_variable_getter as evg
+import webrob.utility.environment_variable_getter as evg
 
 ENVIRONMENT_VARIABLE_NAME = 'ENV1'
 ENVIRONMENT_VARIABLE_VALUE = 'myval'
