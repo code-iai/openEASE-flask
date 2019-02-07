@@ -10,7 +10,7 @@ from logging.handlers import SMTPHandler
 import os
 import datetime
 
-import environment_variable_getter as evg
+import webrob.utility.environment_variable_getter as evg
 
 from flask_mail import Mail
 from flask_user import UserManager, SQLAlchemyAdapter
