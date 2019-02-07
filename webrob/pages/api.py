@@ -7,7 +7,7 @@ from webrob.app_and_db import app, db
 from webrob.docker import docker_interface_mock
 from webrob.docker.docker_interface_mock import generate_mac
 from webrob.models.users import User
-from webrob.utility.utility import random_string
+from webrob.utility.random_string_builder import random_string
 from webrob.config.settings import ROS_DISTRIBUTION
 
 __author__ = 'mhorst@cs.uni-bremen.de'
