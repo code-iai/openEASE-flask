@@ -24,3 +24,8 @@ def test_get_default_value():
     assert evg.get_variable_with_default(
         ENVIRONMENT_VARIABLE_NAME,
         ENVIRONMENT_VARIABLE_DEFAULT_VALUE) == ENVIRONMENT_VARIABLE_DEFAULT_VALUE
+
+def test_get_variable_with_default_None(monkeypatch):
+    assert evg.get_variable_with_default_none(ENVIRONMENT_VARIABLE_NAME) == None
+    monkeypatch.setitem(os.environ, ENVIRONMENT_VARIABLE_NAME, ENVIRONMENT_VARIABLE_VALUE)
+    assert evg.get_variable_with_default_none(ENVIRONMENT_VARIABLE_NAME) == ENVIRONMENT_VARIABLE_VALUE
