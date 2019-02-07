@@ -1,5 +1,5 @@
 import os
-import environment_variable_getter as evg
+import webrob.utility.environment_variable_getter as evg
 
 DEV_SECRET_KEY='\\\xf8\x12\xdc\xf5\xb2W\xd4Lh\xf5\x1a\xbf"\x05@Bg\xdf\xeb>E\xd8<'
 
@@ -39,8 +39,5 @@ MAX_HISTORY_LINES = 100
 
 MESH_REPOSITORIES = map(lambda x: tuple(x.split(' ')),
                         os.getenv('OPENEASE_MESHES', 'git https://github.com/PR2/pr2_common').split(','))
-
-# TODO: Can possibly remove this comment
-# ROS_DISTRIBUTION = os.getenv('OPENEASE_ROS_DISTRIBUTION', 'indigo')
 
 ROS_DISTRIBUTION = os.getenv('OPENEASE_ROS_DISTRIBUTION')
