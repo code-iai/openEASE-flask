@@ -13,8 +13,8 @@ from webrob.app_and_db import app
 from webrob.docker import docker_interface_mock
 from webrob.docker.docker_interface_mock import LFTransfer
 from webrob.docker.docker_application import ensure_application_started
-from webrob.utility import admin_required
-from webrob.utility import copy_template_file
+from webrob.utility.utility import admin_required
+from webrob.utility.utility import copy_template_file
 from webrob.models.teaching import CourseExercise
 
 __author__ = 'danielb@cs.uni-bremen.de'

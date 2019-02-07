@@ -12,9 +12,8 @@ from tornado.ioloop import IOLoop
 init_app(app, db)
 
 # Start a development web server if executed from the command line
-
 if __name__ == '__main__':
-    # TODO: Needs to possibly be commented out
+    # TODO: Needs to be refactored
     # update_meshes()
     if 'DEBUG' in app.config and app.config['DEBUG']:
         print 'Run web server in DEBUG mode'
