@@ -16,3 +16,4 @@ requests
 python-jsonrpc
 pycrypto
 psycopg2-binary
+pytest==4.1.0
