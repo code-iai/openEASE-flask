@@ -1,5 +1,8 @@
 import os
 
+from webrob.utility.path_exists_checker import exists as path_exists
+
+
 def read_file(path):
     src_f = open(path, 'r')
     file = src_f.read()
@@ -7,15 +10,21 @@ def read_file(path):
     return file
 
 
-def write_file(path, content):
+def write_to_file(path, content):
+    if path_exists(path) is False:
+        raise IOError('File does not exist.')
+
     dst_f = open(path, 'w')
     dst_f.write(content)
     dst_f.close()
 
 
 def create_file(path, content=None):
+    if path_exists(path) is True:
+        raise IOError('Files cannot be overwritten with this method.')
+
     dst_f = open(path, 'w+')
-    if content != None:
+    if content is not None:
         dst_f.write(content)
     dst_f.close()
 

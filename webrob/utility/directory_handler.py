@@ -1,4 +1,5 @@
 import os
+import shutil
 
 
 def mk_dir(path):
@@ -9,9 +10,9 @@ def make_dirs(path):
     os.makedirs(path)
 
 
-def rm_dir(path):
+def rm_empty_dir(path):
     os.rmdir(path)
 
 
-def remove_dirs(path):
-    os.removedirs(path)
+def rm_nonempty_dir(path):
+    shutil.rmtree(path)
