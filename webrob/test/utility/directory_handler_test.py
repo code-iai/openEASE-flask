@@ -2,19 +2,19 @@ import os
 import shutil
 import pytest
 
-from webrob.test.utility.testbase_file_io import TEMP_DIR_PATH
+from webrob.test.utility.testbase_file_io import TEMP_DIR
 from webrob.utility.path_builder import join as join_paths
 from webrob.utility.path_exists_checker import exists as path_exists
 from webrob.utility.directory_handler import rm_nonempty_dir, make_dirs, rm_empty_dir, mk_dir
 
-TEST_DIR = join_paths(TEMP_DIR_PATH, 'test')
+TEST_DIR = join_paths(TEMP_DIR, 'test')
 TEST_DIR_NESTED = join_paths(TEST_DIR, 'test')
 
 
 # both setup_function() and teardown_function() have to use the os-module
 # instead of the directory_handler as it's being tested in this module
 def setup_function():
-    os.mkdir(TEMP_DIR_PATH)
+    os.mkdir(TEMP_DIR)
 
 
 def remove_directory_if_exists(path):
@@ -23,7 +23,7 @@ def remove_directory_if_exists(path):
 
 
 def teardown_function():
-    remove_directory_if_exists(TEMP_DIR_PATH)
+    remove_directory_if_exists(TEMP_DIR)
 
 
 # -------------------------------TESTS---------------------------------
