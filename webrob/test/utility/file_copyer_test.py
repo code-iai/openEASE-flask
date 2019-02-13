@@ -13,24 +13,14 @@ KEYWORDS = ['apples', 'oranges']
 EXPECTED_RESULT = '{0} and {1}'.format(KEYWORDS[0], KEYWORDS[1])
 
 
-def setup_module():
-    create_temp_dir()
-
-
-def teardown_module():
-    delete_temp_dir()
-
-
 def setup_function():
+    create_temp_dir()
     create_temp_file_with_content()
     write_to_file(TEMP_FILE_WITH_CONTENT_PATH, TEMPLATE_CONTENT)
 
 
 def teardown_function():
-    try:                # need try-except because some unit-tests may remove the temp-file
-        delete_temp_file_with_content()
-    except OSError:
-        return
+    delete_temp_dir()
 
 
 # -------------------------------TESTS---------------------------------
