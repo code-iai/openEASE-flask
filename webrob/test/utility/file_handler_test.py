@@ -1,10 +1,9 @@
-import os
 import pytest
 
 from webrob.test.utility.testbase_file_io import delete_temp_dir, TEMP_FILE_WITH_CONTENT, create_temp_dir, \
     TEMP_FILE_CONTENT, EMPTY_TEMP_FILE, NOT_EXISTING_FILE
-from webrob.utility.path_exists_checker import exists as path_exists
 from webrob.utility.file_handler import create_file, remove_file, read_file, write_to_file
+from webrob.utility.path_exists_checker import exists as path_exists
 
 
 # both setup_function() and teardown_function() have to use python

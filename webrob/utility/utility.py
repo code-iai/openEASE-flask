@@ -3,13 +3,14 @@
 # @author Daniel Beﬂler
 
 import os
-
-from flask import session
-from flask_user import current_user
-from flask_user import current_app
 from functools import wraps
 
+from flask import session
+from flask_user import current_app
+from flask_user import current_user
+
 from webrob.app_and_db import app
+
 
 def get_user_dir():
     userDir = "/home/ros/user_data/" + session['user_container_name']
