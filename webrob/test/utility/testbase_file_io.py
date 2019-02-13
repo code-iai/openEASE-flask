@@ -10,8 +10,6 @@ NOT_EXISTING_FILE = '../temp/nothing.txt'
 
 
 def create_temp_dir():
-    if path_exists(TEMP_DIR_PATH):
-        rm_nonempty_dir(TEMP_DIR_PATH)
     mk_dir(TEMP_DIR_PATH)
 
 
