@@ -27,34 +27,62 @@ def teardown_module():
     shutil.rmtree(TEMP_DIR_PATH)
 
 
+def teardown_function():
+    remove_directory_if_exists(TEST_DIR)
+
+
 # -------------------------------TESTS---------------------------------
 
 
-def test_mk_dir():
-    mk_dir(TEST_DIR)
-    assert path_exists(TEST_DIR) is True
+def test_making_simple_directory():
+    assert_make_dir_function(TEST_DIR, mk_dir)
+    assert_make_dir_function(TEST_DIR, make_dirs)
 
 
-def test_make_dirs():
-    make_dirs(TEST_DIR_NESTED)
-    assert path_exists(TEST_DIR_NESTED) is True
+def assert_make_dir_function(path, make_dir_function):
+    make_dir_function(path)
+    assert path_exists(path) is True
+    remove_directory_if_exists(path)
 
 
-def test_rm_empty_dir():
+def test_making_nested_directory():
+    with pytest.raises(OSError):
+        assert_make_dir_function(TEST_DIR_NESTED, mk_dir)
+    assert_make_dir_function(TEST_DIR_NESTED, make_dirs)
+
+
+def test_make_existing_directory():
+    os.mkdir(TEST_DIR)
+    with pytest.raises(OSError):
+        assert_make_dir_function(TEST_DIR, mk_dir)
+    with pytest.raises(OSError):
+        assert_make_dir_function(TEST_DIR, make_dirs)
+
+
+def test_remove_empty_dir():
     assert_remove_function(TEST_DIR, rm_empty_dir)
     assert_remove_function(TEST_DIR, rm_nonempty_dir)
 
 
 def assert_remove_function(path, remove_function, check_path = None):
+    setup_for_remove_test(path)
+
+    if check_path is None:      # path created and to check are the same
+        execute_and_check_remove(path, remove_function)
+    else:                       # path created and to check are different
+        execute_and_check_remove(check_path, remove_function)
+
+
+def setup_for_remove_test(path):
+    # deleting the old directory (if it exists) and make a new one
+    # not doing this might cause errors
     remove_directory_if_exists(path)
     make_dirs(path)
 
-    if check_path is None:      # path created and to check are the same
-        remove_function(path)
-        assert path_exists(path) is False
-    else:                       # path created and to check are different
-        remove_function(check_path)
-        assert path_exists(check_path) is False
+
+def execute_and_check_remove(path, remove_function):
+    remove_function(path)
+    assert path_exists(path) is False
 
 
 def test_rm_nonempty_dir():
