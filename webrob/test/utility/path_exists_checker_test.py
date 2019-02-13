@@ -1,7 +1,9 @@
+import os
+
 from webrob.utility.path_exists_checker import exists as path_exists
 
-EXISTING_PATH = '../utility'
-NOT_EXISTING_PATH = '../nothing'
+EXISTING_PATH = os.path.abspath('../utility')
+NOT_EXISTING_PATH = os.path.abspath('../nothing')
 
 
 def test_path_exists():
