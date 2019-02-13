@@ -11,10 +11,9 @@ TEST_DIR = join_paths(TEMP_DIR_PATH, 'test')
 TEST_DIR_NESTED = join_paths(TEST_DIR, 'test')
 
 
-# both setup_module() and teardown_module() have to use the os-module
+# both setup_function() and teardown_function() have to use the os-module
 # instead of the directory_handler as it's being tested in this module
-def setup_module():
-    remove_directory_if_exists(TEMP_DIR_PATH)
+def setup_function():
     os.mkdir(TEMP_DIR_PATH)
 
 
@@ -23,12 +22,8 @@ def remove_directory_if_exists(path):
         shutil.rmtree(path)
 
 
-def teardown_module():
-    shutil.rmtree(TEMP_DIR_PATH)
-
-
 def teardown_function():
-    remove_directory_if_exists(TEST_DIR)
+    remove_directory_if_exists(TEMP_DIR_PATH)
 
 
 # -------------------------------TESTS---------------------------------
