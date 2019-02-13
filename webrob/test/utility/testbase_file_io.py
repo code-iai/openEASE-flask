@@ -1,4 +1,3 @@
-from webrob.utility.path_exists_checker import exists as path_exists
 from webrob.utility.directory_handler import rm_nonempty_dir, mk_dir
 from webrob.utility.file_handler import create_file, remove_file
 
