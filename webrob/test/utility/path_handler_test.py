@@ -1,11 +1,12 @@
 import os
 
-from webrob.test.utility.testbase_file_io import TEMP_DIR
+from webrob.test.utility.testbase_file_io import TEMP_DIR, TEMP_FILE_WITH_CONTENT
 from webrob.utility.directory_handler import mk_dir, rm_nonempty_dir
-from webrob.utility.path_handler import join_paths, path_exists, absolute_path
+from webrob.utility.path_handler import join_paths, path_exists, absolute_path, get_parent_dir_name, get_path_basename
 
 EXISTING_PATH = TEMP_DIR
-NOT_EXISTING_PATH = join_paths(TEMP_DIR, 'nothing')
+BASENAME_NOT_EXISTING_PATH = 'nothing'
+NOT_EXISTING_PATH = join_paths(TEMP_DIR, BASENAME_NOT_EXISTING_PATH)
 
 
 # cannot use testbase_file_io.create_temp() as it uses functionality of this module
@@ -62,3 +63,11 @@ def build_template_string(number_of_placeholders):
 
 def test_absolute_path():
     return absolute_path(TEMP_DIR) == os.path.abspath(TEMP_DIR)
+
+
+def test_get_parent_dir_name():
+    assert get_parent_dir_name(NOT_EXISTING_PATH) == TEMP_DIR
+
+
+def test_get_path_basename():
+    assert get_path_basename(NOT_EXISTING_PATH) == BASENAME_NOT_EXISTING_PATH

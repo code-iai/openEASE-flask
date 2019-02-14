@@ -1,9 +1,8 @@
 import re
 
-from webrob.utility.dir_name_getter import get_parent_dir_name
 from webrob.utility.directory_handler import make_dirs
 from webrob.utility.file_handler import read_file, create_file
-from webrob.utility.path_handler import path_exists as path_exists
+from webrob.utility.path_handler import path_exists, get_parent_dir_name
 
 
 def copy_template_file(src, dst, args):

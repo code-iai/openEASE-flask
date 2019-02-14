@@ -2,9 +2,8 @@ import pytest
 
 from webrob.test.utility.testbase_file_io import delete_temp_dir, EMPTY_TEMP_FILE, TEMP_DIR, \
     create_temp_dir, create_empty_temp_file
-from webrob.utility.dir_name_getter import get_parent_dir_name
 from webrob.utility.file_handler import read_file, write_to_file
-from webrob.utility.path_handler import join_paths, path_exists
+from webrob.utility.path_handler import join_paths, path_exists, get_parent_dir_name
 from webrob.utility.template_file_copyer import __copy_file_and_replace_keywords, __create_parent_dir, \
     copy_template_file, __get_number_of_template_fillers
 
