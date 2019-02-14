@@ -1,6 +1,6 @@
 import os
 
-from webrob.utility.path_exists_checker import path_exists as path_exists
+from webrob.utility.path_handler import path_exists as path_exists
 
 
 def read_file(path):

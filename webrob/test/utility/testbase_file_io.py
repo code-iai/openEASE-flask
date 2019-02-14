@@ -1,6 +1,6 @@
 from webrob.utility.directory_handler import rm_nonempty_dir, mk_dir
 from webrob.utility.file_handler import create_file, remove_file
-from webrob.utility.path_exists_checker import path_exists
+from webrob.utility.path_handler import path_exists
 
 TEMP_DIR = '../temp'
 TEMP_FILE_WITH_CONTENT = '../temp/not-empty.txt'
