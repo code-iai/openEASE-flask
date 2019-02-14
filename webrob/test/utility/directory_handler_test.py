@@ -90,11 +90,14 @@ def test_rm_nonempty_dir():
 
 def test_change_directory():
     # have to get path before changing dir, because otherwise relative path will change
-    # maybe consider changing constant file-paths in testbase from relative to absolute paths...
-    expected_path = os.path.abspath(TEST_DIR)
-    mk_dir(TEST_DIR)
-    ch_dir(TEST_DIR)
-    assert os.getcwd() == expected_path
+    # maybe consider changing constant file-paths in testbase from relative to absolute
+    expected_result = os.path.abspath(TEMP_DIR)
+    ch_dir(TEMP_DIR)
+    assert os.getcwd() == expected_result
+    # not sure why the following two lines are needed, but if not executed, a temp folder
+    # will be left in the test or webrob directory
+    ch_dir('../utility')
+    remove_directory_if_exists(TEMP_DIR)
 
 
 def test_change_to_non_existent_directory():
