@@ -61,8 +61,6 @@ def __password_is_valid(app, name, pw):
     return False
 
 
-
-
 def init_app(app, db_instance, extra_config_settings={}):
     # Initialize app config settings
     app.config.from_object('webrob.config.settings')        # Read config from 'app/settings.py' file
