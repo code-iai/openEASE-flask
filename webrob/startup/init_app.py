@@ -23,13 +23,14 @@ from webrob.models.users import Role, User
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 def add_user(app,db,user_manager,name,mail,pw,displayname='',remoteapp='',roles=[]):
-    if pw==None or len(pw)<4:
-        app.logger.warn("User %s has no password specified." % (name))
+    if not __password_is_valid(app, name, pw):
         return
     
     user = User.query.filter(User.username==name).first()
-    if user: return user
+    if user:
+        return user
     
     user = User(username=name,
                 displayname=displayname,
@@ -48,6 +49,19 @@ def add_user(app,db,user_manager,name,mail,pw,displayname='',remoteapp='',roles=
     db.session.commit()
     
     return user
+
+
+def __password_is_valid(app, name, pw):
+    if pw is None:
+        app.logger.warn("User %s has no password specified." % name)
+    elif len(pw) < 4:
+        app.logger.warn("Password of user %s is too short. Please choose a password with 4 or more characters." % name)
+    else:
+        return True
+    return False
+
+
+
 
 def init_app(app, db_instance, extra_config_settings={}):
     # Initialize app config settings
