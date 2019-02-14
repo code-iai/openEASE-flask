@@ -8,69 +8,92 @@ from flask import send_from_directory, jsonify
 from flask_user import login_required
 from urllib import urlopen, urlretrieve
 from subprocess import call
-from posixpath import basename
 import thread
 
 from webrob.app_and_db import app
 from webrob.config.settings import MESH_REPOSITORIES
-
-
-def is_mesh_url_valid(url):
-    return urlopen(url).getcode() == 200
-
-
-def update_meshes_run():
-    os.chdir('/home/ros/mesh_data')
-    for repo in MESH_REPOSITORIES:
-        try:
-            (tool, url) = repo
-            if tool == "svn":
-                update_meshes_svn(url)
-            elif tool == "git":
-                update_meshes_git(url)
-        except Exception:
-            app.logger.warn("Unable to update repository: '" + str(repo) + "'.")
-    # Convert tif images to png images
-    call(['/opt/webapp/convert-recursive', '/home/ros/mesh_data'])
+from webrob.utility.directory_handler import ch_dir
+from webrob.utility.path_handler import join_paths, path_exists, get_parent_dir_name, get_path_basename, \
+    get_unix_style_path_basename
 
 
 def update_meshes():
-    thread.start_new_thread(update_meshes_run, ())
+    thread.start_new_thread(__update_meshes_run, ())
 
 
-def update_meshes_svn(url):
-    repo_name = basename(url)
-    if os.path.exists(repo_name):
-        os.chdir(repo_name)
-        call(["/usr/bin/svn", "update"])
-        os.chdir('..')
+def __update_meshes_run():
+    __change_to_mesh_data_directory()
+    __update_mesh_repositories()
+    __convert_tif_images_to_png()
+
+
+def __change_to_mesh_data_directory():
+    ch_dir('/home/ros/mesh_data')
+
+
+def __update_mesh_repositories():
+    for repo in MESH_REPOSITORIES:
+        __update_if_svn_or_git_repository(repo)
+
+
+def __update_if_svn_or_git_repository(repo):
+    try:
+        (tool, url) = repo
+        if __tool_is_svn_repository(tool):
+            __update_meshes_in_repository(url, "/usr/bin/svn", "update", "co")
+        elif __tool_is_git_repository(tool):
+            __update_meshes_in_repository(url, "/usr/bin/git", "pull", "clone")
+    except Exception:
+        app.logger.warn("Unable to update repository: '" + str(repo) + "'.")
+
+
+def __tool_is_svn_repository(tool):
+    return tool == "svn"
+
+
+def __tool_is_git_repository(tool):
+    return tool == "git"
+
+
+def __update_meshes_in_repository(url, repo_dir, repo_update_cmd, repo_clone_cmd):
+    repo_name = get_unix_style_path_basename(url)
+    if __repository_exists(repo_name):
+        __update_repository(repo_name, repo_dir, repo_update_cmd)
     else:
-        call(["/usr/bin/svn", "co", url])
+        __clone_repository(repo_dir, repo_clone_cmd, url)
 
 
-def update_meshes_git(url):
-    repo_name = basename(url)
-    if os.path.exists(repo_name):
-        os.chdir(repo_name)
-        call(["/usr/bin/git", "pull"])
-        os.chdir('..')
-    else:
-        call(["/usr/bin/git", "clone", url])
+def __repository_exists(repo_name):
+    path_exists(repo_name)
+
+
+def __update_repository(repo_name, repo_dir, repo_update_cmd):
+    ch_dir(repo_name)
+    call([repo_dir, repo_update_cmd])
+    ch_dir('..')
+
+
+def __clone_repository(repo_dir, repo_clone_cmd, url):
+    call([repo_dir, repo_clone_cmd, url])
+
+
+def __convert_tif_images_to_png():
+    call(['/opt/webapp/convert-recursive', '/home/ros/mesh_data'])
 
 
 @app.route('/meshes/<path:mesh>')
 def download_mesh(mesh):
     mesh_file = None
     for repo in os.listdir('/home/ros/mesh_data'):
-        repo_path = os.path.join('/home/ros/mesh_data', repo)
-        mesh_path = os.path.join(repo_path, mesh)
-        if os.path.exists(mesh_path):
+        repo_path = join_paths('/home/ros/mesh_data', repo)
+        mesh_path = join_paths(repo_path, mesh)
+        if path_exists(mesh_path):
             mesh_file = mesh_path
 
     if mesh_file is None:
-        if os.path.exists(mesh):
+        if path_exists(mesh):
             mesh_file = mesh
-        elif os.path.exists('/' + mesh):
+        elif path_exists('/' + mesh):
             mesh_file = '/' + mesh
 
     if mesh_file is None:
@@ -78,5 +101,9 @@ def download_mesh(mesh):
         return jsonify(result=None)
 
     return send_from_directory(
-        os.path.dirname(mesh_file),
-        os.path.basename(mesh_file))
+        get_parent_dir_name(mesh_file),
+        get_path_basename(mesh_file))
+
+
+def is_mesh_url_valid(url):
+    return urlopen(url).getcode() == 200
