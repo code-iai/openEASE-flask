@@ -1,7 +1,7 @@
 from webrob.test.utility.testbase_file_io import TEMP_DIR
 from webrob.utility.directory_handler import rm_nonempty_dir, mk_dir
-from webrob.utility.path_builder import join as join_paths
-from webrob.utility.path_exists_checker import exists as path_exists
+from webrob.utility.path_builder import join_paths
+from webrob.utility.path_exists_checker import path_exists
 
 EXISTING_PATH = TEMP_DIR
 NOT_EXISTING_PATH = join_paths(TEMP_DIR, 'nothing')

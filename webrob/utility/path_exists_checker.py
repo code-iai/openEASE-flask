@@ -1,5 +1,5 @@
 import os
 
 
-def exists(path):
+def path_exists(path):
     return os.path.exists(path)

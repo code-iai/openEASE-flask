@@ -1,6 +1,6 @@
 import os
 
-from webrob.utility.path_builder import join as join_paths
+from webrob.utility.path_builder import join_paths
 
 
 def test_join_paths():
