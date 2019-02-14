@@ -6,6 +6,7 @@ from webrob.utility.path_exists_checker import exists as path_exists
 EXISTING_PATH = TEMP_DIR
 NOT_EXISTING_PATH = join_paths(TEMP_DIR, 'nothing')
 
+
 # cannot use testbase_file_io.create_temp() as it uses functionality of this module
 # instead use directory_handler and create and delete temp_dir manually
 def setup_module():
