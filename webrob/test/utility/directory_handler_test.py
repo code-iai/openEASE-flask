@@ -4,9 +4,9 @@ import shutil
 import pytest
 
 from webrob.test.utility.testbase_file_io import TEMP_DIR
-from webrob.utility.directory_handler import rm_nonempty_dir, make_dirs, rm_empty_dir, mk_dir
-from webrob.utility.path_builder import join_paths
-from webrob.utility.path_exists_checker import path_exists
+from webrob.utility.directory_handler import rm_nonempty_dir, make_dirs, rm_empty_dir, mk_dir, \
+    get_current_working_directory, ch_dir
+from webrob.utility.path_handler import join_paths, path_exists
 
 TEST_DIR = join_paths(TEMP_DIR, 'test')
 TEST_DIR_NESTED = join_paths(TEST_DIR, 'test')
@@ -15,6 +15,7 @@ TEST_DIR_NESTED = join_paths(TEST_DIR, 'test')
 # both setup_function() and teardown_function() have to use the os-module
 # instead of the directory_handler as it's being tested in this module
 def setup_function():
+    remove_directory_if_exists(TEMP_DIR)
     os.mkdir(TEMP_DIR)
 
 
@@ -85,3 +86,21 @@ def test_rm_nonempty_dir():
     with pytest.raises(OSError):
         assert_remove_function(TEST_DIR_NESTED, rm_empty_dir, TEST_DIR)
     assert_remove_function(TEST_DIR_NESTED, rm_nonempty_dir, TEST_DIR)
+
+
+def test_change_directory():
+    # have to get path before changing dir, because otherwise relative path will change
+    # maybe consider changing constant file-paths in testbase from relative to absolute paths...
+    expected_path = os.path.abspath(TEST_DIR)
+    mk_dir(TEST_DIR)
+    ch_dir(TEST_DIR)
+    assert os.getcwd() == expected_path
+
+
+def test_change_to_non_existent_directory():
+    with pytest.raises(OSError):
+        ch_dir(TEST_DIR)
+
+
+def test_get_current_working_directory():
+    assert get_current_working_directory() == os.getcwd()
