@@ -1,4 +1,5 @@
 import os
+import posixpath
 
 
 def join_paths(path, *paths):
@@ -19,3 +20,7 @@ def get_parent_dir_name(path):
 
 def get_path_basename(path):
     return os.path.basename(path)
+
+
+def get_unix_style_path_basename(path):
+    return posixpath.basename(path)
