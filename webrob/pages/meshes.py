@@ -16,9 +16,12 @@ from webrob.utility.directory_handler import ch_dir
 from webrob.utility.path_handler import join_paths, path_exists, get_parent_dir_name, get_path_basename, \
     get_unix_style_path_basename
 
+ROS_MESH_DATA_DIR = '/home/ros/mesh_data'
+
 
 def update_meshes():
-    thread.start_new_thread(__update_meshes_run, ())
+    if path_exists(ROS_MESH_DATA_DIR):
+        thread.start_new_thread(__update_meshes_run, ())
 
 
 def __update_meshes_run():
@@ -28,7 +31,7 @@ def __update_meshes_run():
 
 
 def __change_to_mesh_data_directory():
-    ch_dir('/home/ros/mesh_data')
+    ch_dir(ROS_MESH_DATA_DIR)
 
 
 def __update_mesh_repositories():
@@ -78,7 +81,7 @@ def __clone_repository(repo_dir, repo_clone_cmd, url):
 
 
 def __convert_tif_images_to_png():
-    call(['/opt/webapp/convert-recursive', '/home/ros/mesh_data'])
+    call(['/opt/webapp/convert-recursive', ROS_MESH_DATA_DIR])
 
 
 @app.route('/meshes/<path:mesh>')
@@ -104,8 +107,8 @@ def __get_mesh_file(mesh):
 def __get_m_file_from_repos(mesh):
     m_file = None
 
-    for repo in os.listdir('/home/ros/mesh_data'):
-        repo_path = join_paths('/home/ros/mesh_data', repo)
+    for repo in os.listdir(ROS_MESH_DATA_DIR):
+        repo_path = join_paths(ROS_MESH_DATA_DIR, repo)
         mesh_path = join_paths(repo_path, mesh)
         if path_exists(mesh_path):
             m_file = mesh_path
