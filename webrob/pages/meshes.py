@@ -83,23 +83,48 @@ def __convert_tif_images_to_png():
 
 @app.route('/meshes/<path:mesh>')
 def download_mesh(mesh):
-    mesh_file = None
+    mesh_file = __get_mesh_file(mesh)
+
+    if mesh_file is None:
+        __log_download_fail_message(mesh)
+        return jsonify(result=None)
+
+    return __send_mesh_file(mesh, mesh_file)
+
+
+def __get_mesh_file(mesh):
+    m_file = __get_m_file_from_repos(mesh)
+
+    if m_file is None:
+        m_file = __get_m_file_from_root(mesh)
+
+    return m_file
+
+
+def __get_m_file_from_repos(mesh):
+    m_file = None
+
     for repo in os.listdir('/home/ros/mesh_data'):
         repo_path = join_paths('/home/ros/mesh_data', repo)
         mesh_path = join_paths(repo_path, mesh)
         if path_exists(mesh_path):
-            mesh_file = mesh_path
+            m_file = mesh_path
 
-    if mesh_file is None:
-        if path_exists(mesh):
-            mesh_file = mesh
-        elif path_exists('/' + mesh):
-            mesh_file = '/' + mesh
+    return m_file
 
-    if mesh_file is None:
-        app.logger.info("Unable to download mesh " + mesh)
-        return jsonify(result=None)
 
+def __get_m_file_from_root(mesh):
+    if path_exists(mesh):
+        return mesh
+    elif path_exists('/' + mesh):
+        return '/' + mesh
+
+
+def __log_download_fail_message(mesh):
+    app.logger.info("Unable to download mesh " + mesh)
+
+
+def __send_mesh_file(mesh_file):
     return send_from_directory(
         get_parent_dir_name(mesh_file),
         get_path_basename(mesh_file))
