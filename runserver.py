@@ -30,7 +30,6 @@ init_app(app, db)
 
 # Start a development web server if executed from the command line
 if __name__ == '__main__':
-    # TODO: meshes-module needs to be refactored
     update_meshes()
     if __config_is_debug():
         __run_debug_server()

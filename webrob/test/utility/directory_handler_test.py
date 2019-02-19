@@ -90,15 +90,15 @@ def test_rm_nonempty_dir():
 
 # TODO: Figure out why this runs locally but not on Travis
 # def test_change_directory():
-# #     # have to get path before changing dir, because otherwise relative path will change
-# #     # maybe consider changing constant file-paths in testbase from relative to absolute
-# #     expected_result = os.path.abspath(TEMP_DIR)
-# #     ch_dir(TEMP_DIR)
-# #     assert os.getcwd() == expected_result
-# #     # not sure why the following two lines are needed, but if not executed, a temp folder
-# #     # will be left in the test or webrob directory
-# #     ch_dir('../utility')
-# #     remove_directory_if_exists(TEMP_DIR)
+#     # have to get path before changing dir, because otherwise relative path will change
+#     # maybe consider changing constant file-paths in testbase from relative to absolute
+#     expected_result = os.path.abspath(TEMP_DIR)
+#     ch_dir(TEMP_DIR)
+#     assert os.getcwd() == expected_result
+#     # not sure why the following two lines are needed, but if not executed, a temp folder
+#     # will be left in the test or webrob directory
+#     ch_dir('../utility')
+#     remove_directory_if_exists(TEMP_DIR)
 
 
 def test_change_to_non_existent_directory():
