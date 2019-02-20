@@ -104,7 +104,6 @@ def init_app(app, db_instance, extra_config_settings={}):
     db_adapter = SQLAlchemyAdapter(db_instance, User)
     app.user_manager = UserManager(db_adapter, app)  # Init Flask-User and bind to app
 
-    # TODO: Find better solution than local imports
     # Load all models.py files to register db.Models with SQLAlchemy
     from webrob.models import users
     from webrob.models import tutorials
@@ -121,7 +120,6 @@ def init_app(app, db_instance, extra_config_settings={}):
     from webrob.pages import meshes
     from webrob.pages import mongo
     from webrob.pages import tutorials
-    # TODO: Why does this throw errors?
     # from webrob.pages import oauth
 
     init_db(app, db_instance)
