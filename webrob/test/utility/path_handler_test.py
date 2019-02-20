@@ -66,7 +66,7 @@ def build_template_string(number_of_placeholders):
     return template
 
 
-# TODO: Figure out why this runs locally but not on Travis
+# Figure out why this runs locally but not on Travis, https://github.com/code-iai/openEASE-flask/issues/2
 # def test_absolute_path():
 #    return absolute_path(TEMP_DIR) == os.path.abspath(TEMP_DIR)
 

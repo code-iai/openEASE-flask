@@ -88,7 +88,7 @@ def test_rm_nonempty_dir():
     assert_remove_function(TEST_DIR_NESTED, rm_nonempty_dir, TEST_DIR)
 
 
-# TODO: Figure out why this runs locally but not on Travis
+# Figure out why this runs locally but not on Travis, https://github.com/code-iai/openEASE-flask/issues/2
 # def test_change_directory():
 #     # have to get path before changing dir, because otherwise relative path will change
 #     # maybe consider changing constant file-paths in testbase from relative to absolute
@@ -106,6 +106,6 @@ def test_change_to_non_existent_directory():
         ch_dir(TEST_DIR)
 
 
-# TODO: Figure out why this runs locally but not on Travis
+# Figure out why this runs locally but not on Travis, https://github.com/code-iai/openEASE-flask/issues/2
 # def test_get_current_working_directory():
 #    assert get_current_working_directory() == os.getcwd()
