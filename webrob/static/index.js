@@ -13,7 +13,12 @@ require('datatables.net-buttons');
 /////////////////////////
 // bootstrap
 global.bootstrap = require('bootstrap');
-require('bootstrap/dist/css/bootstrap.css');
+require('bootstrap/dist/css/bootstrap.min.css');
+
+/////////////////////////
+// TODO: If imports not needed, remove this block
+// font-awesome
+global.fontAwesome = require('@fortawesome/fontawesome-free');
 
 /////////////////////////
 // overlay loading bar
