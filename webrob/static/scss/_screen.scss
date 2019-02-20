@@ -21,6 +21,7 @@
  ******** Originally based on starter template's basic.css         ************
  ******** Have a look at http://j.mp/eq8zSo for more information   ************
  ******************************************************************************/
+
 html,
 body {
     padding: 0;
@@ -67,6 +68,25 @@ h1 {
     font-size: 2.286em; /* 32px, base 14px (see ".dokuwiki") */
     line-height: 2.857em; /* 40px, base 14px (see ".dokuwiki") */
 }
+
+// i added this
+#login{
+
+    line-height: 1 !important;
+    margin-bottom: 20px !important;
+    letter-spacing: -2px !important;
+    text-align: center !important;
+    font-weight: 350 !important;
+}
+//
+//#setup-login{
+//    max-width: 430px;
+//    margin: 0 auto 20px;
+//    border-radius: 8px !important;
+//    background-color: #dadada;
+//
+//}
+
 h2 {
     font-size: 1.714em; /* 24px, base 14px (see ".dokuwiki") */
 }
@@ -295,7 +315,7 @@ label {
 
 input,
 textarea,
-button,
+
 select,
 optgroup {
     background:#ffffff;
@@ -981,7 +1001,7 @@ div.div5 {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-.metanav       { height: 25px; font-size: 0.8em; padding: 7px 15px ; margin-bottom: 1em; background: #dadada; }
+.metanav       { font-size: 0.8em; padding: 7px 15px ; margin-bottom: 1em; background: #dadada; }
 .metanav_left  { float: left; text-align: left;  }
 .metanav_right { float: right; text-align: left;  }
 .flash         { background: #cee5F5; padding: 0.5em; border: 1px solid #aacbe2; }
