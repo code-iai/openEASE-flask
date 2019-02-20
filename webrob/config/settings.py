@@ -13,8 +13,7 @@ MAIL_PORT     = int(evg.get_variable_with_default('OPENEASE_MAIL_PORT', '465'))
 MAIL_USE_TLS  = bool(evg.get_variable_with_default('OPENEASE_MAIL_USE_TLS', 'False'))
 MAIL_USE_SSL  = bool(evg.get_variable_with_default('OPENEASE_MAIL_USE_SSL', 'True'))
 MAIL_USERNAME = evg.get_variable_with_default_none('OPENEASE_MAIL_USERNAME')
-# TODO: Possibly remove default returns
-MAIL_PASSWORD = evg.get_variable_with_default('OPENEASE_MAIL_PASSWORD', '12345678')
+MAIL_PASSWORD = evg.get_variable_with_default('OPENEASE_MAIL_PASSWORD', '12345678') # possibly remove default returns
 MAIL_DEFAULT_SENDER = '"Sender" <openease.iai@gmail.com>'
 
 FACEBOOK_APP_TOKENS = (evg.get_variable_with_default_none('FACEBOOK_APP_ID'), evg.get_variable_with_default_none('FACEBOOK_APP_SECRET'))
