@@ -17,6 +17,7 @@ from flask_user import UserManager, SQLAlchemyAdapter
 from flask.ext.babel import Babel
 
 from webrob.utility.random_string_builder import random_string
+from webrob.utility.db_connection_checker import got_db_connection
 from webrob.startup.init_db import *
 from webrob.startup.init_webapp import *
 from webrob.models.users import Role, User
@@ -60,7 +61,7 @@ def __create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, displ
                 password=user_manager.hash_password(pw))
 
     user = __append_roles_to_user_object(app, user, roles)
-    __add_user_to_db(db, user)
+    __add_user_to_db(app, db, user)
 
     return user
 
@@ -86,9 +87,10 @@ def __log_role_query_failure(app, role):
     app.logger.info("Unable to find role: " + str(role))
 
 
-def __add_user_to_db(db, user):
-    db.session.add(user)
-    db.session.commit()
+def __add_user_to_db(app, db, user):
+    if got_db_connection(app, db):
+        db.session.add(user)
+        db.session.commit()
 
 
 def init_app(app, db_instance, extra_config_settings={}):
