@@ -113,11 +113,11 @@ def remote_app_authorized(response, oauth_token_key, get_user_information):
         flask_user = add_user(db=db,
                               user_manager=app.user_manager,
                               name=user_id,
-                              displayname=name,
+                              display_name=name,
                               mail=mail,
                               pw=pw,
                               app=app.name
-        )
+                              )
         if not app.user_manager.verify_password(pw,flask_user):
             # Username is taken, unable to sign in (or password value from remote service changed?)
             # TODO: do something here: tell the user at least
