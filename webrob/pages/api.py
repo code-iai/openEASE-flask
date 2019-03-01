@@ -4,8 +4,8 @@ from flask_user import login_required
 import time
 from urlparse import urlparse
 from webrob.app_and_db import app, db
-from webrob.docker import docker_interface_mock
-from webrob.docker.docker_interface_mock import generate_mac
+from webrob.docker import docker_interface
+from webrob.docker.docker_interface import generate_mac
 from webrob.models.users import User
 from webrob.utility.random_string_builder import random_string
 from webrob.config.settings import ROS_DISTRIBUTION
@@ -19,7 +19,7 @@ def login_by_session():
     Returns authentication information for the currently logged in user as required by the knowrob.js authentication
     request
     """
-    ip = docker_interface_mock.get_container_ip(session['user_container_name'])
+    ip = docker_interface.get_container_ip(session['user_container_name'])
     return generate_rosauth(session['user_container_name'], ip, True)
 
 
@@ -29,7 +29,7 @@ def refresh_by_session():
     Refreshes the running session for a currently logged in user. This prevents a users container from being terminated
     automatically.
     """
-    docker_interface_mock.refresh(session['user_container_name'])
+    docker_interface.refresh(session['user_container_name'])
     return jsonify({'result': 'success'})
 
 
@@ -41,7 +41,7 @@ def ensure_started():
     if 'user_container_name' not in session:
         return False
 
-    if not docker_interface_mock.container_started(session['user_container_name']):
+    if not docker_interface.container_started(session['user_container_name']):
         start_by_session()
     return jsonify(result=None)
 
@@ -55,8 +55,8 @@ def reset_container():
         return False
 
     container_name = session['user_container_name']
-    if docker_interface_mock.container_started(container_name):
-        docker_interface_mock.stop_container(container_name)
+    if docker_interface.container_started(container_name):
+        docker_interface.stop_container(container_name)
     start_by_session()
     return jsonify(result=None)
 
@@ -69,7 +69,7 @@ def start_by_session():
         return False
     image_name = generate_user_image_name()
     container_name = session['user_container_name']
-    docker_interface_mock.start_user_container(image_name, container_name, ROS_DISTRIBUTION)
+    docker_interface.start_user_container(image_name, container_name, ROS_DISTRIBUTION)
 
 
 @app.route('/api/v1.0/auth_by_token/<string:token>', methods=['GET'])
@@ -81,7 +81,7 @@ def login_by_token(token):
     user = user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
-    ip = docker_interface_mock.get_container_ip(user.username)
+    ip = docker_interface.get_container_ip(user.username)
     return generate_rosauth(user.username, ip)
 
 
@@ -95,7 +95,7 @@ def start_container(token):
     if user is None:
         return jsonify({'error': 'wrong api token'})
 
-    docker_interface_mock.start_user_container(generate_user_image_name(), user.username, ROS_DISTRIBUTION)
+    docker_interface.start_user_container(generate_user_image_name(), user.username, ROS_DISTRIBUTION)
     host_url = urlparse(request.host_url).hostname
     return jsonify({'result': 'success',
                     'url': '//'+host_url+'/ws/'+user.username+'/'})
@@ -109,7 +109,7 @@ def stop_container(token):
     user = user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
-    docker_interface_mock.stop_container(user.username)
+    docker_interface.stop_container(user.username)
     return jsonify({'result': 'success'})
 
 
