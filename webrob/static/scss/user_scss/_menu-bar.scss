@@ -17,8 +17,8 @@
   border: none;
   outline: 0;
 }
+
 .menu {
-  height: 25px;
   z-index: 5000;
   white-space:nowrap;
 }
@@ -96,7 +96,7 @@
 .menu li ul li ul { left: 100%; }
 .menu li ul li:hover > ul { top: -4px; }
 .menu li ul li:hover { z-index: 5001; }
-.menu li.submenu > a:after { content: ' ▾';}
+.menu li.submenu > a:after { content: ' ▾';} // fix this
 
 
 .mega_menu {
