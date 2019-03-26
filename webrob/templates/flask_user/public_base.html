@@ -1,7 +1,15 @@
-{% extends "layout_header.html" %}
+{% extends "layout.html" %}
+
+{% block login %}
+
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='scss/login.css') }}"/>
+
+
+{% endblock %}
 
 {% block content %}
-<div class="page-background">
+<div class="container">
 {% block content_inner %}{% endblock %}
 </div>
 {% endblock %}
