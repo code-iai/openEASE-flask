@@ -34,19 +34,29 @@ body {
 }
 .container-background,
 .page-background {
-  background-image: url(oe-logo.svg);
-  background-position: right bottom;
-  background-repeat: no-repeat;
+
+  //background-image: url(oe-logo.svg);
+  //background-position: right bottom;
+  //background-repeat: no-repeat;
   width: 100%;
-  height: -o-calc(100% - 10px); /* opera */
-  height: -webkit-calc(100% - 10px); /* google, safari */
-  height: -moz-calc(100% - 10px); /* firefox */
-  height: calc(100% - 10px); /* firefox 53 and newer */
+  height: 100%;
+  overflow: auto;
+  background: linear-gradient(to bottom,
+          #549FC8 0%,
+          #246F98 50%,
+          #246F98 51%,
+          #144F78 100%);
+  // TODO> remove the comment
+  //height: -o-calc(100% - 10px); /* opera */
+  //height: -webkit-calc(100% - 10px); /* google, safari */
+  //height: -moz-calc(100% - 10px); /* firefox */
+  //height: calc(100% - 10px); /* firefox 53 and newer */
+
 }
 .container-centered,
 .page-centered {
-  width: 80%;
-  margin: 0 auto;
+  //width: 80%; uncomment later
+  //margin: 0 auto;
 }
 
 
@@ -67,19 +77,19 @@ body {
   padding: 12px;
 }
 // i added this
-@media (max-width: 992px) {
-  #user-data-box{
-    float: none;
-  }
-  #video-box{
-    margin-top: 20px;
-    float: left !important;
-    max-width: 100%;
-  }
-  #howto-video{
-    max-width: 100%;
-  }
-}
+//@media (max-width: 992px) {
+//  #user-data-box{
+//    float: none;
+//  }
+//  #video-box{
+//    margin-top: 20px;
+//    float: left !important;
+//    max-width: 100%;
+//  }
+//  #howto-video{
+//    max-width: 100%;
+//  }
+//}
 
 .content-box a { color: #4C7FD2; }
 .content-box a:hover { text-decoration: underline; }
@@ -770,5 +780,7 @@ li.zero_size,
 } 
 
 @import 'adt-designator';
+
+
 
 
