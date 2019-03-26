@@ -1,0 +1,251 @@
+// login css
+
+#login {
+
+  line-height: 1 !important;
+  margin-bottom: 20px !important;
+  letter-spacing: -2px !important;
+  text-align: center !important;
+  font-weight: 400 !important;
+  padding-bottom: 10px;
+  font-size: 2.0em;
+}
+
+.ease-brand { //there was no dot comment the block of code if wrong rendering occurs
+  display: inline-block;
+  padding: 15px 20px;
+  font-size: 18px;
+  line-height: 20px;
+  height: 50px;
+}
+
+#ease-logo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+a.ease-brand {
+  font-family: 'Oswald', sans-serif;
+  color: #FFFFFF !important;
+  text-decoration: none;
+  font-size: 34px;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #606060 !important;
+}
+
+.ease-brand img {
+  width: auto;
+  height: 30px;
+}
+
+
+#setup-login {
+  background-color: #dadada;
+  color: #007bff;
+
+}
+
+div#login{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 1.6em;
+}
+
+.card#setup-login {
+  width: 430px;
+  max-width: 100%;
+  margin: 0 auto 20px;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+#login-div {
+  margin-top: 100px;
+}
+
+#remember-me {
+  text-align: left;
+}
+
+//#forgot-password-link {
+//  //display: inline;
+//  float: right;
+//}
+
+.card-footer a {
+  text-decoration: underline !important;
+}
+
+/* FOOTER for logos*/
+#footer-style{
+  display: block;
+  margin: auto;
+  height: 170px;
+  background-color: #dadada;
+  width: 430px !important;
+  max-width: 100%;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.legal{
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+}
+
+//#footer-style ul{
+//  list-style: none;
+//  margin-top: 40px;
+//  //padding: 0;
+//  text-align: center;
+//}
+
+.btn-primary {
+  color: #000000;
+  background: #246F98 51% !important;
+}
+
+
+.container {
+  position: relative !important;
+  //height: 100% !important;
+  overflow: hidden;
+  //text-align: center !important;
+  // padding-top: 60px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-container div a {
+  width: 100px;
+ // margin: 10px;
+  text-align: left;
+  //line-height: 75px;
+  //font-size: 30px;
+}
+
+// large devices
+@media (min-width: 1200px) {
+  #login-div {
+
+    width: 430px !important;
+    max-width: 100%;
+    height: auto;
+    margin: 100px auto 20px !important;
+  }
+}
+
+//end of large devices
+
+/********** Medium devices only **********/
+@media (min-width: 992px) and (max-width: 1199px) {
+
+  #login-div {
+
+    width: 430px !important;
+    max-width: 100%;
+    height: auto;
+    margin: 100px auto 20px !important;
+  }
+
+}
+
+// end of medium devices
+
+/********** Small devices only **********/
+@media (min-width: 768px) and (max-width: 991px) {
+
+  #login-div {
+
+    width: 430px;
+    max-width: 100%;
+    height: auto;
+    margin: 100px auto 20px !important;
+  }
+}
+
+// end of small device
+
+//extra small devices
+@media (max-width: 767px) {
+  #login-div {
+
+    width: 430px;
+    max-width: 100%;
+    height: auto;
+    margin: 100px auto 120px;
+  }
+
+  #login {
+    font-size: 1.2em;
+  }
+  a.ease-brand {
+    font-family: 'Oswald', sans-serif;
+    color: #FFFFFF !important;
+    text-decoration: none;
+    font-size: 1.4em;
+  }
+
+  .ease-brand img {
+    width: auto;
+    height: 25px;
+  }
+  #remember-me {
+    font-size: 0.9em;
+  }
+
+  .btn-primary {
+    font-size: 0.9em !important;
+  }
+
+}
+//end extra small devices
+
+/********** Super extra small devices Only :-) (e.g., iPhone 4) i changed from 479  **********/
+@media (max-width: 576px) {
+  #login-div {
+
+    width: 430px;
+    max-width: 100%;
+    height: auto;
+    margin: 22px auto 20px !important;
+  }
+
+  #login {
+    font-size: 1.2em;
+  }
+  a.ease-brand {
+    font-family: 'Oswald', sans-serif;
+    color: #FFFFFF !important;
+    text-decoration: none;
+    font-size: 1.4em;
+  }
+
+  .ease-brand img {
+    width: auto;
+    height: 25px;
+  }
+  #remember-me {
+    font-size: 0.9em;
+  }
+
+  .btn-primary {
+    font-size: 0.9em !important;
+  }
+  #new-user {
+
+  }
+  #forgot-password-link {
+    padding-top: 10px;
+  }
+
+}
+
+// end of super extra small
