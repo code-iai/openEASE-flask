@@ -1,28 +1,29 @@
 {% extends "layout_header.html" %}
 
 {% block head %}
-  <meta charset="utf-8" />
+    <meta charset="utf-8"/>
 
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dat.gui.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='scss/layout.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dat.gui.css') }}"/>
 
-  <script type="text/javascript" src="{{ url_for('static', filename='lib/controller.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='lib/framecontrol.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='lib/menu.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/controller.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/framecontrol.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='lib/menu.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-  <script type="text/javascript">
-    var auth = '{{ authentication }}';
-    var wsproto = 'ws' + (location.protocol === 'https:'?'s':'');
-    var rosUrl = wsproto + '://{{ host_url }}/ws/{{ container_name }}/';
-    var clientBaseURL = '/webclient';
-    var controller = new OpenEASEController(clientBaseURL);
-    var frameControl = new FrameControl({
+    <script type="text/javascript">
+        var auth = '{{ authentication }}';
+        var wsproto = 'ws' + (location.protocol === 'https:' ? 's' : '');
+        var rosUrl = wsproto + '://{{ host_url }}/ws/{{ container_name }}/';
+        var clientBaseURL = '/webclient';
+        var controller = new OpenEASEController(clientBaseURL);
+        var frameControl = new FrameControl({
             menu: menu,
             common_user_interfaces: COMMON_OPENEASE_USER_IFACES
-    });
-    controller.setPageControls(frameControl, menu, flask_user);
-    controller.setClientOptions({
+        });
+        controller.setPageControls(frameControl, menu, flask_user);
+        controller.setClientOptions({
             frameControl: frameControl,
             ros_url: rosUrl,
             authentication: auth,
@@ -32,16 +33,16 @@
             episode: '{{ exp }}',
             require_episode: true,
             use_console_overlay: true
-    });
+        });
 
-    $(document).ready(function () {
-        frameControl.setOEWindow(window);
-        frameControl.createOverlay();
-        frameControl.showPageOverlay("Loading openEASE");
-        controller.setClientFrame(document.getElementById('client-frame'));
-        controller.switchClient('default');
-        $(window).bind('hashchange', frameControl.updateLocation);
-    });
-  </script>
-  <iframe id="client-frame" src=""></iframe>
+        $(document).ready(function () {
+            frameControl.setOEWindow(window);
+            frameControl.createOverlay();
+            frameControl.showPageOverlay("Loading openEASE");
+            controller.setClientFrame(document.getElementById('client-frame'));
+            controller.switchClient('default');
+            $(window).bind('hashchange', frameControl.updateLocation);
+        });
+    </script>
+    <iframe id="client-frame" src=""></iframe>
 {% endblock %}
