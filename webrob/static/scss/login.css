@@ -31,9 +31,6 @@ body {
   height: 100%;
   background-color: #0277bd; }
 
-.fa-fw.fa-border {
-  width: 1.58571429em !important; }
-
 .container {
   min-height: 100%;
   position: relative;
@@ -172,8 +169,6 @@ p#copyright {
 #copyright span {
   color: #eceff1; }
 
-/********** Medium devices only **********/
-/********** Small devices only **********/
 @media (max-width: 767px) {
   #login {
     font-size: 1.2em; }

@@ -10,10 +10,7 @@ body {
   background-color: #0277bd;
 }
 
-// font awesome
-.fa-fw.fa-border {
-  width: 1.58571429em !important;
-}
+
 
 .container {
   min-height: 100%;
@@ -29,7 +26,6 @@ body {
 
   border: 1px solid #0277bd !important;
   box-shadow: 0 0 1px #0277bd !important;
-  //border-color: #0277bd !important;
 }
 
 .form-control {
@@ -42,7 +38,6 @@ body {
 
 .page-background {
   padding: 10px;
-  //padding-bottom: 60px; /* Height of the footer */
 }
 
 #footer-style {
@@ -56,19 +51,13 @@ body {
   margin-top: 0px;
   margin-right: auto;
   margin-left: auto;
-
-
-  //background-color: #0003FF;
   background-color: #0277bd;
-
   text-align: left;
   padding-left: 15px;
   padding-right: 15px;
-
 }
 
 #login {
-
   line-height: 1;
   margin-bottom: 20px;
   letter-spacing: -2px;
@@ -78,7 +67,7 @@ body {
   font-size: 2.0em;
 }
 
-.ease-brand { //there was no dot comment the block of code if wrong rendering occurs
+.ease-brand {
   display: inline-block;
   padding: 15px 20px;
   font-size: 18px;
@@ -98,11 +87,6 @@ a.ease-brand {
   font-size: 34px;
 }
 
-//a:hover {
-//  text-decoration: none;
-//  color: #606060 !important;
-//}
-
 .ease-brand img {
   width: auto;
   height: 30px;
@@ -114,16 +98,8 @@ a.ease-brand {
   color: #757575;
 }
 
-//#remember-me {
-//  text-align: left;
-//  color: #757575;
-//}
-
-
 #setup-login {
-  //background-color: #dadada;
   background-color: #eceff1;
-  //color: #0003FF;
   color: #0277bd;
 }
 
@@ -134,12 +110,6 @@ a.ease-brand {
   padding-top: 20px;
   padding-bottom: 20px;
   color: #757575;;
-}
-
-
-.card-footer p {
-  //padding-top: 10px;
-  //padding-bottom: 15px;
 }
 
 div#login {
@@ -157,7 +127,6 @@ div#login {
 }
 
 #login-div {
-  //margin-top: 100px;
   width: 430px !important;
   max-width: 100%;
   height: auto;
@@ -174,32 +143,19 @@ div#login {
   text-decoration: underline !important;
 }
 
-//.card-footer a:hover {
-//  color: #fff !important;
-//}
-
 .legal {
   padding-top: 20px;
   padding-bottom: 20px;
-  //color: ;
 }
 
 .btn-info {
-  //color: #000000;
   background-color: #0277bd !important;
 }
-
-.btn-primary:hover {
-  //background-color: #256cde !important;
-}
-
 
 #forgot-password-link {
   display: inline;
   float: right;
 }
-
-
 
 #terms-of-service a {
   padding-right: 10px;
@@ -219,61 +175,11 @@ p#copyright {
 
 #copyright span {
   color: #eceff1;
-  //text-decoration: underline;
 }
 
-
-// large devices
-@media (min-width: 1200px) {
-  //#login-div {
-  //
-  //  width: 430px !important;
-  //  max-width: 100%;
-  //  height: auto;
-  //  margin: 0px auto 20px !important;
-  //}
-}
-
-//end of large devices
-
-/********** Medium devices only **********/
-@media (min-width: 992px) and (max-width: 1199px) {
-
-  //#login-div {
-  //
-  //  width: 430px !important;
-  //  max-width: 100%;
-  //  height: auto;
-  //  margin: 0px auto 20px !important;
-  //}
-
-}
-
-// end of medium devices
-
-/********** Small devices only **********/
-@media (min-width: 768px) and (max-width: 991px) {
-
-  //#login-div {
-  //
-  //  width: 430px;
-  //  max-width: 100%;
-  //  height: auto;
-  //  margin: 0px auto 20px !important;
-  //}
-}
-
-// end of small device
 
 //extra small devices
 @media (max-width: 767px) {
-  //#login-div {
-  //
-  //  width: 430px;
-  //  max-width: 100%;
-  //  height: auto;
-  //  margin: 0px auto 120px;
-  //}
 
   #login {
     font-size: 1.2em;
@@ -303,13 +209,6 @@ p#copyright {
 
 /********** Super extra small devices Only :-) (e.g., iPhone 4) i changed from 479  **********/
 @media (max-width: 576px) {
-  //#login-div {
-  //
-  //  width: 430px;
-  //  max-width: 100%;
-  //  height: auto;
-  //  margin: 0px auto 20px !important;
-  //}
 
   .text-login {
     font-size: 1.2em !important;
@@ -335,13 +234,11 @@ p#copyright {
   p#new-user {
     width: 100%;
     text-align: left;
-   // font-size: 0.9em;
   }
   p#forgot-password-link {
     float: left;
     width: 100%;
     text-align: left;
-    //font-size: 0.9em;
     margin-bottom: 0px;
   }
 
