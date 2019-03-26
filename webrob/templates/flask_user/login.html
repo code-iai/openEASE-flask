@@ -3,60 +3,101 @@
 {% block content_inner %}
     {% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
 
-    <div class="container col-md-6 col-md-offset-3">
-        <div id="setup-login">
-            <h1 id="login">{% trans %}Log in{% endtrans %}</h1>
+{#    <script>#}
+{#     var theDate = new Date();#}
+{#     document.write(theDate.getFullYear());#}
+{#    </script>#}
+
+    <div class="page-background">
+        <div class="login-content">
             <div id="login-div">
-                <div>
-                    <form action="" method="POST" class="form" role="form">
-                        {{ form.hidden_tag() }}
+                <div id="ease-logo">
+                    <a class="ease-brand" href="http://www.open-ease.org"><img
+                            src="{{ url_for('static', filename='logos/oe-logo-small.svg') }}">openEASE</a>
+                </div>
+                <div class="card" id="setup-login">
+                    <div class="card-header text-login" >{% trans %}Login to your account{% endtrans %}</div>
+                    <div class="card-body">
+                        {#                    <div>#}
+                        <form action="" method="POST" class="form" role="form">
+                            {{ form.hidden_tag() }}
 
 
-                        {# Username or Email field #}
-                        {% set field = form.username if user_manager.enable_username else form.email %}
-                        <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                            <input placeholder="Username" class="form-control" id="username" name="username" type="text"
-                                   value="" required autofocus/>
-                        </div>
+                            {# Username or Email field #}
+                            {% set field = form.username if user_manager.enable_username else form.email %}
+                            <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
+                                <input placeholder="Username" class="form-control" id="username" name="username"
+                                       type="text"
+                                       value="" required autofocus >
 
-                        {# Password field #}
-                        {% set field = form.password %}
-                        <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                            <input placeholder="Password" class="form-control" id="password" name="password"
-                                   type="password"
-                                   value="" required/>
-                        </div>
+                            </div>
 
-                        <div id="remember-me" class="checkbox">
-                            <label><input type="checkbox" value="remember_me">Remember me </label>
-                        </div>
-                        <span class="privacy-font">By logging in you agree to our <a
-                                href="#">terms of service</a> </span>
-                        <button class="btn btn-primary btn-block" type="submit">Login</button>
-                        <p>New user? <a href="{{ url_for('user.register') }}">Sign Up now!!!</a></p>
+                            {# Password field #}
+                            {% set field = form.password %}
+                            <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
+                                <input placeholder="Password" class="form-control" id="password" name="password"
+                                       type="password"
+                                       value="" required/>
+                            </div>
 
-                        <div id="forgot-password-link">
-                            {% if user_manager.enable_forgot_password %}
-                                <a href="{{ url_for('user.forgot_password') }}" tabindex='195'>
-                                    {% trans %}Forgot your Password?{% endtrans %}</a>
-                            {% endif %}
-                        </div>
-                        <i class="fas fa-long-arrow-alt-up"></i>
+                            <div id="remember-me" class="checkbox inline">
+                                <label><input type="checkbox" value="remember_me"><span>Remember me </span> </label>
+                            </div>
+                            <button class="btn  btn-block btn-primary ripple-effect" type="submit">Login</button>
+                        </form>
+                        {#                    </div>#}
+                    </div>
+                    <div class="card-footer">
 
-                    </form>
+
+                            <p id="new-user"> New user?
+                                <a id="sign" href="{{ url_for('user.register') }}">Sign Up</a>
+                            </p>
+                            <p  id="forgot-password-link">
+                                {% if user_manager.enable_forgot_password %}
+                                    <a href="{{ url_for('user.forgot_password') }}" tabindex='195'>
+                                        {% trans %}Forgot your Password?{% endtrans %}</a>
+                                {% endif %}
+                            </p>
+
+                    </div>
+
                     {% for error in form.username.errors %}
                         <p class="error"><strong>Error:</strong> {{ error }}</p>
                     {% endfor %}
                     {% for error in form.password.errors %}
                         <p class="error"><strong>Error:</strong> {{ error }}</p>
                     {% endfor %}
+                    {#                </div>#}
+                    {#                </div>#}
+
                 </div>
             </div>
 
         </div>
-
     </div>
 
+{#    footer is outside page-background div#}
+    <footer id="footer-style">
+        {#        <div class="container">#}
+
+        <div class="legal">
+
+             <span id="terms-of-service"><a href="#">Terms of Service</a></span>
+
+
+            <span id="privacy"> <a href="#">Privacy</a></span>
+
+            <p id="copyright">
+                <span>&copy;Copyright openEASE 2019</span>
+            </p>
+
+
+        </div>
+        {#        </div>#}
+
+
+    </footer>
 {% endblock %}
 
 
