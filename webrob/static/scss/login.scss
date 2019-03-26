@@ -1,0 +1,363 @@
+// login css
+@import 'font';
+@import '../node_modules/@fortawesome/fontawesome-free/css/fontawesome.css';
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  //background-color: #0003FF;
+  background-color: #0277bd;
+}
+
+// font awesome
+.fa-fw.fa-border {
+  width: 1.58571429em !important;
+}
+
+.container {
+  min-height: 100%;
+  position: relative;
+  padding-top: 60px;
+  padding-bottom: 100px; /* Height of the footer */
+  overflow: hidden;
+}
+
+// forms
+
+.form-control:focus {
+
+  border: 1px solid #0277bd !important;
+  box-shadow: 0 0 1px #0277bd !important;
+  //border-color: #0277bd !important;
+}
+
+.form-control {
+  box-shadow: 0 0 0.5px #0277bd !important;
+}
+
+.login-content {
+  margin-bottom: 90px;
+}
+
+.page-background {
+  padding: 10px;
+  //padding-bottom: 60px; /* Height of the footer */
+}
+
+#footer-style {
+  position: absolute;
+  height: 100px; /* Height of the footer */
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 430px;
+  max-width: 100%;
+  margin-top: 0px;
+  margin-right: auto;
+  margin-left: auto;
+
+
+  //background-color: #0003FF;
+  background-color: #0277bd;
+
+  text-align: left;
+  padding-left: 15px;
+  padding-right: 15px;
+
+}
+
+#login {
+
+  line-height: 1;
+  margin-bottom: 20px;
+  letter-spacing: -2px;
+  text-align: center;
+  font-weight: 300;
+  padding-bottom: 10px;
+  font-size: 2.0em;
+}
+
+.ease-brand { //there was no dot comment the block of code if wrong rendering occurs
+  display: inline-block;
+  padding: 15px 20px;
+  font-size: 18px;
+  line-height: 20px;
+  height: 50px;
+}
+
+#ease-logo {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+a.ease-brand {
+  font-family: 'Oswald', sans-serif;
+  color: #FFFFFF !important;
+  text-decoration: none;
+  font-size: 34px;
+}
+
+//a:hover {
+//  text-decoration: none;
+//  color: #606060 !important;
+//}
+
+.ease-brand img {
+  width: auto;
+  height: 30px;
+}
+
+#new-user {
+  display: inline;
+  float: left;
+  color: #757575;
+}
+
+//#remember-me {
+//  text-align: left;
+//  color: #757575;
+//}
+
+
+#setup-login {
+  //background-color: #dadada;
+  background-color: #eceff1;
+  //color: #0003FF;
+  color: #0277bd;
+}
+
+.text-login {
+  text-align: center;
+  line-height: 1.5;
+  font-size: 1.5em;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #757575;;
+}
+
+
+.card-footer p {
+  //padding-top: 10px;
+  //padding-bottom: 15px;
+}
+
+div#login {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 1.6em;
+}
+
+.card#setup-login {
+  width: 430px;
+  max-width: 100%;
+  margin: 0 auto 20px;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+#login-div {
+  //margin-top: 100px;
+  width: 430px !important;
+  max-width: 100%;
+  height: auto;
+  margin: 0px auto 20px !important;
+}
+
+#remember-me {
+  text-align: left;
+  color: #757575 !important;
+  padding-bottom: 3px;
+}
+
+.card-footer a {
+  text-decoration: underline !important;
+}
+
+//.card-footer a:hover {
+//  color: #fff !important;
+//}
+
+.legal {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  //color: ;
+}
+
+.btn-info {
+  //color: #000000;
+  background-color: #0277bd !important;
+}
+
+.btn-primary:hover {
+  //background-color: #256cde !important;
+}
+
+
+#forgot-password-link {
+  display: inline;
+  float: right;
+}
+
+
+
+#terms-of-service a {
+  padding-right: 10px;
+  color: #eceff1 !important;
+  text-decoration: none !important;
+}
+
+#privacy a {
+  text-align: center;
+  color: #eceff1 !important;
+  text-decoration: none;
+}
+
+p#copyright {
+  float: right;
+}
+
+#copyright span {
+  color: #eceff1;
+  //text-decoration: underline;
+}
+
+
+// large devices
+@media (min-width: 1200px) {
+  //#login-div {
+  //
+  //  width: 430px !important;
+  //  max-width: 100%;
+  //  height: auto;
+  //  margin: 0px auto 20px !important;
+  //}
+}
+
+//end of large devices
+
+/********** Medium devices only **********/
+@media (min-width: 992px) and (max-width: 1199px) {
+
+  //#login-div {
+  //
+  //  width: 430px !important;
+  //  max-width: 100%;
+  //  height: auto;
+  //  margin: 0px auto 20px !important;
+  //}
+
+}
+
+// end of medium devices
+
+/********** Small devices only **********/
+@media (min-width: 768px) and (max-width: 991px) {
+
+  //#login-div {
+  //
+  //  width: 430px;
+  //  max-width: 100%;
+  //  height: auto;
+  //  margin: 0px auto 20px !important;
+  //}
+}
+
+// end of small device
+
+//extra small devices
+@media (max-width: 767px) {
+  //#login-div {
+  //
+  //  width: 430px;
+  //  max-width: 100%;
+  //  height: auto;
+  //  margin: 0px auto 120px;
+  //}
+
+  #login {
+    font-size: 1.2em;
+  }
+  a.ease-brand {
+    font-family: 'Oswald', sans-serif;
+    color: #FFFFFF !important;
+    text-decoration: none;
+    font-size: 1.4em;
+  }
+
+  .ease-brand img {
+    width: auto;
+    height: 25px;
+  }
+  #remember-me {
+    font-size: 0.9em;
+  }
+
+  .btn-primary {
+    font-size: 0.9em !important;
+  }
+
+}
+
+//end extra small devices
+
+/********** Super extra small devices Only :-) (e.g., iPhone 4) i changed from 479  **********/
+@media (max-width: 576px) {
+  //#login-div {
+  //
+  //  width: 430px;
+  //  max-width: 100%;
+  //  height: auto;
+  //  margin: 0px auto 20px !important;
+  //}
+
+  .text-login {
+    font-size: 1.2em !important;
+  }
+  a.ease-brand {
+    font-family: 'Oswald', sans-serif;
+    color: #FFFFFF !important;
+    text-decoration: none;
+    font-size: 1.6em;
+  }
+
+  .ease-brand img {
+    width: auto;
+    height: 25px;
+  }
+  #remember-me {
+    font-size: 0.9em;
+  }
+
+  .btn-primary {
+    font-size: 0.9em !important;
+  }
+  p#new-user {
+    width: 100%;
+    text-align: left;
+   // font-size: 0.9em;
+  }
+  p#forgot-password-link {
+    float: left;
+    width: 100%;
+    text-align: left;
+    //font-size: 0.9em;
+    margin-bottom: 0px;
+  }
+
+  #terms-of-service, #privacy {
+    float: left;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  p#copyright {
+    float: left;
+    width: 100%;
+    text-align: center;
+  }
+
+}
+
+// end of super extra small
