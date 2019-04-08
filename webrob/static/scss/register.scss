@@ -1,0 +1,28 @@
+@import "login";
+
+.field-hint{
+  text-align: center !important;
+}
+
+.already-registered {
+  color: #fff;
+}
+
+.field-hint a {
+  color: #0c0c0c;
+}
+
+.login-content{
+  margin-bottom: 0px;
+}
+
+p#copyright {
+  float: none;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.card-register{
+  box-shadow: 0 0 20px #0b4365;
+     //border: 2px solid #eceff1;
+}
