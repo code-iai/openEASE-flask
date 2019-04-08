@@ -1,12 +1,12 @@
-{% extends 'flask_user/public_base.html' %}
+{% extends 'flask_user/public_base_login.html' %}
 
 {% block content_inner %}
     {% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
 
-{#    <script>#}
-{#     var theDate = new Date();#}
-{#     document.write(theDate.getFullYear());#}
-{#    </script>#}
+    {#    <script>#}
+    {#     var theDate = new Date();#}
+    {#     document.write(theDate.getFullYear());#}
+    {#    </script>#}
 
     <div class="page-background">
         <div class="login-content">
@@ -16,7 +16,7 @@
                             src="{{ url_for('static', filename='logos/oe-logo-small.svg') }}">openEASE</a>
                 </div>
                 <div class="card" id="setup-login">
-                    <div class="card-header text-login" >{% trans %}Login to your account{% endtrans %}</div>
+                    <div class="card-header text-login">{% trans %}Login to your account{% endtrans %}</div>
                     <div class="card-body">
                         {#                    <div>#}
                         <form action="" method="POST" class="form" role="form">
@@ -26,9 +26,10 @@
                             {# Username or Email field #}
                             {% set field = form.username if user_manager.enable_username else form.email %}
                             <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                                <input placeholder="Username" class="form-control" id="username" name="username"
+                                <input placeholder="Username" class="form-control form-control-danger form-control-feedback" id="inputHorizontalDanger" id="username" name="username"
                                        type="text"
-                                       value="" required autofocus >
+                                       value="" required autofocus>
+
 
                             </div>
 
@@ -40,9 +41,10 @@
                                        value="" required/>
                             </div>
 
-                            <div id="remember-me" class="checkbox inline">
-                                <label><input type="checkbox" value="remember_me"><span>Remember me </span> </label>
-                            </div>
+
+                            <label id="remember-me" class="checkbox inline"><input type="checkbox"
+                                                                  value="remember_me"><span>Remember me </span> </label>
+
                             <button class="btn  btn-block btn-primary ripple-effect" type="submit">Login</button>
                         </form>
                         {#                    </div>#}
@@ -50,15 +52,15 @@
                     <div class="card-footer">
 
 
-                            <p id="new-user"> New user?
-                                <a id="sign" href="{{ url_for('user.register') }}">Sign Up</a>
-                            </p>
-                            <p  id="forgot-password-link">
-                                {% if user_manager.enable_forgot_password %}
-                                    <a href="{{ url_for('user.forgot_password') }}" tabindex='195'>
-                                        {% trans %}Forgot your Password?{% endtrans %}</a>
-                                {% endif %}
-                            </p>
+                        <p id="new-user"> New user?
+                            <a id="sign" href="{{ url_for('user.register') }}">Sign Up</a>
+                        </p>
+                        <p id="forgot-password-link">
+                            {% if user_manager.enable_forgot_password %}
+                                <a href="{{ url_for('user.forgot_password') }}" tabindex='195'>
+                                    {% trans %}Forgot your Password?{% endtrans %}</a>
+                            {% endif %}
+                        </p>
 
                     </div>
 
@@ -77,13 +79,13 @@
         </div>
     </div>
 
-{#    footer is outside page-background div#}
+    {#    footer is outside page-background div#}
     <footer id="footer-style">
         {#        <div class="container">#}
 
         <div class="legal">
 
-             <span id="terms-of-service"><a href="#">Terms of Service</a></span>
+            <span id="terms-of-service"><a href="#">Terms of Service</a></span>
 
 
             <span id="privacy"> <a href="#">Privacy</a></span>
