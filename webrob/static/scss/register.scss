@@ -1,5 +1,35 @@
 @import "login";
 
+.register-content{
+  margin-bottom: 0px;
+}
+
+.card-register{
+  background-color: #eceff1;
+  color: #0277bd;
+  width: 430px;
+  max-width: 100%;
+  margin: 0 auto 20px;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.register-text {
+  text-align: center;
+  line-height: 1.5;
+  font-size: 1.5em;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #757575;;
+}
+
+#register-div {
+  width: 430px;
+  max-width: 100%;
+  height: auto;
+  margin: 0px auto 20px;
+}
+
 .field-hint{
   text-align: center !important;
 }
@@ -12,17 +42,15 @@
   color: #0c0c0c;
 }
 
-.login-content{
-  margin-bottom: 0px;
-}
-
 p#copyright {
   float: none;
   text-align: center;
   padding-top: 50px;
 }
 
-//.card-register{
-//  box-shadow: 0 0 20px #0b4365;
-//     //border: 2px solid #eceff1;
-//}
+@media (max-width: 576px) {
+  .register-text {
+    font-size: 1.2em !important;
+  }
+}
+
