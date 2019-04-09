@@ -104,10 +104,6 @@ a.ease-brand {
   float: left;
   color: #757575; }
 
-#setup-login {
-  background-color: #eceff1;
-  color: #0277bd; }
-
 .text-login {
   text-align: center;
   line-height: 1.5;
@@ -122,6 +118,8 @@ div#login {
   font-size: 1.6em; }
 
 .card#setup-login {
+  background-color: #eceff1;
+  color: #0277bd;
   width: 430px;
   max-width: 100%;
   margin: 0 auto 20px;
@@ -135,9 +133,7 @@ div#login {
   margin: 0px auto 20px !important; }
 
 #remember-me {
-  text-align: left;
-  color: #757575 !important;
-  padding-bottom: 3px; }
+  color: #757575 !important; }
 
 .card-footer a {
   text-decoration: underline !important; }

@@ -98,10 +98,10 @@ a.ease-brand {
   color: #757575;
 }
 
-#setup-login {
-  background-color: #eceff1;
-  color: #0277bd;
-}
+//#setup-login {
+//  background-color: #eceff1;
+//  color: #0277bd;
+//}
 
 .text-login {
   text-align: center;
@@ -119,6 +119,8 @@ div#login {
 }
 
 .card#setup-login {
+  background-color: #eceff1;
+  color: #0277bd;
   width: 430px;
   max-width: 100%;
   margin: 0 auto 20px;
