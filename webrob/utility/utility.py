@@ -13,6 +13,7 @@ from webrob.utility.directory_handler import make_dirs
 from webrob.utility.path_handler import path_exists
 
 
+# TODO: Move utilities to own modules
 def get_user_dir():
     user_dir = "/home/ros/user_data/" + session['user_container_name']
     if not path_exists(user_dir):
