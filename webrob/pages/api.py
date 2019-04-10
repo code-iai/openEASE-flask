@@ -98,7 +98,7 @@ def start_container(token):
     docker_interface.start_user_container(generate_user_image_name(), user.username, ROS_DISTRIBUTION)
     host_url = urlparse(request.host_url).hostname
     return jsonify({'result': 'success',
-                    'url': '//'+host_url+'/ws/'+user.username+'/'})
+                    'url': '//' + host_url + '/ws/' + user.username + '/'})
 
 
 @app.route('/api/v1.0/stop_container/<string:token>', methods=['GET'])
@@ -122,8 +122,10 @@ def refresh_by_token(token):
     user = user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
+    # TODO: Why is the main functionality commented out...?
     # docker_interface.refresh(user.username)
     return jsonify({'result': 'success'})
+
 
 @app.route('/create_api_token', methods=['GET'])
 @login_required
@@ -169,11 +171,11 @@ def generate_rosauth(user_container_name, dest, cache=False):
     end = int(t + 3600)
 
     return jsonify({
-            'mac': generate_mac(user_container_name, client, dest, rand, t, level, end, cache),
-            'client': client,
-            'dest': dest,
-            'rand': rand,
-            't': t,
-            'level': level,
-            'end': end
-        })
+        'mac': generate_mac(user_container_name, client, dest, rand, t, level, end, cache),
+        'client': client,
+        'dest': dest,
+        'rand': rand,
+        't': t,
+        'level': level,
+        'end': end
+    })

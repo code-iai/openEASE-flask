@@ -19,13 +19,17 @@ from webrob.models.teaching import CourseExercise
 
 __author__ = 'danielb@cs.uni-bremen.de'
 
+
 class PackageError(Exception):
     status_code = 400
+
     def __init__(self, msg):
         Exception.__init__(self)
         self.msg = msg
+
     def __str__(self):
-        return 'Unable to create package: '+self.msg
+        return 'Unable to create package: ' + self.msg
+
 
 @app.errorhandler(PackageError)
 def handle_package_error(error):
@@ -33,22 +37,24 @@ def handle_package_error(error):
     response.status_code = error.status_code
     return response
 
+
 @app.route('/editor')
 def editor(filename=""):
-    error=""
+    error = ""
     # determine hostname/IP we are currently using
     # (needed for accessing container)
     host_url = urlparse(request.host_url).hostname
     container_name = session['user_container_name']
     return render_template('editor.html', **locals())
 
+
 @app.route('/pkg/new', methods=['POST'])
 def pkg_new():
     packageName = json.loads(request.data)['packageName']
-    
+
     if docker_interface.file_exists(session['user_container_name'], packageName):
-        raise PackageError("A package with the name '"+packageName+"' already exists.")
-    
+        raise PackageError("A package with the name '" + packageName + "' already exists.")
+
     # Make sure templates are available
     templatePath = '/opt/webapp/webrob/templates/package'
     if not os.path.exists(templatePath):
@@ -57,7 +63,7 @@ def pkg_new():
     try:
         with LFTransfer(session['user_container_name']) as lft:
             pkgPath = os.path.join(lft.get_filetransfer_folder(), packageName)
-            
+
             # Copy package template to user_data container while replacing some keywords
             for root, dirs, files in os.walk(templatePath):
                 for f in files:
@@ -75,29 +81,32 @@ def pkg_new():
         app.logger.error(str(traceback.format_exc()))
         pkg_del(packageName)
         raise PackageError("An internal error occurred.")
-    
+
     return jsonify(success=1)
+
 
 @app.route('/pkg/del', methods=['POST'])
 def pkg_del(packageName=None):
     pkgName = packageName
     if pkgName is None: pkgName = session['pkg']
-    
+
     try:
         docker_interface.file_rm(session['user_container_name'], pkgName, True)
     except:  # catch *all* exceptions
         app.logger.error("Unable to delete package. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
-    
+
     return jsonify(success=1)
+
 
 @app.route('/pkg/set', methods=['POST'])
 def pkg_set():
     # Update package name
     data = json.loads(request.data)
-    if 'packageName' in data and len(data['packageName'])>0:
+    if 'packageName' in data and len(data['packageName']) > 0:
         session['pkg'] = data['packageName']
     return get_pkg_tree()
+
 
 @app.route('/pkg/list', methods=['POST'])
 def pkg_list():
@@ -107,6 +116,7 @@ def pkg_list():
     # return jsonify(result=filenames)
 
     return jsonify({})
+
 
 @app.route('/pkg/read', methods=['POST'])
 def pkg_read():
@@ -118,6 +128,7 @@ def pkg_read():
     except:  # catch *all* exceptions
         app.logger.error("Unable to read file. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
+
 
 @app.route('/pkg/down', methods=['POST'])
 def pkg_down():
@@ -132,12 +143,13 @@ def pkg_down():
             zipdir(pkgPath, lft.get_filetransfer_folder(), zipf)
             zipf.close()
             return send_file(zipPath,
-                            mimetype="application/zip",
-                            as_attachment=True,
-                            attachment_filename=zipName)
+                             mimetype="application/zip",
+                             as_attachment=True,
+                             attachment_filename=zipName)
     except:  # catch *all* exceptions
         app.logger.error("Unable to read file. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
+
 
 @app.route('/pkg/save_exercise', methods=['POST'])
 @admin_required
@@ -146,23 +158,23 @@ def pkg_save_exercise():
     # Query exercise DB object
     exercise_id = json.loads(request.data)['exercise_id']
     exercise = CourseExercise.query.filter_by(id=exercise_id).first()
-    
-    if exercise==None:
-        raise PackageError("Exercise with id '"+exercise_id+"' does not exist.")
-    
+
+    if exercise == None:
+        raise PackageError("Exercise with id '" + exercise_id + "' does not exist.")
+
     try:
         with LFTransfer(session['user_container_name']) as lft:
             # Create archive file
-            name    = exercise.title
+            name = exercise.title
             zipName = name + '.zip'
-            lft.from_container(session['pkg'], name) # rename package to match exercise name
+            lft.from_container(session['pkg'], name)  # rename package to match exercise name
             pkgPath = os.path.join(lft.get_filetransfer_folder(), name)
             zipPath = os.path.join(lft.get_filetransfer_folder(), zipName)
             zipf = zipfile.ZipFile(zipPath, 'w')
             zipdir(pkgPath, lft.get_filetransfer_folder(), zipf)
             zipf.close()
             # Read archive as binary blob and save in SQL DB
-            zipfb = open(zipPath,'rb')
+            zipfb = open(zipPath, 'rb')
             # NOTE: need to convert to base64 so that jsonify does not complain
             exercise.archive = zipfb.read().encode('base64')
             db_adapter.commit()
@@ -172,19 +184,20 @@ def pkg_save_exercise():
         app.logger.error("Unable to save exercise. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
 
+
 @app.route('/pkg/load_exercise', methods=['POST'])
 def pkg_load_exercise():
     # Query exercise DB object
     exercise_id = json.loads(request.data)['exercise_id']
     exercise = CourseExercise.query.filter_by(id=exercise_id).first()
-    if exercise==None:
-        raise PackageError("Exercise with id '"+exercise_id+"' does not exist.")
-    
+    if exercise == None:
+        raise PackageError("Exercise with id '" + exercise_id + "' does not exist.")
+
     pkgName = exercise.title
     zipName = pkgName + '.zip'
     if docker_interface.file_exists(session['user_container_name'], pkgName):
-        raise PackageError("A package with the name '"+packageName+"' already exists.")
-    
+        raise PackageError("A package with the name '" + packageName + "' already exists.")
+
     try:
         with LFTransfer(session['user_container_name']) as lft:
             # Create zip file
@@ -203,6 +216,7 @@ def pkg_load_exercise():
         app.logger.error("Unable to load exercise. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
 
+
 @app.route('/pkg/file_write', methods=['POST'])
 def file_write():
     data = json.loads(request.data)
@@ -213,7 +227,8 @@ def file_write():
     except:  # catch *all* exceptions
         app.logger.error("Unable to write file. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
-   
+
+
 @app.route('/pkg/file_del', methods=['POST'])
 def file_del():
     path = get_file_path(json.loads(request.data)['file'])
@@ -224,7 +239,7 @@ def file_del():
         app.logger.error("Unable to delete file. " + str(sys.exc_info()[0]))
         raise PackageError("An internal error occurred.")
 
- 
+
 def get_file_path(fileName):
     """
     Selects package subdir based on file extension.
@@ -237,12 +252,14 @@ def get_file_path(fileName):
         path = os.path.join(path, "owl")
     return os.path.join(path, fileName)
 
+
 def get_pkg_tree():
     # List files in package dir
     pkgPath = session['pkg']
     rootFiles = docker_interface.file_ls(session['user_container_name'], pkgPath, True)['children']
     # Return list of files
     return jsonify(result=rootFiles)
+
 
 def zipdir(path, pathPrefix, zipFile):
     for root, dirs, files in os.walk(path):
