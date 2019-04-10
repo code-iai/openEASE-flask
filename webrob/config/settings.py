@@ -1,13 +1,14 @@
 import webrob.utility.environment_variable_getter as evg
 
-DEV_SECRET_KEY='\\\xf8\x12\xdc\xf5\xb2W\xd4Lh\xf5\x1a\xbf"\x05@Bg\xdf\xeb>E\xd8<'
-
-# SQLALCHEMY_DATABASE_URI = 'postgresql://docker@postgres_db:5432/docker'
-# SQLALCHEMY_ECHO = True
+# TODO: Shouldn't this be generated randomly???
+DEV_SECRET_KEY = '\\\xf8\x12\xdc\xf5\xb2W\xd4Lh\xf5\x1a\xbf"\x05@Bg\xdf\xeb>E\xd8<'
 
 # TODO: Adjust URI to project-settings, check docker-compose from openease-knowrob
+# Potentially use environment variables
 # dialect+driver://username:password@host:port/database
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@localhost:5432/postgres'
+# SQLALCHEMY_DATABASE_URI = 'postgresql://docker@postgres_db:5432/docker'
+# SQLALCHEMY_ECHO = True
+SQLALCHEMY_DATABASE_URI = 'postgresql://docker@localhost:5432/docker'   # currentl only for testing
 
 CSRF_ENABLED = True
 
