@@ -26,7 +26,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 def add_user(app, db, user_manager, name, mail, pw, display_name='', remote_app='', roles=[]):
-    if not __password_is_valid(app, name, pw):
+    if not __check_password_and_display_message_on_error(app, name, pw):
         return
 
     user = __get_user_from_db(name)
@@ -37,14 +37,38 @@ def add_user(app, db, user_manager, name, mail, pw, display_name='', remote_app=
     return user
 
 
-def __password_is_valid(app, name, pw):
+def __check_password_and_display_message_on_error(app, name, pw):
     if pw is None:
         app.logger.warn("User %s has no password specified." % name)
-    elif len(pw) < 4:
-        app.logger.warn("Password of user %s is too short. Please choose a password with 4 or more characters." % name)
+    elif not __password_criteria_fulfilled(pw):
+        app.logger.warn(
+            "Password of user %s needs to have 6 or more characters, one lowercase, one uppercase letter, and a number." % name)
     else:
         return True
     return False
+
+
+def __password_criteria_fulfilled(pw):
+    if __has_six_or_more_chars(pw) and __contains_number(pw) and __contains_lowercase_letter(
+            pw) and __contains_uppercase_letter(pw):
+        return True
+    return False
+
+
+def __has_six_or_more_chars(str):
+    return len(str) >= 6
+
+
+def __contains_number(str):
+    return any(char.isdigit() for char in str)
+
+
+def __contains_lowercase_letter(str):
+    return any(char.islower() for char in str)
+
+
+def __contains_uppercase_letter(str):
+    return any(char.isupper() for char in str)
 
 
 def __get_user_from_db(name):
