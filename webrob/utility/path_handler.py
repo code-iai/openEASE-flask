@@ -24,3 +24,11 @@ def get_path_basename(path):
 
 def get_unix_style_path_basename(path):
     return posixpath.basename(path)
+
+
+def is_directory(path):
+    return os.path.isdir(path)
+
+
+def get_path_size(path):
+    return os.path.getsize(path)

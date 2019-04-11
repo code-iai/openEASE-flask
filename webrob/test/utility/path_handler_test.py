@@ -1,9 +1,10 @@
 import os
 
-from webrob.test.utility.testbase_file_io import TEMP_DIR, TEMP_FILE_WITH_CONTENT
+from webrob.test.utility.testbase_file_io import TEMP_DIR, EMPTY_TEMP_FILE, TEMP_FILE_WITH_CONTENT, \
+    create_empty_temp_file, create_temp_file_with_content, remove_file
 from webrob.utility.directory_handler import mk_dir, rm_nonempty_dir
-from webrob.utility.path_handler import join_paths, path_exists, absolute_path, get_parent_dir_name, get_path_basename, \
-    get_unix_style_path_basename
+from webrob.utility.path_handler import join_paths, path_exists, absolute_path, get_parent_dir_name, \
+    get_path_basename, get_unix_style_path_basename, is_directory, get_path_size
 
 EXISTING_PATH = TEMP_DIR
 NOT_EXISTING_PATH = join_paths(TEMP_DIR, 'nothing')
@@ -84,3 +85,17 @@ def test_get_unix_style_path_basename():
     # replace is needed so tests run on uniformly on all OS
     assert get_unix_style_path_basename(BASENAME_TEST_DIR.replace(os.sep, '/')) == BASENAME
     assert get_unix_style_path_basename(BASENAME_TEST_DIR_UNIX_STLYE.replace(os.sep, '/')) == ''
+
+
+def test_is_directory():
+    assert is_directory(NOT_EXISTING_PATH) is False
+    create_empty_temp_file()
+    assert is_directory(EMPTY_TEMP_FILE) is False
+    assert is_directory(TEMP_DIR) is True
+    remove_file(EMPTY_TEMP_FILE)
+
+
+def test_get_size():
+    create_temp_file_with_content()
+    assert get_path_size(TEMP_FILE_WITH_CONTENT) == os.path.getsize(TEMP_FILE_WITH_CONTENT)
+    remove_file(TEMP_FILE_WITH_CONTENT)
