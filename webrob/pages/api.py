@@ -20,7 +20,7 @@ def login_by_session():
     request
     """
     ip = docker_interface.get_container_ip(session['user_container_name'])
-    return generate_rosauth(session['user_container_name'], ip, True)
+    return __generate_rosauth(session['user_container_name'], ip, True)
 
 
 @app.route('/api/v1.0/refresh_by_session', methods=['GET'])
@@ -42,7 +42,7 @@ def ensure_started():
         return False
 
     if not docker_interface.container_started(session['user_container_name']):
-        start_by_session()
+        __start_by_session()
     return jsonify(result=None)
 
 
@@ -57,17 +57,17 @@ def reset_container():
     container_name = session['user_container_name']
     if docker_interface.container_started(container_name):
         docker_interface.stop_container(container_name)
-    start_by_session()
+    __start_by_session()
     return jsonify(result=None)
 
 
-def start_by_session():
+def __start_by_session():
     """
     Starts the container for the currently logged in user.
     """
     if 'user_container_name' not in session:
         return False
-    image_name = generate_user_image_name()
+    image_name = __generate_user_image_name()
     container_name = session['user_container_name']
     docker_interface.start_user_container(image_name, container_name, ROS_DISTRIBUTION)
 
@@ -78,11 +78,11 @@ def login_by_token(token):
     Returns authentication information for the user assigned to the given API token. This is needed to authenticate
     against the rosbridge by third party clients.
     """
-    user = user_by_token(token)
+    user = __user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
     ip = docker_interface.get_container_ip(user.username)
-    return generate_rosauth(user.username, ip)
+    return __generate_rosauth(user.username, ip)
 
 
 @app.route('/api/v1.0/start_container/<string:token>', methods=['GET'])
@@ -91,11 +91,11 @@ def start_container(token):
     Starts the container of the user assigned to the given API token. The WebSocket url to the users rosbridge instance
     will be returned on success.
     """
-    user = user_by_token(token)
+    user = __user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
 
-    docker_interface.start_user_container(generate_user_image_name(), user.username, ROS_DISTRIBUTION)
+    docker_interface.start_user_container(__generate_user_image_name(), user.username, ROS_DISTRIBUTION)
     host_url = urlparse(request.host_url).hostname
     return jsonify({'result': 'success',
                     'url': '//' + host_url + '/ws/' + user.username + '/'})
@@ -106,7 +106,7 @@ def stop_container(token):
     """
     Stops the container of the user assigned to the given API token.
     """
-    user = user_by_token(token)
+    user = __user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
     docker_interface.stop_container(user.username)
@@ -119,7 +119,7 @@ def refresh_by_token(token):
     Refreshes the running session for the user assigned to the given API token. This prevents a users container from
     being terminated automatically.
     """
-    user = user_by_token(token)
+    user = __user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
     # TODO: Why is the main functionality commented out...?
@@ -130,31 +130,31 @@ def refresh_by_token(token):
 @app.route('/create_api_token', methods=['GET'])
 @login_required
 def create_api_token():
-    create_token()
+    __create_token()
     return render_template('show_user_data.html', **locals())
 
 
-def create_token():
+def __create_token():
     current_user.api_token = random_string(64)
     db.session.commit()
     session['api_token'] = current_user.api_token
 
 
-def user_by_token(token):
+def __user_by_token(token):
     """
     Returns the user object for the given API token, or None if no matching user could be found.
     """
     return User.query.filter_by(api_token=token).first()
 
 
-def generate_user_image_name():
+def __generate_user_image_name():
     """
     Returns the image name to be used for user containers
     """
     return 'openease/' + ROS_DISTRIBUTION + '-knowrob-daemon'
 
 
-def generate_rosauth(user_container_name, dest, cache=False):
+def __generate_rosauth(user_container_name, dest, cache=False):
     """
     Generate the mac for use with rosauth and compile a json object with all necessary information to authenticate
     with the server.
