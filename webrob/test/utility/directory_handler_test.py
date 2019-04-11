@@ -1,12 +1,13 @@
 import os
 import shutil
+import random
 
 import pytest
 
 from webrob.test.utility.testbase_file_io import TEMP_DIR
 from webrob.utility.directory_handler import rm_nonempty_dir, make_dirs, rm_empty_dir, mk_dir, \
-    get_current_working_directory, ch_dir
-from webrob.utility.path_handler import join_paths, path_exists
+    get_current_working_directory, ch_dir, list_directories
+from webrob.utility.path_handler import join_paths, path_exists, get_path_basename
 
 TEST_DIR = join_paths(TEMP_DIR, 'test')
 TEST_DIR_NESTED = join_paths(TEST_DIR, 'test')
@@ -109,3 +110,24 @@ def test_change_to_non_existent_directory():
 # Figure out why this runs locally but not on Travis, https://github.com/code-iai/openEASE-flask/issues/2
 # def test_get_current_working_directory():
 #    assert get_current_working_directory() == os.getcwd()
+
+
+def test_list_directories():
+    dir_list = []
+    os.makedirs(TEST_DIR)
+    __check_directory_list(dir_list, TEST_DIR)
+
+    for i in range(0, random.randint(5, 11)):
+        dir_list.append(str(i))
+        os.makedirs(join_paths(TEST_DIR, str(i)))
+        __check_directory_list(dir_list, TEST_DIR)
+
+    remove_directory_if_exists(TEST_DIR)
+
+
+def __check_directory_list(actual_dir_names, parent_dir):
+    dir_list = list_directories(parent_dir)
+    assert len(dir_list) is len(actual_dir_names)
+
+    for i in range(0, len(dir_list)):
+        assert dir_list[i] in actual_dir_names

@@ -24,3 +24,7 @@ def ch_dir(path):
 
 def get_current_working_directory():
     return os.getcwd()
+
+
+def list_directories(path):
+    return os.listdir(path)
