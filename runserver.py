@@ -16,7 +16,7 @@ def __config_is_debug():
 
 def __run_debug_server():
     print 'Run web server in DEBUG mode'
-    app.run(host='0.0.0.0')
+    app.run(debug = True)
 
 
 def __run_server():
@@ -31,6 +31,7 @@ init_app(app, db)
 # Start a development web server if executed from the command line
 if __name__ == '__main__':
     update_meshes()
+    # app.config['DEBUG'] = True    # comment out if want to run in debug mode
     if __config_is_debug():
         __run_debug_server()
     else:
