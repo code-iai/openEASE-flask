@@ -130,14 +130,10 @@ def refresh_by_token(token):
 @app.route('/create_api_token', methods=['GET'])
 @login_required
 def create_api_token():
-    __create_token()
-    return render_template('show_user_data.html', **locals())
-
-
-def __create_token():
     current_user.api_token = random_string(64)
     db.session.commit()
     session['api_token'] = current_user.api_token
+    return render_template('show_user_data.html', **locals())
 
 
 def __user_by_token(token):
