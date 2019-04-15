@@ -23,6 +23,33 @@ def login_by_session():
     return __generate_rosauth(session['user_container_name'], ip, True)
 
 
+def __generate_rosauth(user_container_name, dest, cache=False):
+    """
+    Generate the mac for use with rosauth and compile a json object with all necessary information to authenticate
+    with the server.
+    :param user_container_name: Name of the user container
+    :param dest: IP of the destination
+    :return: a json object for ros
+    """
+    client = request.remote_addr
+
+    rand = random_string(30)
+
+    t = int(time.time())
+    level = "user"
+    end = int(t + 3600)
+
+    return jsonify({
+        'mac': generate_mac(user_container_name, client, dest, rand, t, level, end, cache),
+        'client': client,
+        'dest': dest,
+        'rand': rand,
+        't': t,
+        'level': level,
+        'end': end
+    })
+
+
 @app.route('/api/v1.0/refresh_by_session', methods=['GET'])
 def refresh_by_session():
     """
@@ -46,6 +73,24 @@ def ensure_started():
     return jsonify(result=None)
 
 
+def __start_by_session():
+    """
+    Starts the container for the currently logged in user.
+    """
+    if 'user_container_name' not in session:
+        return False
+    image_name = __generate_user_image_name()
+    container_name = session['user_container_name']
+    docker_interface.start_user_container(image_name, container_name, ROS_DISTRIBUTION)
+
+
+def __generate_user_image_name():
+    """
+    Returns the image name to be used for user containers
+    """
+    return 'openease/' + ROS_DISTRIBUTION + '-knowrob-daemon'
+
+
 @app.route('/api/v1.0/reset_by_session', methods=['POST'])
 def reset_container():
     """
@@ -61,17 +106,6 @@ def reset_container():
     return jsonify(result=None)
 
 
-def __start_by_session():
-    """
-    Starts the container for the currently logged in user.
-    """
-    if 'user_container_name' not in session:
-        return False
-    image_name = __generate_user_image_name()
-    container_name = session['user_container_name']
-    docker_interface.start_user_container(image_name, container_name, ROS_DISTRIBUTION)
-
-
 @app.route('/api/v1.0/auth_by_token/<string:token>', methods=['GET'])
 def login_by_token(token):
     """
@@ -83,6 +117,13 @@ def login_by_token(token):
         return jsonify({'error': 'wrong api token'})
     ip = docker_interface.get_container_ip(user.username)
     return __generate_rosauth(user.username, ip)
+
+
+def __user_by_token(token):
+    """
+    Returns the user object for the given API token, or None if no matching user could be found.
+    """
+    return User.query.filter_by(api_token=token).first()
 
 
 @app.route('/api/v1.0/start_container/<string:token>', methods=['GET'])
@@ -134,44 +175,3 @@ def create_api_token():
     db.session.commit()
     session['api_token'] = current_user.api_token
     return render_template('show_user_data.html', **locals())
-
-
-def __user_by_token(token):
-    """
-    Returns the user object for the given API token, or None if no matching user could be found.
-    """
-    return User.query.filter_by(api_token=token).first()
-
-
-def __generate_user_image_name():
-    """
-    Returns the image name to be used for user containers
-    """
-    return 'openease/' + ROS_DISTRIBUTION + '-knowrob-daemon'
-
-
-def __generate_rosauth(user_container_name, dest, cache=False):
-    """
-    Generate the mac for use with rosauth and compile a json object with all necessary information to authenticate
-    with the server.
-    :param user_container_name: Name of the user container
-    :param dest: IP of the destination
-    :return: a json object for ros
-    """
-    client = request.remote_addr
-
-    rand = random_string(30)
-
-    t = int(time.time())
-    level = "user"
-    end = int(t + 3600)
-
-    return jsonify({
-        'mac': generate_mac(user_container_name, client, dest, rand, t, level, end, cache),
-        'client': client,
-        'dest': dest,
-        'rand': rand,
-        't': t,
-        'level': level,
-        'end': end
-    })
