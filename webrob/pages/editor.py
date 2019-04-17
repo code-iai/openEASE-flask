@@ -1,18 +1,18 @@
-import os, sys
+import sys
 import json
 import zipfile
 import traceback
 
 from urlparse import urlparse
 
-from flask import session, request, render_template, jsonify, send_file, redirect, url_for
-from flask_user import login_required
+from flask import session, request, render_template, jsonify, send_file
 from flask_user import current_app
 
 from webrob.app_and_db import app
 from webrob.docker import docker_interface
 from webrob.docker.docker_interface import LFTransfer
-from webrob.docker.docker_application import ensure_application_started
+from webrob.utility.path_handler import path_exists, join_paths, split_extension, relative_path
+from webrob.utility.directory_handler import walk_directories
 from webrob.utility.utility import admin_required
 from webrob.utility.template_file_copyer import copy_template_file
 from webrob.models.teaching import CourseExercise
