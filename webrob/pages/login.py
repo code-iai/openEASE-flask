@@ -34,44 +34,44 @@ def show_user_data():
     if 'user_container_name' not in session:
         # return redirect(url_for('user.logout'))
         # FIXME: delete knowrob container when user leaves the site
-        __add_random_username_and_container_name_to_session()
+        _add_random_username_and_container_name_to_session()
 
     error = ""
     # determine hostname/IP we are currently using
     # (needed for accessing container)
     host_url = urlparse(request.host_url).hostname
     container_name = session['user_container_name']
-    role_names = __get_user_roles()
+    role_names = _get_user_roles()
 
-    category = __get_exp_category()
-    exp = __get_exp_name()
+    category = _get_exp_category()
+    exp = _get_exp_name()
 
     # TODO: show_user_data never shown, could be re-enabled as iframe
     return render_template('main.html', **locals())
     # return render_template('show_user_data.html', **locals())
 
 
-def __add_random_username_and_container_name_to_session():
+def _add_random_username_and_container_name_to_session():
     random_name = ''.join(choice(lowercase) for i in range(10))
     session['user_container_name'] = random_name
     session['username'] = random_name
 
 
-def __get_user_roles():
+def _get_user_roles():
     role_names = []
     if hasattr(current_user, 'roles'):
         role_names = map(lambda x: str(x.name), current_user.roles)
     return role_names
 
 
-def __get_exp_category():
+def _get_exp_category():
     if 'exp-category' in session:
         return session['exp-category']
     else:
         return None
 
 
-def __get_exp_name():
+def _get_exp_name():
     if 'exp-name' in session:
         return session['exp-name']
     else:
@@ -98,10 +98,10 @@ def openease_remote():
     # (needed for accessing container)
     host_url = urlparse(request.host_url).hostname
     container_name = 'remote/172.17.42.1'
-    role_names = __get_user_roles()
+    role_names = _get_user_roles()
 
-    category = __get_exp_category()
-    exp = __get_exp_name()
+    category = _get_exp_category()
+    exp = _get_exp_name()
 
     # TODO: show_user_data never shown, could be re-enabled as iframe
     return render_template('main.html', **locals())

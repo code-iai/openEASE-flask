@@ -16,44 +16,44 @@ __author__ = 'danielb@cs.uni-bremen.de'
 @app.route('/knowrob/admin/mongo')
 @admin_required
 def admin_mongo():
-    mongo_db = __connect_to_mongo_db()
+    mongo_db = _connect_to_mongo_db()
 
-    db_info, file_info = __get_db_and_file_info(mongo_db)
+    db_info, file_info = _get_db_and_file_info(mongo_db)
 
     mongo_db.close()
     return render_template('admin/mongo.html', **locals())
 
 
-def __connect_to_mongo_db():
+def _connect_to_mongo_db():
     host = "mongo_db"
     port = "27017"
     return MongoClient(host, int(port))
 
 
-def __get_db_and_file_info(mongo_db):
+def _get_db_and_file_info(mongo_db):
     db_info = {}
     file_info = {}
 
     for (cat, exp) in get_experiment_list():
-        db_name = __build_mongo_db_name(cat, exp)
+        db_name = _build_mongo_db_name(cat, exp)
         # Mongo stats
-        db_info[db_name] = __get_db_info(db_name, mongo_db)
+        db_info[db_name] = _get_db_info(db_name, mongo_db)
 
-        file_info[db_name] = __get_file_info(cat, exp)
+        file_info[db_name] = _get_file_info(cat, exp)
 
     return db_info, file_info
 
 
-def __build_mongo_db_name(category, experiment):
+def _build_mongo_db_name(category, experiment):
     return category + "_" + experiment
 
 
-def __get_db_info(db_name, mongo_db):
+def _get_db_info(db_name, mongo_db):
     stats = mongo_db[db_name].command("dbStats")
-    return __get_formatted_db_stats(stats)
+    return _get_formatted_db_stats(stats)
 
 
-def __get_formatted_db_stats(stats):
+def _get_formatted_db_stats(stats):
     return {
         'size': round((stats['dataSize']) / (1024.0 * 1024.0), 2),
         'avgObjSize': round((stats['avgObjSize']) / (1024.0 * 1024.0), 2),
@@ -62,21 +62,21 @@ def __get_formatted_db_stats(stats):
     }
 
 
-def __get_file_info(cat, exp):
-    size, collections = __get_episode_sizes_and_collections(cat, exp)
-    return __get_formatted_file_info(cat, collections, exp, size)
+def _get_file_info(cat, exp):
+    size, collections = _get_episode_sizes_and_collections(cat, exp)
+    return _get_formatted_file_info(cat, collections, exp, size)
 
 
-def __get_episode_sizes_and_collections(cat, exp):
+def _get_episode_sizes_and_collections(cat, exp):
     size = 0
     collections = set()
-    for (collection, f) in __get_episode_files(cat, exp):
+    for (collection, f) in _get_episode_files(cat, exp):
         size += round((get_path_size(f)) / (1024.0 * 1024.0), 2)
         collections.add(collection)
     return size, collections
 
 
-def __get_episode_files(cat, exp):
+def _get_episode_files(cat, exp):
     episode_files = []
     exp_path = get_experiment_path(cat, exp)
     for episode in list_directories(exp_path):
@@ -89,17 +89,17 @@ def __get_episode_files(cat, exp):
     return episode_files
 
 
-def __get_formatted_file_info(cat, collections, exp, size):
+def _get_formatted_file_info(cat, collections, exp, size):
     return {
         'category': cat,
         'experiment': exp,
-        'episodes': __get_episode_count(cat, exp),
+        'episodes': _get_episode_count(cat, exp),
         'size': size,
         'collections': list(collections)
     }
 
 
-def __get_episode_count(cat, exp):
+def _get_episode_count(cat, exp):
     exp_path = get_experiment_path(cat, exp)
     count = 0
     for episode in list_directories(exp_path):
@@ -113,24 +113,24 @@ def __get_episode_count(cat, exp):
 @app.route('/knowrob/admin/mongo_update/<cat>/<exp>', methods=['GET', 'POST'])
 @admin_required
 def admin_mongo_update(cat, exp):
-    db_name = __build_mongo_db_name(cat, exp)
-    __drop_old_db_content(db_name)
+    db_name = _build_mongo_db_name(cat, exp)
+    _drop_old_db_content(db_name)
 
     # TODO: check whether functionalities inside mongo_import() can be moved outside the method without error
     # Import all JSON/BSON files in episode directories
     def mongo_import():
         collections = set()
-        for (collection, data_file) in __get_episode_files(cat, exp):
+        for (collection, data_file) in _get_episode_files(cat, exp):
             app.logger.info("Importing " + data_file)
             collections.add(collection)
             if data_file.endswith('.json'):
-                __mongo_import_json(db_name, collection, data_file)
+                _mongo_import_json(db_name, collection, data_file)
             if data_file.endswith('.bson'):
-                __mongo_import_bson(db_name, collection, data_file)
+                _mongo_import_bson(db_name, collection, data_file)
             yield 'Imported %s.\n' % (data_file)
 
         # Create indices
-        mongo = __connect_to_mongo_db()
+        mongo = _connect_to_mongo_db()
         db = mongo[db_name]
         for collection_name in list(collections):
             # TODO: make this more flexible
@@ -143,13 +143,13 @@ def admin_mongo_update(cat, exp):
     return Response(stream_with_context(mongo_import()))
 
 
-def __drop_old_db_content(db_name):
-    mongo = __connect_to_mongo_db()
+def _drop_old_db_content(db_name):
+    mongo = _connect_to_mongo_db()
     mongo.drop_database(db_name)
     mongo.close()
 
 
-def __mongo_import_json(db_name, collection, json_file):
+def _mongo_import_json(db_name, collection, json_file):
     call(["mongoimport",
           "--host", "mongo_db",
           "--port", "27017",
@@ -159,7 +159,7 @@ def __mongo_import_json(db_name, collection, json_file):
           ])
 
 
-def __mongo_import_bson(db_name, collection, bson_file):
+def _mongo_import_bson(db_name, collection, bson_file):
     call(["mongorestore",
           "--host", "mongo_db",
           "--port", "27017",

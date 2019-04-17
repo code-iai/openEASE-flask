@@ -26,21 +26,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 def add_user(app, db, user_manager, name, mail, pw, display_name='', remote_app='', roles=[]):
-    if not __check_password_and_display_message_on_error(app, name, pw):
+    if not _check_password_and_display_message_on_error(app, name, pw):
         return
 
-    user = __get_user_from_db(name)
+    user = _get_user_from_db(name)
 
     if not user:
-        user = __create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles)
+        user = _create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles)
 
     return user
 
 
-def __check_password_and_display_message_on_error(app, name, pw):
+def _check_password_and_display_message_on_error(app, name, pw):
     if pw is None:
         app.logger.warn("User %s has no password specified." % name)
-    elif not __password_criteria_fulfilled(pw):
+    elif not _password_criteria_fulfilled(pw):
         app.logger.warn(
             "Password of user %s needs to have 6 or more characters, one lowercase, one uppercase letter, and a number." % name)
     else:
@@ -48,34 +48,34 @@ def __check_password_and_display_message_on_error(app, name, pw):
     return False
 
 
-def __password_criteria_fulfilled(pw):
-    if __has_six_or_more_chars(pw) and __contains_number(pw) and __contains_lowercase_letter(
-            pw) and __contains_uppercase_letter(pw):
+def _password_criteria_fulfilled(pw):
+    if _has_six_or_more_chars(pw) and _contains_number(pw) and _contains_lowercase_letter(
+            pw) and _contains_uppercase_letter(pw):
         return True
     return False
 
 
-def __has_six_or_more_chars(str):
+def _has_six_or_more_chars(str):
     return len(str) >= 6
 
 
-def __contains_number(str):
+def _contains_number(str):
     return any(char.isdigit() for char in str)
 
 
-def __contains_lowercase_letter(str):
+def _contains_lowercase_letter(str):
     return any(char.islower() for char in str)
 
 
-def __contains_uppercase_letter(str):
+def _contains_uppercase_letter(str):
     return any(char.isupper() for char in str)
 
 
-def __get_user_from_db(name):
+def _get_user_from_db(name):
     return User.query.filter(User.username == name).first()
 
 
-def __create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles):
+def _create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles):
     user = User(active=True,
                 username=name,
                 displayname=display_name,
@@ -84,41 +84,41 @@ def __create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, displ
                 confirmed_at=datetime.datetime.utcnow(),
                 password=user_manager.hash_password(pw))
 
-    user = __append_roles_to_user_object(app, user, roles)
-    __add_user_to_db(app, db, user)
+    user = _append_roles_to_user_object(app, user, roles)
+    _add_user_to_db(app, db, user)
 
     return user
 
 
-def __append_roles_to_user_object(app, user, roles):
+def _append_roles_to_user_object(app, user, roles):
     user_with_roles = user
 
     for r in roles:
-        curr_role = __get_role_from_db(r)
+        curr_role = _get_role_from_db(r)
         if curr_role is None:
-            __log_role_query_failure(app, r)
+            _log_role_query_failure(app, r)
         else:
             user_with_roles.roles.append(curr_role)
 
     return user_with_roles
 
 
-def __get_role_from_db(role):
+def _get_role_from_db(role):
     return Role.query.filter(Role.name == role).first()
 
 
-def __log_role_query_failure(app, role):
+def _log_role_query_failure(app, role):
     app.logger.info("Unable to find role: " + str(role))
 
 
-def __add_user_to_db(app, db, user):
+def _add_user_to_db(app, db, user):
     if got_db_connection(app, db):
         db.session.add(user)
         db.session.commit()
 
 
 def init_app(app, db_instance, extra_config_settings={}):
-    __init_app_config_settings(app, extra_config_settings)
+    _init_app_config_settings(app, extra_config_settings)
 
     # Setup Flask-Mail
     mail = Mail(app)
@@ -161,11 +161,11 @@ def init_app(app, db_instance, extra_config_settings={}):
              pw=os.environ.get('OPENEASE_ADMIN_PASSWORD'),
              roles=['admin'])
 
-    __log_webapp_started(app)
+    _log_webapp_started(app)
     return app
 
 
-def __init_app_config_settings(app, extra_config_settings):
+def _init_app_config_settings(app, extra_config_settings):
     app.config.from_object('webrob.config.settings')  # Read config from 'app/settings.py' file
     app.config.update(extra_config_settings)  # Overwrite with 'extra_config_settings' parameter
     if app.testing:
@@ -180,5 +180,5 @@ def __init_app_config_settings(app, extra_config_settings):
             app.config['SECRET_KEY'] = random_string(64)
 
 
-def __log_webapp_started(app):
+def _log_webapp_started(app):
     app.logger.info("Webapp started.")

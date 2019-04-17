@@ -20,10 +20,10 @@ def login_by_session():
     request
     """
     ip = docker_interface.get_container_ip(session['user_container_name'])
-    return __generate_rosauth(session['user_container_name'], ip, True)
+    return _generate_rosauth(session['user_container_name'], ip, True)
 
 
-def __generate_rosauth(user_container_name, dest, cache=False):
+def _generate_rosauth(user_container_name, dest, cache=False):
     """
     Generate the mac for use with rosauth and compile a json object with all necessary information to authenticate
     with the server.
@@ -69,22 +69,22 @@ def ensure_started():
         return False
 
     if not docker_interface.container_started(session['user_container_name']):
-        __start_by_session()
+        _start_by_session()
     return jsonify(result=None)
 
 
-def __start_by_session():
+def _start_by_session():
     """
     Starts the container for the currently logged in user.
     """
     if 'user_container_name' not in session:
         return False
-    image_name = __generate_user_image_name()
+    image_name = _generate_user_image_name()
     container_name = session['user_container_name']
     docker_interface.start_user_container(image_name, container_name, ROS_DISTRIBUTION)
 
 
-def __generate_user_image_name():
+def _generate_user_image_name():
     """
     Returns the image name to be used for user containers
     """
@@ -102,7 +102,7 @@ def reset_container():
     container_name = session['user_container_name']
     if docker_interface.container_started(container_name):
         docker_interface.stop_container(container_name)
-    __start_by_session()
+    _start_by_session()
     return jsonify(result=None)
 
 
@@ -112,14 +112,14 @@ def login_by_token(token):
     Returns authentication information for the user assigned to the given API token. This is needed to authenticate
     against the rosbridge by third party clients.
     """
-    user = __user_by_token(token)
+    user = _user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
     ip = docker_interface.get_container_ip(user.username)
-    return __generate_rosauth(user.username, ip)
+    return _generate_rosauth(user.username, ip)
 
 
-def __user_by_token(token):
+def _user_by_token(token):
     """
     Returns the user object for the given API token, or None if no matching user could be found.
     """
@@ -132,11 +132,11 @@ def start_container(token):
     Starts the container of the user assigned to the given API token. The WebSocket url to the users rosbridge instance
     will be returned on success.
     """
-    user = __user_by_token(token)
+    user = _user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
 
-    docker_interface.start_user_container(__generate_user_image_name(), user.username, ROS_DISTRIBUTION)
+    docker_interface.start_user_container(_generate_user_image_name(), user.username, ROS_DISTRIBUTION)
     host_url = urlparse(request.host_url).hostname
     return jsonify({'result': 'success',
                     'url': '//' + host_url + '/ws/' + user.username + '/'})
@@ -147,7 +147,7 @@ def stop_container(token):
     """
     Stops the container of the user assigned to the given API token.
     """
-    user = __user_by_token(token)
+    user = _user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
     docker_interface.stop_container(user.username)
@@ -160,7 +160,7 @@ def refresh_by_token(token):
     Refreshes the running session for the user assigned to the given API token. This prevents a users container from
     being terminated automatically.
     """
-    user = __user_by_token(token)
+    user = _user_by_token(token)
     if user is None:
         return jsonify({'error': 'wrong api token'})
     # TODO: Why is the main functionality commented out...?

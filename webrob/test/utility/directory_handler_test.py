@@ -115,17 +115,17 @@ def test_change_to_non_existent_directory():
 def test_list_directories():
     dir_list = []
     os.makedirs(TEST_DIR)
-    __check_directory_list(dir_list, TEST_DIR)
+    _check_directory_list(dir_list, TEST_DIR)
 
     for i in range(0, random.randint(5, 11)):
         dir_list.append(str(i))
         os.makedirs(join_paths(TEST_DIR, str(i)))
-        __check_directory_list(dir_list, TEST_DIR)
+        _check_directory_list(dir_list, TEST_DIR)
 
     remove_directory_if_exists(TEST_DIR)
 
 
-def __check_directory_list(actual_dir_names, parent_dir):
+def _check_directory_list(actual_dir_names, parent_dir):
     dir_list = list_directories(parent_dir)
     assert len(dir_list) is len(actual_dir_names)
 
