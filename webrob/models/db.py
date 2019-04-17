@@ -65,6 +65,6 @@ def db_table_class(table_name):
     for clazz in db_adapter.db.Model._decl_class_registry.values():
         try:
             if clazz.__tablename__ == table_name: return clazz
-        except:
+        except Exception:
             pass
     return None
