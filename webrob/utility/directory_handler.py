@@ -28,3 +28,7 @@ def get_current_working_directory():
 
 def list_directories(path):
     return os.listdir(path)
+
+
+def walk_directories(top, topdown=True, onerror=None, followlinks=False):
+    return os.walk(top, topdown, onerror, followlinks)

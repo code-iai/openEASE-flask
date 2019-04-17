@@ -6,8 +6,8 @@ import pytest
 
 from webrob.test.utility.testbase_file_io import TEMP_DIR
 from webrob.utility.directory_handler import rm_nonempty_dir, make_dirs, rm_empty_dir, mk_dir, \
-    get_current_working_directory, ch_dir, list_directories
-from webrob.utility.path_handler import join_paths, path_exists, get_path_basename
+    get_current_working_directory, ch_dir, list_directories, walk_directories
+from webrob.utility.path_handler import join_paths, path_exists
 
 TEST_DIR = join_paths(TEMP_DIR, 'test')
 TEST_DIR_NESTED = join_paths(TEST_DIR, 'test')
@@ -62,7 +62,7 @@ def test_remove_empty_dir():
     assert_remove_function(TEST_DIR, rm_nonempty_dir)
 
 
-def assert_remove_function(path, remove_function, check_path = None):
+def assert_remove_function(path, remove_function, check_path=None):
     setup_for_remove_test(path)
 
     if check_path is None:      # path created and to check are the same
@@ -131,3 +131,8 @@ def __check_directory_list(actual_dir_names, parent_dir):
 
     for i in range(0, len(dir_list)):
         assert dir_list[i] in actual_dir_names
+
+
+def test_walk_directories():
+    # TODO
+    return
