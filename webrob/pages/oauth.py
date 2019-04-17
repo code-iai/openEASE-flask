@@ -110,7 +110,7 @@ def remote_app_authorized(response, oauth_token_key, get_user_information):
         app.logger.warn('Remote app authentication error: %s.' % (response['error']))
         return redirect('/')
     if oauth_token_key not in response:
-        app.logger.warn('%s key missing in response.' % (oauth_token_key))
+        app.logger.warn('%s key missing in response.' % oauth_token_key)
         app.logger.warn(str(response.keys()))
         return redirect('/')
     session['oauth_token'] = (response[oauth_token_key], '')

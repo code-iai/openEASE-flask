@@ -1,4 +1,4 @@
-from flask import jsonify, request, session, redirect, render_template
+from flask import jsonify, request, session, render_template
 from flask_login import current_user
 from flask_user import login_required
 import time

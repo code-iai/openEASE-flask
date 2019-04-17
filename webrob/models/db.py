@@ -1,7 +1,4 @@
 from flask_user import current_app
-from webrob.app_and_db import app
-
-import json
 
 __author__ = 'danielb@cs.uni-bremen.de'
 
@@ -36,7 +33,8 @@ def db_find_name(cls, name):
     db_adapter = current_app.user_manager.db_adapter
     entries = db_adapter.find_all_objects(cls)
     for e in entries:
-        if e.name == name: return e
+        if e.name == name:
+            return e
     return None
 
 
@@ -48,7 +46,8 @@ def db_update(cls, i, data):
 
 
 def db_create(cls, data):
-    if 'id' in data: del data['id']
+    if 'id' in data:
+        del data['id']
     db_adapter = current_app.user_manager.db_adapter
     db_adapter.add_object(cls, **data)
     db_adapter.commit()

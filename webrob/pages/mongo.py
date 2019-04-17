@@ -1,5 +1,4 @@
-from flask import session, render_template, stream_with_context, Response
-from flask_user import login_required
+from flask import render_template, stream_with_context, Response
 
 from subprocess import call
 

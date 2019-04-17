@@ -1,15 +1,10 @@
-from flask import session, request, send_from_directory, render_template, jsonify, abort
-from flask_user import login_required
-from flask_user import current_user
-from flask_user import current_app
+from flask import request, render_template, jsonify, abort
 
-import os
 import json
 
 from webrob.app_and_db import app
 from webrob.utility.utility import admin_required
 from webrob.models.db import *
-from webrob.models.users import *
 
 __author__ = 'danielb@cs.uni-bremen.de'
 

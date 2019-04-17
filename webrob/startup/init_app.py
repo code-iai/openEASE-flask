@@ -132,12 +132,14 @@ def init_app(app, db_instance, extra_config_settings={}):
 
     # Local imports clogg up code, https://github.com/code-iai/openEASE-flask/issues/6
     # Load all models.py files to register db.Models with SQLAlchemy
+    # Needs to remain in code, even if IDEs might show it's unused, Flask will use them during runtime
     from webrob.models import users
     from webrob.models import tutorials
     from webrob.models import teaching
     from webrob.models import experiments
 
     # Load all views.py files to register @app.routes() with Flask
+    # Needs to remain in code, even if IDEs might show it's unused, Flask will use them during runtime
     from webrob.pages import api
     from webrob.pages import db
     from webrob.pages import editor

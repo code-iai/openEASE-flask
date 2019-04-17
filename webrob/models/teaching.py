@@ -1,5 +1,4 @@
 from webrob.app_and_db import db
-from webrob.app_and_db import app
 from sqlalchemy import func
 
 
