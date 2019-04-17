@@ -6,7 +6,6 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 
-from logging.handlers import SMTPHandler
 import os
 import datetime
 
@@ -17,12 +16,9 @@ from flask_user import UserManager, SQLAlchemyAdapter
 from flask.ext.babel import Babel
 
 from webrob.utility.random_string_builder import random_string
-from webrob.utility.db_connection_checker import got_db_connection
 from webrob.startup.init_db import *
 from webrob.startup.init_webapp import *
 from webrob.models.users import Role, User
-
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 def add_user(app, db, user_manager, name, mail, pw, display_name='', remote_app='', roles=[]):

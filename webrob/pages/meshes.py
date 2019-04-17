@@ -1,12 +1,9 @@
 __author__ = 'danielb@cs.uni-bremen.de'
 
 import os
-import sys
-import traceback
 
 from flask import send_from_directory, jsonify
-from flask_user import login_required
-from urllib import urlopen, urlretrieve
+from urllib import urlopen
 from subprocess import call
 import thread
 
