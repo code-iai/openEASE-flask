@@ -92,7 +92,7 @@ def download_mesh(mesh):
         _log_download_fail_message(mesh)
         return jsonify(result=None)
 
-    return _send_mesh_file(mesh, mesh_file)
+    return _send_mesh_file(mesh_file)
 
 
 def _get_mesh_file(mesh):
