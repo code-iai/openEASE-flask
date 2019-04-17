@@ -14,6 +14,10 @@ def absolute_path(path):
     return os.path.abspath(path)
 
 
+def relative_path(path, start):
+    return os.path.relpath(path, start)
+
+
 def get_parent_dir_name(path):
     return os.path.dirname(path)
 

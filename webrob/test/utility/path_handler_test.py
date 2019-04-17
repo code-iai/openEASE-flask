@@ -99,3 +99,7 @@ def test_get_size():
     create_temp_file_with_content()
     assert get_path_size(TEMP_FILE_WITH_CONTENT) == os.path.getsize(TEMP_FILE_WITH_CONTENT)
     remove_file(TEMP_FILE_WITH_CONTENT)
+
+
+def test_relative_path():
+    assert relative_path(BASENAME_TEST_DIR, EXISTING_PATH) == os.path.relpath(BASENAME_TEST_DIR, EXISTING_PATH)
