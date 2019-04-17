@@ -92,8 +92,10 @@ app.user_manager.remote_app_registered = remote_app_registered
 
 
 def remote_app_login(remote_app, authorized):
-    if session.has_key('oauth_token'): del session['oauth_token']
-    if remote_app == None: return redirect('/')
+    if 'oauth_token' in session:
+        del session['oauth_token']
+    if remote_app is None:
+        return redirect('/')
     # remember the next parameter to be used in authorized callback.
     # OAuth services may not allow parameters in authorize urls (e.g., google)
     session['next'] = request.args.get('next') or request.referrer or None
@@ -147,7 +149,7 @@ def get_user_name(login):
 
 
 def get_user_mail(login, domain):
-    if not '@' in login:
+    if '@' not in login:
         return login + '@' + domain
     else:
         return login
@@ -157,23 +159,28 @@ def get_user_mail(login, domain):
 @facebook.tokengetter
 @twitter.tokengetter
 @google.tokengetter
-def get_outh_token(): return session.get('oauth_token')
+def get_oauth_token():
+    return session.get('oauth_token')
 
 
 @app.route("/facebook/login")
-def facebook_login(): return remote_app_login(facebook, 'facebook_authorized')
+def facebook_login():
+    return remote_app_login(facebook, 'facebook_authorized')
 
 
 @app.route('/twitter/login')
-def twitter_login(): return remote_app_login(twitter, 'twitter_authorized')
+def twitter_login():
+    return remote_app_login(twitter, 'twitter_authorized')
 
 
 @app.route('/google/login')
-def google_login(): return remote_app_login(google, 'google_authorized')
+def google_login():
+    return remote_app_login(google, 'google_authorized')
 
 
 @app.route('/github/login')
-def github_login(): return remote_app_login(github, 'github_authorized')
+def github_login():
+    return remote_app_login(github, 'github_authorized')
 
 
 @app.route("/github_authorized")

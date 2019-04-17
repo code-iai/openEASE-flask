@@ -26,6 +26,7 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated or not current_user.has_role('admin'):
-           return current_app.login_manager.unauthorized()
+            return current_app.login_manager.unauthorized()
         return f(*args, **kwargs)
+
     return decorated_function
