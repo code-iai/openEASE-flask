@@ -36,3 +36,7 @@ def is_directory(path):
 
 def get_path_size(path):
     return os.path.getsize(path)
+
+
+def split_extension(path):
+    return os.path.splitext(path)

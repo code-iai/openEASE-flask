@@ -4,7 +4,7 @@ from webrob.test.utility.testbase_file_io import TEMP_DIR, EMPTY_TEMP_FILE, TEMP
     create_empty_temp_file, create_temp_file_with_content, remove_file
 from webrob.utility.directory_handler import mk_dir, rm_nonempty_dir
 from webrob.utility.path_handler import join_paths, path_exists, absolute_path, get_parent_dir_name, \
-    get_path_basename, get_unix_style_path_basename, is_directory, get_path_size
+    get_path_basename, get_unix_style_path_basename, is_directory, get_path_size, relative_path, split_extension
 
 EXISTING_PATH = TEMP_DIR
 NOT_EXISTING_PATH = join_paths(TEMP_DIR, 'nothing')
@@ -103,3 +103,20 @@ def test_get_size():
 
 def test_relative_path():
     assert relative_path(BASENAME_TEST_DIR, EXISTING_PATH) == os.path.relpath(BASENAME_TEST_DIR, EXISTING_PATH)
+
+
+def test_split_extension():
+    # file_names
+    empty = ''
+    only_ext = '.txt'
+    normal = 'something.txt'
+    path = './some_path/'
+    path_and_only_ext = join_paths(path, only_ext)
+    path_and_normal_name = join_paths(path, normal)
+
+    assert split_extension(empty) == os.path.splitext(empty)
+    assert split_extension(only_ext) == os.path.splitext(only_ext)
+    assert split_extension(normal) == os.path.splitext(normal)
+    assert split_extension(path) == os.path.splitext(path)
+    assert split_extension(path_and_only_ext) == os.path.splitext(path_and_only_ext)
+    assert split_extension(path_and_normal_name) == os.path.splitext(path_and_normal_name)
