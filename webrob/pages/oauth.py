@@ -23,7 +23,7 @@ GOOGLE_OAUTH_USERINFO = 'https://www.googleapis.com/oauth2/v1/userinfo'
 oauth = OAuth()
 
 
-def tokens_defined(tokens):
+def tokens_are_defined(tokens):
     (tok0, tok1) = tokens
     return len(tok0) > 0 and len(tok1) > 0
 
@@ -74,10 +74,10 @@ google = oauth.remote_app('google',
 
 def remote_app_registered(name):
     remote_apps = {
-        'github': tokens_defined(GITHUB_APP_TOKENS),
-        'facebook': tokens_defined(FACEBOOK_APP_TOKENS),
-        'twitter': tokens_defined(TWITTER_APP_TOKENS),
-        'google': tokens_defined(GOOGLE_APP_TOKENS)
+        'github': tokens_are_defined(GITHUB_APP_TOKENS),
+        'facebook': tokens_are_defined(FACEBOOK_APP_TOKENS),
+        'twitter': tokens_are_defined(TWITTER_APP_TOKENS),
+        'google': tokens_are_defined(GOOGLE_APP_TOKENS)
     }
     if name == 'any':
         return remote_apps.values().count(True) > 0
