@@ -5,7 +5,7 @@ from webrob.utility.file_handler import read_file, create_file
 from webrob.utility.path_handler import path_exists, get_parent_dir_name
 
 
-def copy_template_file(src, dst, args):
+def copy_template_file_and_replace_keywords(src, dst, args):
     template = read_file(src)
     _create_parent_dir(dst)
     _copy_file_and_replace_keywords(dst, template, args)

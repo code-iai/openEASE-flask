@@ -5,7 +5,7 @@ from webrob.test.utility.testbase_file_io import delete_temp_dir, EMPTY_TEMP_FIL
 from webrob.utility.file_handler import read_file, write_to_file
 from webrob.utility.path_handler import join_paths, path_exists, get_parent_dir_name
 from webrob.utility.template_file_copyer import _copy_file_and_replace_keywords, _create_parent_dir, \
-    copy_template_file, _get_number_of_template_fillers
+    copy_template_file_and_replace_keywords, _get_number_of_template_fillers
 
 BUILD_DESTINATION = join_paths(TEMP_DIR, 'copy.txt')
 PARENT_DIR = get_parent_dir_name(BUILD_DESTINATION)
@@ -32,7 +32,7 @@ def teardown_function():
 
 
 def test_copy_template_file():
-    copy_template_file(TEMPLATE_FILE, BUILD_DESTINATION, KEYWORDS)
+    copy_template_file_and_replace_keywords(TEMPLATE_FILE, BUILD_DESTINATION, KEYWORDS)
     assert path_exists(BUILD_DESTINATION) is True
     assert read_file(BUILD_DESTINATION) == EXPECTED_RESULT
 
