@@ -38,5 +38,9 @@ def get_path_size(path):
     return os.path.getsize(path)
 
 
+def split_path(path):
+    return os.path.split(path)
+
+
 def split_extension(path):
     return os.path.splitext(path)
