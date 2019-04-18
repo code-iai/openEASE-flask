@@ -64,23 +64,15 @@ def create_new_pkg():
 
 
 def _check_pkg_name_and_raise_error_if_already_exists(pkg_name):
-    _raise_error_if_pkg_already_exists_in_container(pkg_name)
+    if docker_interface.file_exists(session['user_container_name'], pkg_name):
+        raise PackageError("A package with the name '" + pkg_name + "' already exists.")
     return pkg_name
 
 
-def _raise_error_if_pkg_already_exists_in_container(pkg_name):
-    if docker_interface.file_exists(session['user_container_name'], pkg_name):
-        raise PackageError("A package with the name '" + pkg_name + "' already exists.")
-
-
 def _check_template_path_and_raise_error_if_does_not_exist(path):
-    _raise_error_if_template_path_does_not_exist(path)
-    return path
-
-
-def _raise_error_if_template_path_does_not_exist(template_path):
-    if not path_exists(template_path):
+    if not path_exists(path):
         raise PackageError("Package template could not be found.")
+    return path
 
 
 def _transfer_pkg_to_user_container(pkg_name, template_path):
@@ -262,13 +254,9 @@ def _get_exercise_from_db():
     # Query exercise DB object
     exercise_id = json.loads(request.data)['exercise_id']
     exercise = CourseExercise.query.filter_by(id=exercise_id).first()
-    _raise_error_if_exercise_is_none(exercise, exercise_id)
-    return exercise
-
-
-def _raise_error_if_exercise_is_none(exercise, exercise_id):
     if exercise is None:
         raise PackageError("Exercise with id '" + exercise_id + "' does not exist.")
+    return exercise
 
 
 def _read_archive_and_save_in_db(db_adapter, exercise, zip_path):
