@@ -144,17 +144,6 @@ def remote_app_authorized(response, oauth_token_key, get_user_information):
         return redirect('/')
 
 
-def get_user_name(login):
-    return login.replace(' ', '').replace('@', '_').replace('.', '_')
-
-
-def get_user_mail(login, domain):
-    if '@' not in login:
-        return login + '@' + domain
-    else:
-        return login
-
-
 @github.tokengetter
 @facebook.tokengetter
 @twitter.tokengetter
@@ -202,6 +191,17 @@ def github_authorized(response):
     return redirect('/')
 
 
+def _get_user_name(login):
+    return login.replace(' ', '').replace('@', '_').replace('.', '_')
+
+
+def _get_user_mail(login, domain):
+    if '@' not in login:
+        return login + '@' + domain
+    else:
+        return login
+
+
 @app.route("/facebook_authorized")
 @facebook.authorized_handler
 def facebook_authorized(response):
@@ -211,8 +211,8 @@ def facebook_authorized(response):
         # NOTE: The access_token changes with each call and thus can not be used as password
         # FIXME: using id as password is not save
         return (str(facebook_user['id']),
-                get_user_name(user_name),
-                get_user_mail(user_name, 'facebook.com'),
+                _get_user_name(user_name),
+                _get_user_mail(user_name, 'facebook.com'),
                 str(facebook_user['id']))
 
     try:
@@ -226,11 +226,11 @@ def facebook_authorized(response):
 @app.route("/twitter_authorized")
 @twitter.authorized_handler
 def twitter_authorized(response):
-    def user_information(response):
-        return (str(response['user_id']),
-                get_user_name(response['screen_name']),
-                get_user_mail(response['screen_name'], 'twitter.com'),
-                response['oauth_token_secret'])
+    def user_information(twitter_response):
+        return (str(twitter_response['user_id']),
+                _get_user_name(twitter_response['screen_name']),
+                _get_user_mail(twitter_response['screen_name'], 'twitter.com'),
+                twitter_response['oauth_token_secret'])
 
     try:
         return remote_app_authorized(response, 'oauth_token', user_information)
@@ -252,8 +252,8 @@ def google_authorized(response):
         google_user = loads(r.text)
         # FIXME: using id as password is not save
         return (str(google_user['id']),
-                get_user_name(google_user['name']),
-                get_user_mail(google_user['name'], 'google.com'),
+                _get_user_name(google_user['name']),
+                _get_user_mail(google_user['name'], 'google.com'),
                 str(google_user['id']))
 
     try:
