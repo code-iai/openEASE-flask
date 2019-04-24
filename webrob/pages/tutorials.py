@@ -1,14 +1,14 @@
+import json
+import re
+from urlparse import urlparse
+
 from flask import request, session, render_template, Markup, jsonify
 from flask.ext.misaka import markdown
 from flask_user import current_user
-from urlparse import urlparse
-import re
-
-import json
 
 from webrob.app_and_db import app
-from webrob.models.tutorials import read_tutorial_page
 from webrob.models.teaching import find_courses, get_exercises, get_task
+from webrob.models.tutorials import read_tutorial_page
 
 
 # TODO delete tutorial route
