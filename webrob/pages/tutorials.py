@@ -11,7 +11,8 @@ from webrob.models.teaching import find_courses, get_exercises, get_task
 from webrob.models.tutorials import read_tutorial_page
 
 
-# TODO delete tutorial route
+# TODO: delete tutorial route
+# FIXME: Why delete this route????
 @app.route('/tutorials/')
 def tutorials():
     error = ""
@@ -36,6 +37,7 @@ def tutorials():
 @app.route('/tutorials/get', methods=['POST'])
 def get_tutorial():
     data = json.loads(request.data)
+    # FIXME: Why is this commented out?
     response = None  # read_tutorial(data['category'], data['page'])
     if response == None:
         return jsonify({})
