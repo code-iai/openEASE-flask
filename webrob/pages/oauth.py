@@ -175,13 +175,13 @@ def github_login():
 @app.route("/github_authorized")
 @github.authorized_handler
 def github_authorized(response):
-    def user_information(response):
+    def user_information(github_response):
         github_user = github.get('/user').data
         user_name = github_user['login']
         return (str(github_user['id']),
-                get_user_name(user_name),
-                get_user_mail(user_name, 'github.com'),
-                response['access_token'])
+                _get_user_name(user_name),
+                _get_user_mail(user_name, 'github.com'),
+                github_response['access_token'])
 
     try:
         return remote_app_authorized(response, 'access_token', user_information)
@@ -205,7 +205,7 @@ def _get_user_mail(login, domain):
 @app.route("/facebook_authorized")
 @facebook.authorized_handler
 def facebook_authorized(response):
-    def user_information(response):
+    def user_information(facebook_response):
         facebook_user = facebook.get('/me').data
         user_name = facebook_user['name']
         # NOTE: The access_token changes with each call and thus can not be used as password
@@ -243,9 +243,9 @@ def twitter_authorized(response):
 @app.route("/google_authorized")
 @google.authorized_handler
 def google_authorized(response):
-    def user_information(response):
+    def user_information(google_response):
         r = requests.get(GOOGLE_OAUTH_USERINFO,
-                         headers={'Authorization': 'OAuth ' + response['access_token']})
+                         headers={'Authorization': 'OAuth ' + google_response['access_token']})
         if not r.ok:
             app.logger.warn('Google user information request failed.')
             return redirect(request.args.get('next') or '/')
