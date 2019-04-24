@@ -39,7 +39,7 @@ def get_tutorial():
     data = json.loads(request.data)
     # FIXME: Why is this commented out?
     response = None  # read_tutorial(data['category'], data['page'])
-    if response == None:
+    if response is None:
         return jsonify({})
     else:
         return jsonify(response)
@@ -47,7 +47,7 @@ def get_tutorial():
 
 def read_tutorial(cat_id, page):
     tut = read_tutorial_page(cat_id, page)
-    if tut == None:
+    if tut is None:
         app.logger.info("No tutorial available for %s/%s" % (cat_id, str(page)))
         return None
     content = markdown(tut.text, fenced_code=True)
@@ -84,13 +84,13 @@ def read_tutorial(cat_id, page):
         'title': tut.title,
         'text': content
     }
-    if (nxt != None):
+    if nxt is not None:
         out['next'] = {
             'cat_id': nxt.cat_id,
             'page': nxt.page,
             'title': nxt.title
         }
-    if (prev != None):
+    if prev is not None:
         out['prev'] = {
             'cat_id': prev.cat_id,
             'page': prev.page,
@@ -137,7 +137,8 @@ def get_task_():
     task_number = data['task_number']
 
     task = get_task(exercise_id, task_number)
-    if task == None: return jsonify(None)
+    if task is None:
+        return jsonify(None)
     content = markdown(task.text, fenced_code=True)
 
     # automatically add "ask as query" links after code blocks
@@ -156,13 +157,13 @@ def get_task_():
         'title': task.title,
         'text': content
     }
-    if (nxt != None):
+    if nxt is not None:
         out['next'] = {
             'exercise_id': nxt.exercise_id,
             'number': nxt.number,
             'title': nxt.title
         }
-    if (prev != None):
+    if prev is not None:
         out['prev'] = {
             'exercise_id': prev.exercise_id,
             'number': prev.number,
