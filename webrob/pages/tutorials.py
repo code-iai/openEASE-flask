@@ -29,6 +29,7 @@ def tutorials():
         container_name = session['user_container_name']
         authentication = True
 
+    # TODO: change template-path because this template was moved to a different container
     return render_template('knowrob_tutorial.html', **locals())
 
 
@@ -181,4 +182,5 @@ def teaching():
     # authentication = False
     session['video'] = 0
 
+    # TODO: change template-path because this template was moved to a different container
     return render_template('knowrob_teaching.html', **locals())
