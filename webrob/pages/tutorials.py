@@ -77,7 +77,7 @@ def read_tutorial(cat_id, page):
     nxt = read_tutorial_page(cat_id, int(page) + 1)
     prev = read_tutorial_page(cat_id, int(page) - 1)
 
-    out = {}
+    out = dict()
     out['this'] = {
         'cat_id': tut.cat_title,
         'page': tut.page,
@@ -150,7 +150,7 @@ def get_task_():
     nxt = get_task(exercise_id, task_number + 1)
     prev = get_task(exercise_id, task_number - 1)
 
-    out = {}
+    out = dict()
     out['this'] = {
         'exercise_id': task.exercise_id,
         'number': task.number,
