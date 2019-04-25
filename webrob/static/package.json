@@ -4,7 +4,9 @@
   "description": "The openEASE knowledge web service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./",
+    "pretest": "",
+    "test": "echo \"WARNING: no tests specified\" && exit 0",
     "browserify": "browserify -g browserify-css index.js > openease.js",
     "uglify": "uglifyjs openease.js -m -o openease-min.js",
     "build": "npm run browserify && npm run uglify"
@@ -34,5 +36,10 @@
     "popper.js": "1.14.3",
     "spin": "0.0.1",
     "uglify-js": "latest"
+  },
+  "devDependencies": {
+    "@code-iai/eslint-config-openease": "^2.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-import": "^2.17.2"
   }
 }
