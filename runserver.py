@@ -10,16 +10,16 @@ from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
 
-def __config_is_debug():
+def _config_is_debug():
     return 'DEBUG' in app.config and app.config['DEBUG']
 
 
-def __run_debug_server():
+def _run_debug_server():
     print 'Run web server in DEBUG mode'
-    app.run(host='0.0.0.0')
+    app.run(debug = True)
 
 
-def __run_server():
+def _run_server():
     http_server = HTTPServer(WSGIContainer(app))
     http_server.listen(5000)
     print 'Web server is running. Listening on {}'.format(5000)
@@ -31,7 +31,8 @@ init_app(app, db)
 # Start a development web server if executed from the command line
 if __name__ == '__main__':
     update_meshes()
-    if __config_is_debug():
-        __run_debug_server()
+    # app.config['DEBUG'] = True    # comment out if want to run in debug mode
+    if _config_is_debug():
+        _run_debug_server()
     else:
-        __run_server()
+        _run_server()

@@ -6,7 +6,6 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 
-from logging.handlers import SMTPHandler
 import os
 import datetime
 
@@ -17,41 +16,62 @@ from flask_user import UserManager, SQLAlchemyAdapter
 from flask.ext.babel import Babel
 
 from webrob.utility.random_string_builder import random_string
-from webrob.utility.db_connection_checker import got_db_connection
 from webrob.startup.init_db import *
 from webrob.startup.init_webapp import *
 from webrob.models.users import Role, User
 
-from werkzeug.security import generate_password_hash, check_password_hash
-
 
 def add_user(app, db, user_manager, name, mail, pw, display_name='', remote_app='', roles=[]):
-    if not __password_is_valid(app, name, pw):
+    if not _check_password_and_display_message_on_error(app, name, pw):
         return
 
-    user = __get_user_from_db(name)
+    user = _get_user_from_db(name)
 
     if not user:
-        user = __create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles)
+        user = _create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles)
 
     return user
 
 
-def __password_is_valid(app, name, pw):
+def _check_password_and_display_message_on_error(app, name, pw):
     if pw is None:
         app.logger.warn("User %s has no password specified." % name)
-    elif len(pw) < 4:
-        app.logger.warn("Password of user %s is too short. Please choose a password with 4 or more characters." % name)
+    elif not _password_criteria_fulfilled(pw):
+        app.logger.warn(
+            "Password of user %s needs to have 6 or more characters, one lowercase, one uppercase letter, and a number." % name)
     else:
         return True
     return False
 
 
-def __get_user_from_db(name):
+def _password_criteria_fulfilled(pw):
+    if _has_six_or_more_chars(pw) and _contains_number(pw) and _contains_lowercase_letter(
+            pw) and _contains_uppercase_letter(pw):
+        return True
+    return False
+
+
+def _has_six_or_more_chars(str):
+    return len(str) >= 6
+
+
+def _contains_number(str):
+    return any(char.isdigit() for char in str)
+
+
+def _contains_lowercase_letter(str):
+    return any(char.islower() for char in str)
+
+
+def _contains_uppercase_letter(str):
+    return any(char.isupper() for char in str)
+
+
+def _get_user_from_db(name):
     return User.query.filter(User.username == name).first()
 
 
-def __create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles):
+def _create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, display_name, remote_app, roles):
     user = User(active=True,
                 username=name,
                 displayname=display_name,
@@ -60,41 +80,41 @@ def __create_new_user_and_add_to_db(app, db, user_manager, name, mail, pw, displ
                 confirmed_at=datetime.datetime.utcnow(),
                 password=user_manager.hash_password(pw))
 
-    user = __append_roles_to_user_object(app, user, roles)
-    __add_user_to_db(app, db, user)
+    user = _append_roles_to_user_object(app, user, roles)
+    _add_user_to_db(app, db, user)
 
     return user
 
 
-def __append_roles_to_user_object(app, user, roles):
+def _append_roles_to_user_object(app, user, roles):
     user_with_roles = user
 
     for r in roles:
-        curr_role = __get_role_from_db(r)
+        curr_role = _get_role_from_db(r)
         if curr_role is None:
-            __log_role_query_failure(app, r)
+            _log_role_query_failure(app, r)
         else:
             user_with_roles.roles.append(curr_role)
 
     return user_with_roles
 
 
-def __get_role_from_db(role):
+def _get_role_from_db(role):
     return Role.query.filter(Role.name == role).first()
 
 
-def __log_role_query_failure(app, role):
+def _log_role_query_failure(app, role):
     app.logger.info("Unable to find role: " + str(role))
 
 
-def __add_user_to_db(app, db, user):
+def _add_user_to_db(app, db, user):
     if got_db_connection(app, db):
         db.session.add(user)
         db.session.commit()
 
 
 def init_app(app, db_instance, extra_config_settings={}):
-    __init_app_config_settings(app, extra_config_settings)
+    _init_app_config_settings(app, extra_config_settings)
 
     # Setup Flask-Mail
     mail = Mail(app)
@@ -108,12 +128,14 @@ def init_app(app, db_instance, extra_config_settings={}):
 
     # Local imports clogg up code, https://github.com/code-iai/openEASE-flask/issues/6
     # Load all models.py files to register db.Models with SQLAlchemy
+    # Needs to remain in code, even if IDEs might show it's unused, Flask will use them during runtime
     from webrob.models import users
     from webrob.models import tutorials
     from webrob.models import teaching
     from webrob.models import experiments
 
     # Load all views.py files to register @app.routes() with Flask
+    # Needs to remain in code, even if IDEs might show it's unused, Flask will use them during runtime
     from webrob.pages import api
     from webrob.pages import db
     from webrob.pages import editor
@@ -135,11 +157,11 @@ def init_app(app, db_instance, extra_config_settings={}):
              pw=os.environ.get('OPENEASE_ADMIN_PASSWORD'),
              roles=['admin'])
 
-    __log_webapp_started(app)
+    _log_webapp_started(app)
     return app
 
 
-def __init_app_config_settings(app, extra_config_settings):
+def _init_app_config_settings(app, extra_config_settings):
     app.config.from_object('webrob.config.settings')  # Read config from 'app/settings.py' file
     app.config.update(extra_config_settings)  # Overwrite with 'extra_config_settings' parameter
     if app.testing:
@@ -154,5 +176,5 @@ def __init_app_config_settings(app, extra_config_settings):
             app.config['SECRET_KEY'] = random_string(64)
 
 
-def __log_webapp_started(app):
+def _log_webapp_started(app):
     app.logger.info("Webapp started.")

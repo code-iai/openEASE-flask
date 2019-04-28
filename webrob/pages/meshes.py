@@ -1,12 +1,9 @@
 __author__ = 'danielb@cs.uni-bremen.de'
 
 import os
-import sys
-import traceback
 
 from flask import send_from_directory, jsonify
-from flask_user import login_required
-from urllib import urlopen, urlretrieve
+from urllib import urlopen
 from subprocess import call
 import thread
 
@@ -21,90 +18,90 @@ ROS_MESH_DATA_DIR = '/home/ros/mesh_data'
 
 def update_meshes():
     if path_exists(ROS_MESH_DATA_DIR):
-        thread.start_new_thread(__update_meshes_run, ())
+        thread.start_new_thread(_update_meshes_run, ())
 
 
-def __update_meshes_run():
-    __change_to_mesh_data_directory()
-    __update_mesh_repositories()
-    __convert_tif_images_to_png()
+def _update_meshes_run():
+    _change_to_mesh_data_directory()
+    _update_mesh_repositories()
+    _convert_tif_images_to_png()
 
 
-def __change_to_mesh_data_directory():
+def _change_to_mesh_data_directory():
     ch_dir(ROS_MESH_DATA_DIR)
 
 
-def __update_mesh_repositories():
+def _update_mesh_repositories():
     for repo in MESH_REPOSITORIES:
-        __update_if_svn_or_git_repository(repo)
+        _update_if_svn_or_git_repository(repo)
 
 
-def __update_if_svn_or_git_repository(repo):
+def _update_if_svn_or_git_repository(repo):
     try:
         (tool, url) = repo
-        if __tool_is_svn_repository(tool):
-            __update_meshes_in_repository(url, "/usr/bin/svn", "update", "co")
-        elif __tool_is_git_repository(tool):
-            __update_meshes_in_repository(url, "/usr/bin/git", "pull", "clone")
+        if _tool_is_svn_repository(tool):
+            _update_meshes_in_repository(url, "/usr/bin/svn", "update", "co")
+        elif _tool_is_git_repository(tool):
+            _update_meshes_in_repository(url, "/usr/bin/git", "pull", "clone")
     except Exception:
         app.logger.warn("Unable to update repository: '" + str(repo) + "'.")
 
 
-def __tool_is_svn_repository(tool):
+def _tool_is_svn_repository(tool):
     return tool == "svn"
 
 
-def __tool_is_git_repository(tool):
+def _tool_is_git_repository(tool):
     return tool == "git"
 
 
-def __update_meshes_in_repository(url, repo_dir, repo_update_cmd, repo_clone_cmd):
+def _update_meshes_in_repository(url, repo_dir, repo_update_cmd, repo_clone_cmd):
     repo_name = get_unix_style_path_basename(url)
-    if __repository_exists(repo_name):
-        __update_repository(repo_name, repo_dir, repo_update_cmd)
+    if _repository_exists(repo_name):
+        _update_repository(repo_name, repo_dir, repo_update_cmd)
     else:
-        __clone_repository(repo_dir, repo_clone_cmd, url)
+        _clone_repository(repo_dir, repo_clone_cmd, url)
 
 
-def __repository_exists(repo_name):
+def _repository_exists(repo_name):
     path_exists(repo_name)
 
 
-def __update_repository(repo_name, repo_dir, repo_update_cmd):
+def _update_repository(repo_name, repo_dir, repo_update_cmd):
     ch_dir(repo_name)
     call([repo_dir, repo_update_cmd])
     ch_dir('..')
 
 
-def __clone_repository(repo_dir, repo_clone_cmd, url):
+def _clone_repository(repo_dir, repo_clone_cmd, url):
     call([repo_dir, repo_clone_cmd, url])
 
 
-def __convert_tif_images_to_png():
+def _convert_tif_images_to_png():
     call(['/opt/webapp/convert-recursive', ROS_MESH_DATA_DIR])
 
 
 @app.route('/meshes/<path:mesh>')
 def download_mesh(mesh):
-    mesh_file = __get_mesh_file(mesh)
+    mesh_file = _get_mesh_file(mesh)
 
     if mesh_file is None:
-        __log_download_fail_message(mesh)
+        _log_download_fail_message(mesh)
         return jsonify(result=None)
 
-    return __send_mesh_file(mesh, mesh_file)
+    return _send_mesh_file(mesh_file)
 
 
-def __get_mesh_file(mesh):
-    m_file = __get_m_file_from_repos(mesh)
+def _get_mesh_file(mesh):
+    m_file = _get_m_file_from_repos(mesh)
 
     if m_file is None:
-        m_file = __get_m_file_from_root(mesh)
+        m_file = _get_m_file_from_root(mesh)
 
     return m_file
 
 
-def __get_m_file_from_repos(mesh):
+def _get_m_file_from_repos(mesh):
     m_file = None
 
     for repo in os.listdir(ROS_MESH_DATA_DIR):
@@ -116,18 +113,18 @@ def __get_m_file_from_repos(mesh):
     return m_file
 
 
-def __get_m_file_from_root(mesh):
+def _get_m_file_from_root(mesh):
     if path_exists(mesh):
         return mesh
     elif path_exists('/' + mesh):
         return '/' + mesh
 
 
-def __log_download_fail_message(mesh):
+def _log_download_fail_message(mesh):
     app.logger.info("Unable to download mesh " + mesh)
 
 
-def __send_mesh_file(mesh_file):
+def _send_mesh_file(mesh_file):
     return send_from_directory(
         get_parent_dir_name(mesh_file),
         get_path_basename(mesh_file))

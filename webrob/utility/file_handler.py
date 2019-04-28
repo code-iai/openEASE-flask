@@ -4,10 +4,10 @@ from webrob.utility.path_handler import path_exists
 
 
 def read_file(path):
-    src_f = open(path, 'r')
-    file = src_f.read()
-    src_f.close()
-    return file
+    file_src = open(path, 'r')
+    file_content = file_src.read()
+    file_src.close()
+    return file_content
 
 
 def write_to_file(path, content):

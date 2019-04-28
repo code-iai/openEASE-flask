@@ -1,4 +1,3 @@
-
 from flask import session, jsonify, request, redirect, render_template, url_for, send_from_directory
 from flask_user import login_required
 
@@ -21,22 +20,27 @@ from webrob.config.settings import ROS_DISTRIBUTION
 
 __author__ = 'danielb@cs.uni-bremen.de'
 
+
 # TODO: remove "/knowrob" prefix in some routes or replace by "/kb"
 @app.route('/static/<path:filename>')
 @app.route('/knowrob/static/<path:filename>')
 def download_static(filename):
     return send_from_directory(os.path.join(app.root_path, "static"), filename)
 
+
 @app.route('/episode_data/<path:filename>')
 @app.route('/knowrob/knowrob_data/<path:filename>')
 def download_logged_image(filename):
     return send_from_directory('/episodes/', filename)
 
+
 @app.route('/knowrob/local_data/<path:filename>')
 def transfer_logged_video(filename):
     data = base64.b64encode(file_read(session['user_container_name'], filename))
-    return '<video controls><source type="video/mp4" src="data:video/mp4;base64,{}"></video>'.format(urllib.quote(data.rstrip('\n')))
-    
+    return '<video controls><source type="video/mp4" src="data:video/mp4;base64,{}"></video>'.format(
+        urllib.quote(data.rstrip('\n')))
+
+
 @app.route('/knowrob/user_data/<path:filename>')
 @app.route('/user_data/<path:filename>')
 def transfer_logged_memory(filename):
@@ -49,21 +53,23 @@ def transfer_logged_memory(filename):
 @app.route('/knowrob/')
 @app.route('/knowrob/exp/<category>/<exp>')
 def knowrob(category=None, exp=None):
-    if not ensure_application_started('openease/'+ROS_DISTRIBUTION+'-knowrob-daemon'):
+    if not ensure_application_started('openease/' + ROS_DISTRIBUTION + '-knowrob-daemon'):
         return redirect(url_for('user.logout'))
     return __knowrob_page__('knowrob_simple.html', session['user_container_name'], category, exp)
+
 
 # TODO delete routes, replace exp preselection
 @app.route('/replay')
 @app.route('/video')
 @app.route('/video/exp/<category>/<exp>')
 def video(category=None, exp=None):
-    if not ensure_application_started('openease/'+ROS_DISTRIBUTION+'-knowrob-daemon'):
+    if not ensure_application_started('openease/' + ROS_DISTRIBUTION + '-knowrob-daemon'):
         return redirect(url_for('user.logout'))
     return __knowrob_page__('video.html', session['user_container_name'], category, exp)
 
+
 def __knowrob_page__(template, container_name, category=None, exp=None):
-    error=""
+    error = ""
     # determine hostname/IP we are currently using
     # (needed for accessing container)
     host_url = urlparse(request.host_url).hostname
@@ -71,9 +77,10 @@ def __knowrob_page__(template, container_name, category=None, exp=None):
     if exp is not None:      session['exp-name'] = exp
     if 'exp-category' in session: category = session['exp-category']
     if 'exp-name' in session: exp = session['exp-name']
-    
+
     exp_url = get_experiment_download_url()
     return render_template(template, **locals())
+
 
 @app.route('/knowrob/menu', methods=['POST'])
 def menu():
@@ -137,83 +144,90 @@ def menu():
 
     return jsonify(menu_left=menu_left, menu_right=menu_right)
 
+
 @app.route('/knowrob/add_history_item', methods=['POST'])
 def add_history_item():
-  query = json.loads(request.data)['query']
-  hfile = get_history_file()
-  # Remove newline characters
-  #query.replace("\n", " ")
-  
-  # Read history
-  lines = []
-  if os.path.isfile(hfile):
-    f = open(hfile)
-    lines = f.readlines()
-    f.close()
-  # Remove old history items
-  history = ''.join(lines).split("\n\n")
-  history = map(lambda x: x + '\n\n', history)
-  # Append the last query
-  history.append(query+".")
-  
-  numLines = len(history)
-  history = history[max(0, numLines-MAX_HISTORY_LINES):numLines]
-  
-  with open(hfile, "w") as f:
-    f.writelines(history)
-  
-  return jsonify(result=None)
+    query = json.loads(request.data)['query']
+    hfile = get_history_file()
+    # Remove newline characters
+    # query.replace("\n", " ")
+
+    # Read history
+    lines = []
+    if os.path.isfile(hfile):
+        f = open(hfile)
+        lines = f.readlines()
+        f.close()
+    # Remove old history items
+    history = ''.join(lines).split("\n\n")
+    history = map(lambda x: x + '\n\n', history)
+    # Append the last query
+    history.append(query + ".")
+
+    numLines = len(history)
+    history = history[max(0, numLines - MAX_HISTORY_LINES):numLines]
+
+    with open(hfile, "w") as f:
+        f.writelines(history)
+
+    return jsonify(result=None)
+
 
 @app.route('/knowrob/get_history_item', methods=['POST'])
 def get_history_item():
-  index = json.loads(request.data)['index']
-  
-  if index<0:
-    return jsonify(item="", index=-1)
-  
-  hfile = get_history_file()
-  if os.path.isfile(hfile):
-    # Read file content
-    f = open(hfile)
-    lines = f.readlines()
-    f.close()
-    
-    # Clamp index
-    if index<0: index=0
-    if index>=len(lines): index=len(lines)-1
-    if index<0: return jsonify(item="", index=-1)
-    
-    # History items are separated with empty line (\n\n)
-    history = ''.join(lines).split("\n\n")
-    
-    item = history[len(history)-index-1]
-    if len(item)>0 and item[len(item)-1]=='\n':
-      item = item[:len(item)-1]
-    
-    return jsonify(item=item, index=index)
-  
-  else:
-    return jsonify(item="", index=-1)
+    index = json.loads(request.data)['index']
+
+    if index < 0:
+        return jsonify(item="", index=-1)
+
+    hfile = get_history_file()
+    if os.path.isfile(hfile):
+        # Read file content
+        f = open(hfile)
+        lines = f.readlines()
+        f.close()
+
+        # Clamp index
+        if index < 0: index = 0
+        if index >= len(lines): index = len(lines) - 1
+        if index < 0: return jsonify(item="", index=-1)
+
+        # History items are separated with empty line (\n\n)
+        history = ''.join(lines).split("\n\n")
+
+        item = history[len(history) - index - 1]
+        if len(item) > 0 and item[len(item) - 1] == '\n':
+            item = item[:len(item) - 1]
+
+        return jsonify(item=item, index=index)
+
+    else:
+        return jsonify(item="", index=-1)
+
 
 @app.route('/userdata')
 @login_required
 def user_data():
     return render_template('show_user_data.html', **locals())
 
+
 @app.route('/knowrob/admin/cookie')
 @login_required
 def admin_cookie():
     return render_template('admin/cookie.html', **locals())
 
+
 @app.route('/logs')
 @app.route('/log')
 def log():
-  logStr = docker_interface.get_container_log(session['user_container_name'])
-  return render_template('log.html', log=logStr)
+    logStr = docker_interface.get_container_log(session['user_container_name'])
+    return render_template('log.html', log=logStr)
+
 
 def get_history_file():
-  userDir = get_user_dir()
-  return os.path.join(get_user_dir(), "query.history")
+    userDir = get_user_dir()
+    return os.path.join(get_user_dir(), "query.history")
+
 
 @app.errorhandler(Exception)
 def unhandled_exception(e):
