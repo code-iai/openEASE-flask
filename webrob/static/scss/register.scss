@@ -42,6 +42,14 @@
   color: #0c0c0c;
 }
 
+.custom-control {
+  padding-bottom: 8px;
+}
+
+.custom-control-label::before {
+  background-color: #cdcdcd;
+}
+
 p#copyright {
   float: none;
   text-align: center;
