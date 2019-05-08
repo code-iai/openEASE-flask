@@ -1,65 +1,103 @@
-{% extends 'flask_user/public_base.html' %}
+{% extends 'flask_user/public_base_register.html' %}
 
 {% block content_inner %}
-{% from "flask_user/_macros.html" import render_field, render_submit_field %}
+    {% from "flask_user/_macros.html" import render_field, render_submit_field %}
 
-<div class="page-centered">
-    <div id="page-body">
-        <div class="content-box" id="register-box">
-            <h1 class="content-box-header">{%trans%}Please fill out{%endtrans%}</h1>
-            <form action="" method="POST" novalidate formnovalidate class="form" role="form">
-                {{ form.hidden_tag() }}
+    <div class="page-background">
+        {#    <div id="page-body">#}
+        {#        <div class="content-box" id="register-box">#}
+        <div class="register-content">
+            <div id="register-div">
+                <div id="ease-logo">
+                    <a class="ease-brand" href="http://www.open-ease.org"><img
+                            src="{{ url_for('static', filename='logos/oe-logo-small.svg') }}">openEASE</a>
 
-                <div class="row">
+                </div>
+
+                <div class="card card-register">
+                    {#                    <h1 class="content-box-header">{% trans %}Please fill out{% endtrans %}</h1>#}
+                    <div class="card-header register-text">{% trans %}Create an account{% endtrans %}</div>
+
+                    <div class="card-body">
+                        <form action="" method="POST" novalidate formnovalidate class="form" role="form">
+                            {{ form.hidden_tag() }}
+
+
+                            {# Username or Email #}
+                            {% set field = form.username %}
+                            <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
+                                <input placeholder="Name" class="form-control" id="username" name="username" type="text"
+                                       value="" required autofocus/>
+                            </div>
+
+                            {% if user_manager.enable_email and user_manager.enable_username %}
+                                {% set field = form.email %}
+                                <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
+                                    <input placeholder="Email" class="form-control" id="email" name="email" type="text"
+                                           value=""
+                                           required/>
+                                </div>
+                            {% endif %}
+
+                            {# Password field #}
+                            {% set field = form.password %}
+                            <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
+                                <input placeholder="Password" class="form-control" id="password" name="password"
+                                       type="password"
+                                       value="" required/>
+                            </div>
+                            {% if user_manager.enable_retype_password %}
+                                <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
+                                    <input placeholder="Retype Password" class="form-control" id="retype_password"
+                                           name="retype_password" type="password" value="" required/>
+                                </div>
+                            {% endif %}
+                            <label id="remember-me" class="checkbox inline"><input type="checkbox"
+                                                                                   value="remember_me"> I accept the <a
+                                    href="#">Terms of Use</a> and <a href="#">Privacy Policy</a> </label>
+                            <button id="register-button" class="btn btn-lg btn-primary btn-block" type="submit">Register
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div>
                     <div class="field-hint" id="already-registered-link">
                         {% if user_manager.enable_forgot_password %}
+                            <span class="already-registered">Already registered?</span>
                             <a href="{{ url_for('user.login') }}" tabindex='195'>
-                                    {%trans%}Already registered? Sign in.{%endtrans%}</a>
+                                {% trans %}Sign in.{% endtrans %}</a>
                         {% endif %}
                     </div>
                 </div>
 
-                {# Username or Email #}
-                {% set field = form.username %}
-                <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                    <input placeholder="Name" class="form-control" id="username" name="username" type="text" value="" required autofocus />
-                </div>
-                
-                {% if user_manager.enable_email and user_manager.enable_username %}
-                    {% set field = form.email %}
-                    <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                        <input placeholder="Email" class="form-control" id="email" name="email" type="text" value="" required />
-                    </div>
-                {% endif %}
+                {% for error in form.username.errors %}
+                    <p class="error"><strong>Error:</strong> {{ error }}</p>
+                {% endfor %}
+                {% for error in form.email.errors %}
+                    <p class="error"><strong>Error:</strong> {{ error }}</p>
+                {% endfor %}
+                {% for error in form.password.errors %}
+                    <p class="error"><strong>Error:</strong> {{ error }}</p>
+                {% endfor %}
+            </div>
 
-                {# Password field #}
-                {% set field = form.password %}
-                <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                    <input placeholder="Password" class="form-control" id="password" name="password" type="password" value="" required />
-                </div>
-                {% if user_manager.enable_retype_password %}
-                    <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                        <input placeholder="Retype Password" class="form-control" id="retype_password" name="retype_password" type="password" value="" required />
-                    </div>
-                {% endif %}
-
-                <button id="register-button" class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
-            </form>
-{% for error in form.username.errors %}
-            <p class="error"><strong>Error:</strong> {{ error }}</p>
-{% endfor %}
-{% for error in form.email.errors %}
-            <p class="error"><strong>Error:</strong> {{ error }}</p>
-{% endfor %}
-{% for error in form.password.errors %}
-            <p class="error"><strong>Error:</strong> {{ error }}</p>
-{% endfor %}
-        </div>
-        <div class="content-box" id="video-box">
-            <h1 class="content-box-header">Howto use openEASE</h1>
-            <video id="howto-video" width="420" height="236" src="{{ url_for('static', filename='HowtouseopenEASE.mp4') }}" controls></video>
         </div>
     </div>
-</div>
+    <footer id="footer-style">
+        {#        <div class="container">#}
 
+        <div class="legal">
+
+            <p id="copyright">
+                <span>&copy;Copyright openEASE 2019</span>
+            </p>
+
+
+        </div>
+        {#        </div>#}
+
+
+    </footer>
 {% endblock %}

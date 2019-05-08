@@ -57,7 +57,7 @@ html {
   background-color: transparent; }
 
 body {
-  font: normal 100%/1.4em 'Open Sans',Arial,Helvetica,sans-serif;
+  font: normal 100%/1.4em 'Open Sans', Arial, Helvetica, sans-serif;
   /* same font stack should be used for ".dokuwiki div.toc" */ }
 
 h1, h1 a,
@@ -67,7 +67,7 @@ h4, h4 a,
 h5, h5 a,
 h6, h6 a,
 .btb-header {
-  font-family: Oswald,Arial,Helvetica,sans-serif;
+  font-family: Oswald, Arial, Helvetica, sans-serif;
   /* same font stack should be used for ".dokuwiki div.tocheader" */
   font-weight: normal;
   color: #333;
@@ -93,13 +93,6 @@ h1 {
   /* 32px, base 14px (see ".dokuwiki") */
   line-height: 2.857em;
   /* 40px, base 14px (see ".dokuwiki") */ }
-
-#login {
-  line-height: 1 !important;
-  margin-bottom: 20px !important;
-  letter-spacing: -2px !important;
-  text-align: center !important;
-  font-weight: 350 !important; }
 
 h2 {
   font-size: 1.714em;
@@ -135,7 +128,7 @@ legend {
 legend {
   text-align: left;
   /* needed for webkit browsers */
-  font-family: 'Open Sans',Arial,Helvetica,sans-serif;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   /* fix MSIE 6/7 */ }
 
 /* basic margins and paddings */
@@ -149,10 +142,6 @@ blockquote,
 fieldset,
 address {
   margin: 0 0 1.4em 0;
-  padding: 0; }
-
-div {
-  margin: 0;
   padding: 0; }
 
 /* lists */
@@ -276,7 +265,7 @@ pre,
 code,
 samp,
 kbd {
-  font-family: Source Code Pro,Consolas,monospace;
+  font-family: Source Code Pro, Consolas, monospace;
   /* same font stack should be used for ".dokuwiki table.diff td" and
      ".dokuwiki textarea.edit" */
   font-size: 1em;
@@ -470,7 +459,7 @@ div.clearer {
   font-size: 0.929em;
   /* =13px (base 14px) */
   font-weight: normal;
-  font-family: Source Code Pro,Consolas,monospace; }
+  font-family: Source Code Pro, Consolas, monospace; }
 
 .dokuwiki dl.code dt a,
 .dokuwiki dl.file dt a {
@@ -582,7 +571,7 @@ div#pagewrap {
 #tmpl_header #tmpl_header_logo a.tmpl_header_logo_txt:visited,
 #tmpl_header #tmpl_header_logo a.tmpl_header_logo_txt:hover,
 #tmpl_header #tmpl_header_logo a.tmpl_header_logo_txt:active {
-  font-family: Oswald,Arial,Helvetica,sans-serif;
+  font-family: Oswald, Arial, Helvetica, sans-serif;
   font-size: 48px;
   /* px instead of em to get a cross-browser reliable... */
   line-height: 59px;
@@ -612,7 +601,7 @@ div#pagewrap {
 #tmpl_header #tmpl_header_nav {
   position: absolute;
   bottom: 0;
-  font-family: Oswald,Arial,Helvetica,sans-serif;
+  font-family: Oswald, Arial, Helvetica, sans-serif;
   font-size: 112.5%;
   /* 18px (base: 16px) */
   margin-bottom: 8px;
@@ -690,7 +679,7 @@ div#pagewrap.admin div#content {
  ******** Have a look at http://j.mp/eq8zSo for more information   ************
  ******************************************************************************/
 .dokuwiki table.diff td {
-  font-family: Source Code Pro,Consolas,monospace;
+  font-family: Source Code Pro, Consolas, monospace;
   /* same font stack should be used for "pre, code, samp, kbd" and
      ".dokuwiki textarea.edit" */
   font-size: 0.857em;
@@ -767,7 +756,7 @@ div#pagewrap.admin div#content {
  ******************************************************************************/
 .dokuwiki div.toc {
   float: left;
-  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   margin: 0 0 1.5em;
   padding: 0;
   width: 100%;
@@ -775,7 +764,7 @@ div#pagewrap.admin div#content {
   background-color: transparent; }
 
 .dokuwiki div.toc div.tocheader {
-  font-family: 'Open Sans',Arial,Helvetica,sans-serif;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   font-size: 1.429em;
   /* 20px, base 14px (see ".dokuwiki") */
   font-weight: normal; }
@@ -870,7 +859,7 @@ div.insitu-footnote {
 .dokuwiki textarea.edit {
   line-height: 1.214em;
   /* 17px, base 14px (see ".dokuwiki") */
-  font-family: Source Code Pro,Consolas,monospace;
+  font-family: Source Code Pro, Consolas, monospace;
   /* same font stack should be used for "pre, code, samp, kbd" and
      ".dokuwiki table.diff td" */ }
 
@@ -1000,12 +989,12 @@ div.div5 {
   border: 1px black solid; }
 
 .code {
-  font-family: Source Code Pro,Consolas,monospace;
+  font-family: Source Code Pro, Consolas, monospace;
   font-size: 9pt;
   line-height: 1.0em; }
 
 code {
-  font-family: Source Code Pro,Consolas,monospace;
+  font-family: Source Code Pro, Consolas, monospace;
   font-size: 9pt;
   line-height: 1.0em; }
 
@@ -1999,7 +1988,7 @@ a.navbar-tool-brand {
   z-index: 5001; }
 
 .menu li.submenu > a:after {
-  content: ' Γû╛'; }
+  content: ' ▾'; }
 
 .mega_menu {
   position: absolute;
@@ -2071,23 +2060,10 @@ li:hover ul li.zero_size > div {
 
 .container-background,
 .page-background {
-  background-image: url(oe-logo.svg);
-  background-position: right bottom;
-  background-repeat: no-repeat;
   width: 100%;
-  height: -o-calc(100% - 10px);
-  /* opera */
-  height: -webkit-calc(100% - 10px);
-  /* google, safari */
-  height: -moz-calc(100% - 10px);
-  /* firefox */
-  height: calc(100% - 10px);
-  /* firefox 53 and newer */ }
-
-.container-centered,
-.page-centered {
-  width: 80%;
-  margin: 0 auto; }
+  height: 100%;
+  overflow: auto;
+  background: linear-gradient(to bottom, #549FC8 0%, #246F98 50%, #246F98 51%, #144F78 100%); }
 
 /* Area at the top of the page */
 .headline {
@@ -2111,17 +2087,6 @@ li:hover ul li.zero_size > div {
   font-family: Tahoma, Geneva, sans-serif;
   padding: 12px; }
 
-@media (max-width: 992px) {
-  #user-data-box {
-    float: none; }
-
-  #video-box {
-    margin-top: 20px;
-    float: left !important;
-    max-width: 100%; }
-
-  #howto-video {
-    max-width: 100%; } }
 .content-box a {
   color: #4C7FD2; }
 
@@ -3175,7 +3140,7 @@ li.zero_size,
   line-height: 1; }
 
 .fa-lg {
-  font-size: 1.3333333333em;
+  font-size: 1.33333em;
   line-height: 0.75em;
   vertical-align: -.0667em; }
 
