@@ -26,12 +26,18 @@
                             {# Username or Email field #}
                             {% set field = form.username if user_manager.enable_username else form.email %}
                             <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                                <input placeholder="Username" class="form-control form-control-danger form-control-feedback" id="inputHorizontalDanger" id="username" name="username"
+                                <input placeholder="Username"
+                                       class="form-control form-control-danger form-control-feedback"
+                                       id="inputHorizontalDanger" id="username" name="username"
                                        type="text"
                                        value="" required autofocus>
-
-
                             </div>
+
+                            {% for error in form.username.errors %}
+                                <p class="alert alert-danger alert-dismissible error">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Error!</strong> {{ error }}</p>
+                            {% endfor %}
 
                             {# Password field #}
                             {% set field = form.password %}
@@ -41,9 +47,22 @@
                                        value="" required/>
                             </div>
 
+                            {% for error in form.password.errors %}
+                                <p class="alert alert-danger alert-dismissible error">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Error!</strong> {{ error }}</p>
+                            {% endfor %}
 
-                            <label id="remember-me" class="checkbox inline"><input type="checkbox"
-                                                                  value="remember_me"><span>Remember me </span> </label>
+{#                            <label id="remember-me" class="checkbox inline"><input type="checkbox"#}
+{#                                                                                   value="remember_me"><span>Remember me </span>#}
+{#                            </label>#}
+
+                            <div id="remember-me" class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1"
+                                       value="remember_me">
+                                <label id="remember-me" class="custom-control-label" for="customCheck1">Remember me
+                                </label>
+                            </div>
 
                             <button class="btn  btn-block btn-primary ripple-effect" type="submit">Login</button>
                         </form>
@@ -64,12 +83,8 @@
 
                     </div>
 
-                    {% for error in form.username.errors %}
-                        <p class="error"><strong>Error:</strong> {{ error }}</p>
-                    {% endfor %}
-                    {% for error in form.password.errors %}
-                        <p class="error"><strong>Error:</strong> {{ error }}</p>
-                    {% endfor %}
+                    {#                    error message was here#}
+
                     {#                </div>#}
                     {#                </div>#}
 

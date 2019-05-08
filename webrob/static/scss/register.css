@@ -52,23 +52,6 @@ body {
 .page-background {
   padding: 10px; }
 
-#footer-style {
-  position: absolute;
-  height: 100px;
-  /* Height of the footer */
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 430px;
-  max-width: 100%;
-  margin-top: 0px;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #0277bd;
-  text-align: left;
-  padding-left: 15px;
-  padding-right: 15px; }
-
 #login {
   line-height: 1;
   margin-bottom: 20px;
@@ -133,14 +116,16 @@ div#login {
   margin: 0px auto 20px !important; }
 
 #remember-me {
-  color: #757575 !important; }
+  color: #757575; }
+
+.custom-control {
+  padding-bottom: 5px; }
+
+.custom-control-label::before {
+  background-color: #cdcdcd; }
 
 .card-footer a {
   text-decoration: underline !important; }
-
-.legal {
-  padding-top: 20px;
-  padding-bottom: 20px; }
 
 .btn-info {
   background-color: #0277bd !important; }
@@ -148,6 +133,27 @@ div#login {
 #forgot-password-link {
   display: inline;
   float: right; }
+
+#footer-style {
+  position: absolute;
+  height: 100px;
+  /* Height of the footer */
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 430px;
+  max-width: 100%;
+  margin-top: 0px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #0277bd;
+  text-align: left;
+  padding-left: 15px;
+  padding-right: 15px; }
+
+.legal {
+  padding-top: 20px;
+  padding-bottom: 20px; }
 
 #terms-of-service a {
   padding-right: 10px;
@@ -259,6 +265,12 @@ p#copyright {
 
 .field-hint a {
   color: #0c0c0c; }
+
+.custom-control {
+  padding-bottom: 8px; }
+
+.custom-control-label::before {
+  background-color: #cdcdcd; }
 
 p#copyright {
   float: none;
