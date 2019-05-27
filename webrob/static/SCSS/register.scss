@@ -30,6 +30,10 @@
   margin: 0px auto 20px;
 }
 
+span#register-policy{
+  color: #757575;
+}
+
 .field-hint{
   text-align: center !important;
 }
@@ -44,7 +48,8 @@
 
 .custom-control {
   padding-bottom: 8px;
-}
+  font-size: 15px;
+ }
 
 .custom-control-label::before {
   background-color: #cdcdcd;
@@ -54,6 +59,7 @@ p#copyright {
   float: none;
   text-align: center;
   padding-top: 50px;
+  //font-size: 15px;
 }
 
 @media (max-width: 576px) {

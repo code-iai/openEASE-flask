@@ -1,6 +1,6 @@
 // login css
 @import 'font';
-@import '../node_modules/@fortawesome/fontawesome-free/css/fontawesome.css';
+//@import '../node_modules/@fortawesome/fontawesome-free/css/fontawesome.css';
 html,
 body {
   margin: 0;
@@ -75,6 +75,10 @@ a.ease-brand {
   height: 30px;
 }
 
+#new-user-row{
+  flex-wrap: nowrap;
+}
+
 #new-user {
   display: inline;
   float: left;
@@ -87,7 +91,7 @@ a.ease-brand {
   font-size: 1.5em;
   padding-top: 20px;
   padding-bottom: 20px;
-  color: #757575;;
+  color: #757575;
 }
 
 div#login {
@@ -115,6 +119,7 @@ div#login {
 
 #remember-me {
     color: #757575;
+  font-size: 0.9rem;
 }
 
 .custom-control {
@@ -125,8 +130,11 @@ div#login {
   background-color: #cdcdcd;
 }
 
-.card-footer a {
-  text-decoration: underline !important;
+.card-footer {
+  //font-size: 18px;
+  & a {
+    text-decoration: none;
+  }
 }
 
 .btn-info {
@@ -150,9 +158,10 @@ div#login {
   margin-right: auto;
   margin-left: auto;
   background-color: #0277bd;
-  text-align: left;
+  //text-align: left;
   padding-left: 15px;
   padding-right: 15px;
+  font-size: 15px;
 }
 
 .legal {
@@ -161,7 +170,7 @@ div#login {
 }
 
 #terms-of-service a {
-  padding-right: 10px;
+  padding-right: 15px;
   color: #eceff1 !important;
   text-decoration: none !important;
 }
@@ -176,8 +185,9 @@ p#copyright {
   float: right;
 }
 
-#copyright span {
+#copyright{
   color: #eceff1;
+  padding-right: 15px;
 }
 
 
@@ -234,29 +244,29 @@ p#copyright {
   .btn-primary {
     font-size: 0.9em !important;
   }
-  p#new-user {
-    width: 100%;
-    text-align: left;
-  }
-  p#forgot-password-link {
-    float: left;
-    width: 100%;
-    text-align: left;
-    margin-bottom: 0px;
-  }
+  //p#new-user {
+  //  width: 100%;
+  //  text-align: left;
+  //}
+  //p#forgot-password-link {
+  //  float: left;
+  //  width: 100%;
+  //  text-align: left;
+  //  margin-bottom: 0px;
+  //}
 
-  #terms-of-service, #privacy {
-    float: left;
-    width: 100%;
-    text-align: center;
-    text-decoration: none;
-  }
-
-  p#copyright {
-    float: left;
-    width: 100%;
-    text-align: center;
-  }
+  //#terms-of-service, #privacy {
+  //  float: left;
+  //  width: 100%;
+  //  text-align: center;
+  //  text-decoration: none;
+  //}
+  //
+  //p#copyright {
+  //  float: left;
+  //  width: 100%;
+  //  text-align: center;
+  //}
 
 }
 
