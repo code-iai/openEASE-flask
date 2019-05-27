@@ -67,7 +67,7 @@
                     </div>
                     <div class="card-footer">
 
-                        <div class="row">
+                        <div class="row" id="new-user-row">
                             <p id="new-user" class="col-sm-6"> New user?
                                 <a href="{{ url_for('user.register') }}">Sign Up</a>
                             </p>
@@ -104,7 +104,8 @@
             <span id="privacy"> <a href="#">Privacy</a></span>
 
             <p id="copyright">
-                <span>&copy;Copyright openEASE 2019</span>
+{#                <span>&copy;Copyright openEASE</span>#}
+                &copy;Copyright openEASE <span id="myYear"> </span>
             </p>
 
 
@@ -113,7 +114,7 @@
 
 
     </footer>
-{#    <script src="../../static/form-js/form_script.js"></script>#}
+    <script src="../../static/form-js/copyright_year.js"></script>
 {% endblock %}
 
 
