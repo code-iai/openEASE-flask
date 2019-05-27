@@ -46,7 +46,7 @@
                             {% if user_manager.enable_email and user_manager.enable_username %}
                                 {% set field = form.email %}
                                 <div id="user-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                                    <input placeholder="Email" class="form-control" id="email" name="email" type="text"
+                                    <input placeholder="Email" class="form-control" id="email" name="email" type="email"
                                            value=""
                                            required/>
                                     <div class="invalid-feedback">Email is Invalid.</div>
@@ -65,26 +65,42 @@
                             {# Password field #}
                             {% set field = form.password %}
                             <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                                <input placeholder="Password" class="form-control" id="password" name="password"
-                                       type="password" title="Password must be atleast 6 characters long. Must contain a number, an Upper case letter, and a Lower case letter"
+                                <input placeholder="Password" class="form-control" id="psw" name="password"
+                                       type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                                       title="Password must be atleast 6 characters long. Must contain a number, an Upper case letter, and a Lower case letter"
                                        value="" required/>
-                                <div class="invalid-feedback">Password must be atleast 6 characters long. Must contain a number, an Upper case letter,
-                                    and a Lower case letter.</div>
+                                {#                                <div class="invalid-feedback">#}
+
+                                <div id="message">
+                                    <p>Password must contain the following:</p>
+                                    <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                                    <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                                    <p id="number" class="invalid">A <b>number</b></p>
+                                    <p id="length" class="invalid">Minimum <b>6 characters</b></p>
+                                    {#                                    </div>#}
+                                </div>
+                                <div class="invalid-feedback" id="psw-check">
+                                    Password must be atleast 6 characters long. Must contain a number, an Upper case
+                                    letter, and a Lower case letter"
+                                </div>
                             </div>
+
 
                             {#                            {% for error in form.password.errors %}#}
                             {#                                <p class="alert alert-danger alert-dismissible error">#}
                             {#                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>#}
                             {#<strong>Error!</strong> #}
-{#                            {{ error }}#}
-{#                            </p>#}
+                            {#                            {{ error }}#}
+                            {#                            </p>#}
                             {#                            {% endfor %}#}
 
                             {% if user_manager.enable_retype_password %}
                                 <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
                                     <input placeholder="Retype Password" class="form-control" id="retype_password"
                                            name="retype_password" type="password" value="" required/>
-                                    <div class="invalid-feedback">Password does not match.</div>
+                                    <div id="invalid-msg">
+{#                                        Password does not match.#}
+                                    </div>
                                 </div>
 
                             {% endif %}
@@ -95,9 +111,11 @@
                                                                                                id="customCheck1"
                                                                                                value="remember_me"
                                                                                                required>
-                                    <label class="custom-control-label" for="customCheck1"> I
-                                        accept the <a
-                                                href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>
+                                    <label class="custom-control-label" for="customCheck1">
+                                        <span id="register-policy">
+                                            I accept the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>
+                                        </span>
+
                                     </label>
                                     <div class="invalid-feedback">Please check the checkbox to continue</div>
                                 </div>
@@ -107,6 +125,14 @@
                             <button id="register-button" class="btn btn-lg btn-primary btn-block" type="submit">Register
                             </button>
                         </form>
+                        {#                        <div id="message">#}
+                        {#                            <p>Password must contain the following:</p>#}
+                        {#                            <p id="letter" class="invalid">A <b>lowercase</b> letter</p>#}
+                        {#                            <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>#}
+                        {#                            <p id="number" class="invalid">A <b>number</b></p>#}
+                        {#                            <p id="length" class="invalid">Minimum <b>8 characters</b></p>#}
+                        {#                        </div>#}
+
                     </div>
 
                 </div>
@@ -116,12 +142,14 @@
                         {% if user_manager.enable_forgot_password %}
                             <span class="already-registered">Already registered?</span>
                             <a href="{{ url_for('user.login') }}" tabindex='195'>
-                                {% trans %}Sign in.{% endtrans %}</a>
+                                {% trans %}Sign in{% endtrans %}</a>
                         {% endif %}
                     </div>
                 </div>
 
                 {#                error was here#}
+
+
             </div>
 
         </div>
@@ -132,15 +160,16 @@
         <div class="legal">
 
             <p id="copyright">
-                <span>&copy;Copyright openEASE 2019</span>
+                {#                <span>&copy;Copyright openEASE</span>#}
+                &copy;Copyright openEASE <span id="myYear"> </span>
             </p>
 
-	&copy;
         </div>
         {#        </div>#}
 
 
     </footer>
-
+    <script src="../../static/form-js/copyright_year.js"></script>
+    <script src="../../static/form-js/validate_password.js"></script>
     <script src="../../static/form-js/form_script.js"></script>
 {% endblock %}
