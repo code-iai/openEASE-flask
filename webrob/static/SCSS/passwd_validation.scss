@@ -34,3 +34,18 @@
   left: -10px;
   content: "\2716";
 }
+
+#invalid-msg{
+  font-size: 12px;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-weight: bold;
+}
+
+.confirmpsw{
+  border-color: red;
+}
+
+//.was-validated .confirmpsw:valid{
+//  border-color: red;
+//}

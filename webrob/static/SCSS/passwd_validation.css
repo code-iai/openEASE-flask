@@ -36,4 +36,15 @@
   content: "✖";
 }
 
+#invalid-msg {
+  font-size: 12px;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-weight: bold;
+}
+
+.confirmpsw {
+  border-color: red;
+}
+
 /*# sourceMappingURL=passwd_validation.css.map */
