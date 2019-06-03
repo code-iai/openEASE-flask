@@ -96,8 +96,8 @@
 
                             {% if user_manager.enable_retype_password %}
                                 <div id="pw-field" class="form-group {% if field.errors %}has-error{% endif %}">
-                                    <input placeholder="Retype Password" class="form-control" id="retype_password"
-                                           name="retype_password" type="password" value="" required/>
+                                    <input placeholder="Retype Password" class="form-controlregist" id="retype_password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                                           name="retype_password" type="password" value=""/>
                                     <div id="invalid-msg">
 {#                                        Password does not match.#}
                                     </div>
