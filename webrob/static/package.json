@@ -23,7 +23,7 @@
   "homepage": "https://github.com/knowrob/docker#readme",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
-    "bootstrap": "4.1.1",
+    "bootstrap": "4.3.1",
     "brace": "0.11.1",
     "browserify": "latest",
     "browserify-css": "latest",
